@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  devise_scope :user do
+  devise_scope :clients do
     get "/sign_in" => "devise/sessions#new"
     get "/sign_up" => "devise/regestrations#new", as: "new_user_registration"
   end
