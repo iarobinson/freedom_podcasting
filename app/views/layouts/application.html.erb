@@ -10,8 +10,22 @@
   </head>
 
   <body>
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
-    <%= yield %>
+    <div class="container">
+      <p class="notice"><%= notice %></p>
+      <p class="alert"><%= alert %></p>
+
+      <p class="navbar-text pull-right">
+      <% if producer_signed_in? %>
+        Logged in as <strong><%= current_producer.email %></strong>.
+        <%= link_to 'Edit profile', edit_producer_registration_path, :class => 'navbar-link' %> |
+        <%= link_to "Logout", destroy_producer_session_path, method: :delete, :class => 'navbar-link'  %>
+      <% else %>
+        <%= link_to "Sign up", new_producer_registration_path, :class => 'navbar-link'  %> |
+        <%= link_to "Login", new_producer_session_path, :class => 'navbar-link'  %>
+      <% end %>
+      </p>
+
+      <%= yield %>
+    </div>
   </body>
 </html>
