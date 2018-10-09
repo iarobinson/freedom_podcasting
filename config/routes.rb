@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   devise_for :clients, controllers: { sessions: "clients/sessions" }
   resources :pages, :producers, :clients, :home
 
-  root 'pages#index'
+  root 'pages#home'
 end
