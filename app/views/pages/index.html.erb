@@ -10,8 +10,15 @@
   </thead>
 
   <tbody>
+    <th>
+      <td>Title</td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </th>
     <% @pages.each do |page| %>
       <tr>
+        <td><%= page.title %>
         <td><%= link_to 'Show', page %></td>
         <td><%= link_to 'Edit', edit_page_path(page) %></td>
         <td><%= link_to 'Destroy', page, method: :delete, data: { confirm: 'Are you sure?' } %></td>
