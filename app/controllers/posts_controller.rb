@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   before_action :set_author, only: [:create]
 
   def index
-    @posts = Post.all
+    @posts = Post.limit(5)
   end
 
   def new

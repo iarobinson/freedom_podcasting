@@ -16,6 +16,14 @@ Rails.application.routes.draw do
     resources :profile
   end
 
+  resources :posts do
+    collection do
+      get 'hobby'
+      get 'study'
+      get 'team'
+    end
+  end
+
   root 'pages#home'
 
 end
