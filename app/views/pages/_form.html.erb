@@ -10,10 +10,11 @@
       </ul>
     </div>
   <% end %>
-  <%= form.label :title %>
-  <%= form.title :title, autofocus: true %>
+  <%= form.label :title %>:<br>
+  <%= form.text_area :title, autofocus: true %><br>
 
-  <!-- <%= f.email_field :email, autofocus: true, autocomplete: "email" %> -->
+  <%= form.label :content %>:<br>
+  <%= form.text_area :content %><br>
 
   <div class="actions">
     <%= form.submit %>

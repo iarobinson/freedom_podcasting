@@ -1,0 +1,9 @@
+<li class="nav-item" style="display: none">
+  <a class="nav-link">Logged in as <strong><%= current_user.email %></strong>.</a>
+</li>
+<li class="nav-item">
+  <%= link_to 'Edit profile', edit_user_registration_path, class: 'nav-link' %>
+</li>
+<li class="nav-item">
+  <%= link_to "Logout", destroy_user_session_path, method: :delete, class: 'nav-link'  %>
+</li>

@@ -1,14 +1,21 @@
 Rails.application.routes.draw do
 
-  devise_for :producers, controllers: { sessions: "producers/sessions" }
-  devise_for :clients, controllers: { sessions: "clients/sessions" }
-  resources :pages, :producers, :clients, :home
+  resources :tags
+  resources :posts
+  resources :pages
+  resources :profiles
 
-  resources :dashboard
+  devise_for :users, :controllers => { :registrations => "registrations" }
+
+  devise_scope :user do
+    get 'login', to: 'devise/sessions#new'
+    get 'signup', to: 'devise/registrations#new'
+  end
+
+  resources :users, module: "users" do
+    resources :profile
+  end
 
   root 'pages#home'
 
-  resources :producers, module: "producers" do
-    resources :dashboard, only: %i[index]
-  end
 end

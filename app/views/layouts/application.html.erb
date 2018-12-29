@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Freedom Podcasting - Podcast Editing and Podcast Production Service</title>
+    <title>
+      Freedom Podcasting - Podcast Editing and Podcast Production Service
+    </title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,9 +12,15 @@
   </head>
 
   <body>
-    <div class="container">
-      <%= render 'layouts/nav' %>
-      <%= yield %>
-    </div>
+    <!-- Devise error handling -->
+    <% if notice %>
+      <p class="notice"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert"><%= alert %></p>
+    <% end %>
+
+    <!-- Default Rails Behavior -->
+    <%= yield %>
   </body>
 </html>

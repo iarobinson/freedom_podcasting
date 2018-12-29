@@ -1,43 +1,37 @@
-<div class="section hero">
-  <div class="container">
-    <div class="row">
-      <div class="one-half column">
-        <h4 class="hero-heading">Stop struggling with podcast production.</h4>
-        <p>Just record and we'll take care of the rest.</p>
-        <a class="button button-primary" href="/login">Try Freedom</a>
-      </div>
-      <div class="one-half column phones">
-        <%= image_tag ("home/podcast-production-services.jpg"), class: "phone" %>
-      </div>
+<%= render 'layouts/nav' %>
+<div class="container">
+  <div class="row pt-5">
+    <div class="col-md-6">
+      <ul>
+        <li><%= link_to "Main Page", root_path %></li>
+        <li><%= link_to 'Tags', tags_path %></li>
+        <li><%= link_to 'Posts', posts_path %></li>
+        <li><%= link_to 'Pages', pages_path %></li>
+        <li><%= link_to 'Profile', pages_path %></li>
+      </ul>
+    </div>
+    <div class="col-md-6">
+      <ul>
+        <% if user_signed_in? %>
+          <li>Logged in as <strong><%= current_user.email %></strong>.</li>
+          <li><%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %></li>
+          <li><%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %></li>
+        <% else %>
+          <li><%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %></li>
+          <li><%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %></li>
+        <% end %>
+      </ul>
     </div>
   </div>
 </div>
 
-<div class="section get-help">
-  <div class="container">
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/ZWg08HzxBxc?rel=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-  </div>
-</div>
-
-<div class="section get-help">
-  <div class="container">
-    <h3 class="section-heading">Need help getting started?</h3>
-    <p class="section-description">This web application helps podcast hosts work more efficiently with their podcast production team. If you want to learn more, just sign in and get started!</p>
-    <a class="button button-primary" href="https://www.freedompodcasting.com/start">Start</a>
-  </div>
-</div>
-
-<div class="section categories">
-  <div class="container">
-    <h3>Thank you for visiting.</h3>
-    <p>If you would like to learn more about our team, vist our <a href="http://freedompodcasting.com/team" target="_blank">main page</a>.</p>
-    <div class="row">
-      <div class="one-half column category">
-        <%= image_tag ("home/podcast-editing-services.jpg"), class: "u-max-full-width" %>
-      </div>
-      <div class="one-half column category">
-        <%= image_tag ("home/podcast-production-services.jpg"), class: "u-max-full-width" %>
-      </div>
+<div class="text-center">
+  <div class="row pt-5">
+    <div class="col-md-8 offset-md-2 pb-5">
+      <h4>An app to make podcast production faster.</h4>
+    </div>
+    <div class="col-md-4 offset-md-4">
+      <%= link_to "Try Freedom", new_user_session_path, class: "btn btn-success btn-block" %>
     </div>
   </div>
 </div>

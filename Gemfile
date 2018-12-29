@@ -6,8 +6,15 @@ ruby '2.5.1'
 # Devise is a user authentication Ruby gem
 gem "devise"
 gem "devise-security"
-# Skeleton framework
-gem 'skeleton-rails', :git => 'https://github.com/helios-technologies/skeleton-rails'
+
+# Bootstrap is a front end framework for designing mobile friendly applications
+gem 'bootstrap', '~> 4.1.3'
+gem 'sprockets-rails', '~> 3.2', '>= 3.2.1'
+gem 'jquery-rails'
+gem "autoprefixer-rails"
+gem 'popper_js', '~> 1.14', '>= 1.14.5'
+gem 'sass', '~> 3.7', '>= 3.7.2'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.2.1'
 
@@ -28,6 +35,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'redis', '~> 4.0'
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
+
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'
@@ -65,6 +73,14 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+
+  # Test environment from https://medium.freecodecamp.org/lets-create-an-intermediate-level-ruby-on-rails-application-d7c6e997c63f
+  gem 'rspec-rails', '~> 3.6'
+  gem 'factory_girl_rails'
+  gem 'rails-controller-testing'
+  gem 'headless'
+  gem 'poltergeist'
+  gem 'database_cleaner'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

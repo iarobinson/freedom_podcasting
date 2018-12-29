@@ -1,0 +1,41 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-4 offset-md-4">
+      <%= form_with(model: profile, local: true) do |form| %>
+        <% if profile.errors.any? %>
+          <div id="error_explanation">
+            <h2><%= pluralize(profile.errors.count, "error") %> prohibited this profile from being saved:</h2>
+
+            <ul>
+            <% profile.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= form.label :first_name %><br>
+          <%= form.text_field :first_name, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :last_name %>:<br>
+          <%= form.text_field :last_name, autofocus: true, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :description %>:<br>
+          <%= form.text_field :description, class: "form-control" %>
+        </div>
+
+        <div class="form-group">
+
+          <div class="actions">
+            <%= form.submit %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -8,6 +8,9 @@ Bundler.require(*Rails.groups)
 
 module FreedomPodcasting
   class Application < Rails::Application
+    # Do not include all helpers in every view
+    config.action_controller.include_all_helpers = false
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 

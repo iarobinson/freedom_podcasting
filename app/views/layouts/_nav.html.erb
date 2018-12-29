@@ -1,36 +1,6 @@
-<nav class="navbar">
+<nav class="navbar navbar-expand-lg navbar-light">
   <div class="container">
-    <ul class="navbar-list">
-
-      <% if notice || alert %>
-        <li class="notice navbar-item">
-          <a class="navbar-link"><%= notice %></a>
-        </li>
-        <li class="alert navbar-item">
-          <a class="navbar-link"><%= alert %></a>
-        </li>
-      <% end %>
-      <% if producer_signed_in? %>
-        <li class="alert navbar-item" style="display: none">
-          <a class="navbar-link">Logged in as <strong><%= current_producer.email %></strong>.</a>
-        </li>
-        <li class="alert navbar-item">
-          <%= link_to 'Edit profile', edit_producer_registration_path, :class => 'navbar-link' %>
-        </li>
-        <li class="alert navbar-item">
-          <%= link_to "Logout", destroy_producer_session_path, method: :delete, :class => 'navbar-link'  %>
-        </li>
-      <% else %>
-        <li class="alert navbar-item">
-          <%= link_to "Sign up", new_producer_registration_path, :class => 'navbar-link'  %>
-        </li>
-        <li class="alert navbar-item">
-          <%= link_to "Producer Login", new_producer_session_path, :class => 'navbar-link'  %>
-        </li>
-      <% end %>
-      <li class="navbar-item">
-        <%= link_to "Home", root_path, :class => 'navbar-link'  %>
-      </li>
-    </ul>
+    <%= render 'layouts/navigation/header' %>
+    <%= render 'layouts/navigation/collapsible_elements' %>
   </div>
 </nav>
