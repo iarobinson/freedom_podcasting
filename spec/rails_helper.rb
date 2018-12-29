@@ -58,6 +58,15 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  require 'capybara/poltergeist'
+  require 'factory_girl_rails'
+  require 'capybara/rspec'
+
+  config.include Devise::Test::IntegrationHelpers, type: :feature
+  config.include FactoryGirl::Syntax::Methods
+  Capybara.javascript_driver = :poltergeist
+  Capybara.server = :puma
+
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.
