@@ -6,16 +6,10 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module FreedomPodcasting
+module Freedompodcasting
   class Application < Rails::Application
-    # Do not include all helpers in every view
-    config.action_controller.include_all_helpers = false
-
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
-
-    # As per devise requirements
-    config.assets.initialize_on_precompile = false
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

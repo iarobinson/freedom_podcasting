@@ -5,9 +5,9 @@ application up and running.
 
 Things you may want to cover:
 
-* Ruby version - 2.5.1
+* Ruby version
 
-* Rails version - 5.2.1
+* System dependencies
 
 * Configuration
 
@@ -21,6 +21,4 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* Dependencies
-- User Authentication: Devise
-- CSS Framework: Skeleton (http://getskeleton.com/)
+* ...

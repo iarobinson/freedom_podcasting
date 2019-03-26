@@ -1,2 +1,0 @@
-module Clients::DashboardHelper
-end
