@@ -1,0 +1,43 @@
+<div class="container">
+    <div class="pt-3">
+      <h1>Shows</h1>
+    </div>
+  <div class="row">
+    <p id="notice"><%= notice %></p>
+    <div class="card-deck">
+      <% @shows.each_with_index do |show, index| %>
+        <div class="col-lg-4 pb-5">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><%= show.title %></h5>
+              <div class="card-text"><%= show.description %></div>
+              <div class="card-text"><small class="text-muted">Last updated 3 mins ago</small></div>
+            </div>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item"><%= show.host %></li>
+              <li class="list-group-item"><%= show.website %></li>
+              <li class="list-group-item"><%= show.category %></li>
+              <li class="list-group-item"><%= show.description %></li>
+              <li class="list-group-item"><%= show.subtitle %></li>
+            </ul>
+            <div class="card-footer">
+              <div class="row">
+                <div class="col-4">
+                  <%= link_to 'Show', show, class: "btn btn-primary text-white btn-sm btn-block" %>
+                </div>
+                <div class="col-4">
+                  <%= link_to 'Edit', edit_show_path(show), class: "btn btn-success text-white btn-sm btn-block" %>
+                </div>
+                <div class="col-4">
+                  <%= link_to 'Delete', show, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger text-white btn-sm btn-block" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <br>
+  </div>
+  <%= link_to 'New Show', new_show_path, class: "btn btn-primary text-white" %>
+</div>
