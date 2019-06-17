@@ -7,9 +7,14 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
     <ul class="navbar-nav">
-      <li class="nav-item active">
+      <li class="nav-item">
         <%= link_to shows_path, class: "nav-link" do %>
           All Shows <span class="sr-only">(current)</span>
+        <% end %>
+      </li>
+      <li class="nav-item">
+        <%= link_to destroy_user_session_path, class: "nav-link" do %>
+          Sign Out
         <% end %>
       </li>
     </ul>
