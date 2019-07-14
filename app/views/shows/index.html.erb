@@ -6,12 +6,16 @@
     <p id="notice"><%= notice %></p>
     <div class="card-deck">
       <% @shows.each_with_index do |show, index| %>
-        <div class="col-lg-4 pb-5">
+        <!-- <div class="col-lg-4 pb-5"> -->
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"><%= show.title %></h5>
               <div class="card-text"><%= show.description %></div>
-              <div class="card-text"><small class="text-muted">Last updated 3 mins ago</small></div>
+              <div class="card-text">
+                  <small class="text-muted">
+                  Last updated <%= "3 Minutes Ago" %> <!-- TODO: Add dynamic time ago -->
+                </small>
+              </div>
             </div>
             <ul class="list-group list-group-flush">
               <li class="list-group-item"><%= show.host %></li>
@@ -34,7 +38,7 @@
               </div>
             </div>
           </div>
-        </div>
+        <!-- </div> -->
       <% end %>
     </div>
     <br>

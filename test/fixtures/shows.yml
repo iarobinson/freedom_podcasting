@@ -1,17 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  host: MyString
-  website: MyString
-  category: MyString
-  description: MyString
-  subtitle: MyString
+glambition:
+  title: Glambition Radio with Ali Brown
+  host: Ali Brown
+  website: www.AliBrown.com
+  category: Business
+  description: Interviews with today's leading women entrepreneurs
+  subtitle:
 
-two:
-  title: MyString
-  host: MyString
-  website: MyString
-  category: MyString
-  description: MyString
-  subtitle: MyString
+love_affair_travel:
+  title: Love Affair Travel Podcast - Stories of Adventure and Enterprise
+  host: Ian Robinson
+  website: www.loveaffairtravel.com
+  category: Personal Journals
+  description: A show exploring the stories and adventures in long term travel
+  subtitle: Hosted by Ian Robinson of Freedom Podcasting
