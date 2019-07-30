@@ -6,6 +6,7 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :pages, only: [:index]
+  resources :administrator_dashboard, only: [:index]
 
   resources :users do
     resources :dashboard, only: [:index]
