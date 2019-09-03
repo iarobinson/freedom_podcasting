@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :pages, only: [:index]
   resources :administrator_dashboard, only: [:index]
 
-  resources :users do
-    resources :dashboard, only: [:index]
+  resources :shows, module: "shows" do
+    resources :episodes
   end
 end

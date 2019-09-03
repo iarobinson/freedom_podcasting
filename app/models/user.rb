@@ -10,5 +10,7 @@ class User < ApplicationRecord
   :recoverable, :rememberable, :validatable,
   :trackable
 
+  has_many :shows
   has_one_attached :avatar
+  has_and_belongs_to_many :shows
 end

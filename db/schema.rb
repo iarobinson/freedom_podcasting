@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_17_052930) do
+ActiveRecord::Schema.define(version: 2019_09_03_212223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,18 @@ ActiveRecord::Schema.define(version: 2019_06_17_052930) do
 
   create_table "episodes", force: :cascade do |t|
     t.string "title"
-    t.integer "number"
+    t.date "pubDate"
+    t.string "link"
+    t.string "description"
+    t.string "content_encoded"
+    t.string "enclosure"
+    t.integer "itunes_duration"
+    t.boolean "itunes_explicit"
+    t.string "itunes_keywords"
+    t.string "itunes_subtitle"
+    t.string "itunes_episode"
+    t.string "itunes_episodeType"
+    t.integer "episode_number"
     t.integer "client_cost"
     t.bigint "show_id"
     t.datetime "created_at", null: false
@@ -68,8 +79,17 @@ ActiveRecord::Schema.define(version: 2019_06_17_052930) do
     t.string "category"
     t.string "description"
     t.string "subtitle"
+    t.bigint "users_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["users_id"], name: "index_shows_on_users_id"
+  end
+
+  create_table "shows_users", id: false, force: :cascade do |t|
+    t.bigint "show_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["show_id", "user_id"], name: "index_shows_users_on_show_id_and_user_id"
+    t.index ["user_id", "show_id"], name: "index_shows_users_on_user_id_and_show_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -101,4 +121,5 @@ ActiveRecord::Schema.define(version: 2019_06_17_052930) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "episodes", "shows"
   add_foreign_key "messages", "users"
+  add_foreign_key "shows", "users", column: "users_id"
 end

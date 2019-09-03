@@ -7,6 +7,7 @@ class CreateShows < ActiveRecord::Migration[5.2]
       t.string :category
       t.string :description
       t.string :subtitle
+      t.references :users, foreign_key: true
 
       t.timestamps
     end

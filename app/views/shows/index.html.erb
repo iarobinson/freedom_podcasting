@@ -18,11 +18,11 @@
               </div>
             </div>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item"><%= show.host %></li>
-              <li class="list-group-item"><%= show.website %></li>
-              <li class="list-group-item"><%= show.category %></li>
-              <li class="list-group-item"><%= show.description %></li>
-              <li class="list-group-item"><%= show.subtitle %></li>
+              <%= if_it_exists_show_list_item(show.host) %>
+              <%= if_it_exists_show_list_item(show.website) %>
+              <%= if_it_exists_show_list_item(show.category) %>
+              <%= if_it_exists_show_list_item(show.description) %>
+              <%= if_it_exists_show_list_item(show.subtitle) %>
             </ul>
             <div class="card-footer">
               <div class="row">

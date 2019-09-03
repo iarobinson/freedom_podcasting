@@ -3,11 +3,9 @@
 episode_one:
   show: glambition
   title: Ali Brown and Kara Gouldin
-  number: 1
   client_cost: 100
 
 episode_two:
   show: love_affair_travel
   title: Talking about Long Term Travel
-  number: 1
   client_cost:

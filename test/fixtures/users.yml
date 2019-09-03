@@ -1,6 +1,7 @@
 administrator:
   email: ian@testing.com
   encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
+  # shows: glambition, love_affair_travel
 
 client:
   email: ali@testing.com

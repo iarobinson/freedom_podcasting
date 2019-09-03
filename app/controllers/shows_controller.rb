@@ -1,10 +1,11 @@
 class ShowsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_show, only: [:show, :edit, :update, :destroy]
 
   # GET /shows
   # GET /shows.json
   def index
-    @shows = Show.all
+    @shows = current_user.shows
   end
 
   # GET /shows/1
