@@ -1,20 +1,5 @@
 <div class="container">
   <div class="row paddingbottom">
-    <div class="col">
-      <%= link_to "New", new_episode_path(@show),
-                  class: "btn btn-primary text-white btn-sm btn-block" %>
-    </div>
-    <div class="col">
-      <%= link_to "Create", new_episode_path(@show),
-                  class: "btn btn-primary text-white btn-sm btn-block" %>
-    </div>
-    <div class="col">
-      <%= link_to "More Info", new_episode_path(@show),
-                  class: "btn btn-primary text-white btn-sm btn-block" %>
-    </div>
-  </div>
-
-  <div class="row paddingbottom">
     <ul class="list-group" id="admin_actions">
       <% @episodes.all.each do |episode| %>
         <a href="<%= episode_path(episode) %>" class="list-group-item list-group-item-action">

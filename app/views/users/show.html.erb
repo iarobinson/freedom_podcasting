@@ -1,1 +1,15 @@
-<%= @user.inspect %>
+<div class="container">
+  <div class="row">
+    <div class="col-8 offset-2">
+      <div class="row">
+        <div class="col-8">
+          <p><%= @user.email %></p>
+          <p><%= @user.name %></p>
+        </div>
+        <div class="col-4">
+          <%= image_tag @user.avatar, width: '100%' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

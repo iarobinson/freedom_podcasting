@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_03_212223) do
+ActiveRecord::Schema.define(version: 2019_09_04_034809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,19 @@ ActiveRecord::Schema.define(version: 2019_09_03_212223) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["show_id"], name: "index_episodes_on_show_id"
+  end
+
+  create_table "episodes_invoices", id: false, force: :cascade do |t|
+    t.bigint "episode_id", null: false
+    t.bigint "invoice_id", null: false
+    t.index ["episode_id", "invoice_id"], name: "index_episodes_invoices_on_episode_id_and_invoice_id"
+    t.index ["invoice_id", "episode_id"], name: "index_episodes_invoices_on_invoice_id_and_episode_id"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.boolean "paid"
+    t.bigint "episodes_id"
+    t.index ["episodes_id"], name: "index_invoices_on_episodes_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -107,7 +120,16 @@ ActiveRecord::Schema.define(version: 2019_09_03_212223) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.integer "failed_attempts", default: 0, null: false
     t.string "unlock_token"
+    t.datetime "locked_at"
+    t.string "first_name"
+    t.string "last_name"
+    t.string "address"
+    t.string "city"
+    t.string "state"
+    t.string "country"
+    t.string "zip"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
@@ -120,6 +142,7 @@ ActiveRecord::Schema.define(version: 2019_09_03_212223) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "episodes", "shows"
+  add_foreign_key "invoices", "episodes", column: "episodes_id"
   add_foreign_key "messages", "users"
   add_foreign_key "shows", "users", column: "users_id"
 end

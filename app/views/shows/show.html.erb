@@ -1,14 +1,6 @@
 <div class="container">
   <div class="row paddingbottom">
     <div class="col">
-      <%= link_to "Create an Episode", new_episode_path, class: "btn btn-primary btn-block" %>
-    </div>
-    <div class="col">
-      <%= link_to 'Edit Show Details', edit_show_path(@show), class: "btn btn-primary btn-block" %>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col">
       <p><strong>Show Title:</strong></p>
       <p><%= @show.title %></p>
     </div>
@@ -34,9 +26,24 @@
     </div>
   </div>
 
+  <div class="row paddingbottom">
+    <div class="col">
+      <%= link_to "Create an Episode of #{@show.title}", new_show_episode_path(@show), class: "btn btn-primary btn-block" %>
+    </div>
+    <div class="col">
+      <%= link_to 'Edit Show Details', edit_show_path(@show), class: "btn btn-primary btn-block" %>
+    </div>
+  </div>
+
+
   <h2>Episodes</h2>
-  <% @episodes.each do |episode| %>
-    <p><strong>Title:</strong> <%= episode.title %></p>
+  <% if @episodes.count > 0 %>
+    <% @episodes.each do |episode| %>
+      <p><strong>Title:</strong> <%= episode.title %></p>
+    <% end %>
+  <% else %>
+    <p>You currently have no episodes.</p>
+    <p><%= link_to "Create an Episode", new_show_episode_path(@show), class: "btn btn-success btn-block" %></p>
   <% end %>
 
   <%= link_to 'Edit', edit_show_path(@show) %> |

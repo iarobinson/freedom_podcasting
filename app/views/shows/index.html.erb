@@ -1,47 +1,44 @@
 <div class="container">
+  <% if @shows.size > 0 %>
     <div class="pt-3">
       <h1>Shows</h1>
     </div>
-  <div class="row">
-    <p id="notice"><%= notice %></p>
-    <div class="card-deck">
-      <% @shows.each_with_index do |show, index| %>
-        <!-- <div class="col-lg-4 pb-5"> -->
+    <div class="row paddingbottom">
+      <div class="card-deck">
+        <% @shows.each_with_index do |show, index| %>
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"><%= show.title %></h5>
               <div class="card-text"><%= show.description %></div>
               <div class="card-text">
-                  <small class="text-muted">
-                  Last updated <%= "3 Minutes Ago" %> <!-- TODO: Add dynamic time ago -->
+                <small class="text-muted">
+                  Last updated <%= time_ago_in_words(show.updated_at) %>
                 </small>
               </div>
             </div>
             <ul class="list-group list-group-flush">
-              <%= if_it_exists_show_list_item(show.host) %>
-              <%= if_it_exists_show_list_item(show.website) %>
-              <%= if_it_exists_show_list_item(show.category) %>
-              <%= if_it_exists_show_list_item(show.description) %>
-              <%= if_it_exists_show_list_item(show.subtitle) %>
+              <% details = [show.host, show.website, show.category, show.description, show.subtitle] %>
+              <%= if_it_exists_show_list_item(details) %>
             </ul>
             <div class="card-footer">
               <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                   <%= link_to 'Show', show, class: "btn btn-primary text-white btn-sm btn-block" %>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                   <%= link_to 'Edit', edit_show_path(show), class: "btn btn-success text-white btn-sm btn-block" %>
-                </div>
-                <div class="col-4">
-                  <%= link_to 'Delete', show, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger text-white btn-sm btn-block" %>
                 </div>
               </div>
             </div>
           </div>
-        <!-- </div> -->
-      <% end %>
+        <% end %>
+      </div>
+      <br>
     </div>
-    <br>
-  </div>
+  <% else %>
+    <div class="row paddingbottom">
+      <p>You don't have any shows associated with your account.</p>
+    </div>
+  <% end %>
   <%= link_to 'New Show', new_show_path, class: "btn btn-primary text-white" %>
 </div>

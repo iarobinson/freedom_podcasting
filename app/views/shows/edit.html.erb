@@ -1,8 +1,21 @@
 <div class="container">
-  <h1>Editing Show</h1>
+  <div class="row">
+    <div class=" offset-md-2 col-md-8">
+      <h1>Editing Show</h1>
 
-  <%= render 'form', show: @show %>
+      <%= render 'form', show: @show %>
 
-  <%= link_to 'Show', @show %> |
-  <%= link_to 'Back', shows_path %>
+      <div class="row paddingbottom">
+        <div class="col">
+          <%= link_to "See Show Profile", @show,
+                      class: "btn btn-primary text-white btn-sm btn-block" %>
+        </div>
+        <div class="col">
+          <%= link_to 'Delete', @show, method: :delete,
+                      data: { confirm: 'Are you sure? This cannot be undone.' },
+                      class: "btn btn-danger text-white btn-sm btn-block" %>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

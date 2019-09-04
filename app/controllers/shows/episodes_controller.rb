@@ -1,6 +1,6 @@
 class Shows::EpisodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_show, only: [:index, :show, :edit, :update, :destroy]
+  before_action :set_show, only: [:index, :new, :show, :edit, :update, :destroy]
 
   def index
     @episodes = Episode.where(show_id: params[:show_id])
@@ -18,6 +18,8 @@ class Shows::EpisodesController < ApplicationController
   end
 
   def create
+    p "In Shows::EpisodesController#create"
+    binding.pry
     @episode = Episode.new(episode_params)
 
     respond_to do |format|
@@ -57,7 +59,9 @@ class Shows::EpisodesController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def show_params
-      params.require(:show).permit(:title, :host, :website, :category, :description, :subtitle)
+    def episode_params
+      params.require(:episode).permit(
+        :title, :host, :website, :category, :description, :subtitle
+      )
     end
 end
