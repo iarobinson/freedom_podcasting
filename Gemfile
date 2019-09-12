@@ -18,6 +18,8 @@ gem 'rails', '~> 5.2.2', '>= 5.2.2.1'
 gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.11'
+# Use Amazon s3 for image, audio and video storage
+gem "aws-sdk-s3", require: false
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets

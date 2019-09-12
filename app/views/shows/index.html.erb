@@ -1,9 +1,9 @@
 <div class="container">
-  <% if @shows.size > 0 %>
-    <div class="pt-3">
-      <h1>Shows</h1>
-    </div>
-    <div class="row paddingbottom">
+  <div class="row paddingbottom">
+    <h1>Shows</h1>
+  </div>
+  <div class="row paddingbottom">
+    <% if @shows.size > 0 %>
       <div class="card-deck">
         <% @shows.each_with_index do |show, index| %>
           <div class="card">
@@ -33,12 +33,13 @@
           </div>
         <% end %>
       </div>
-      <br>
-    </div>
-  <% else %>
-    <div class="row paddingbottom">
+    <% else %>
       <p>You don't have any shows associated with your account.</p>
+    <% end %>
+  </div>
+  <div class="row paddingbottom">
+    <div class="col-4 offset-4">
+      <%= link_to 'New Show', new_show_path, class: "btn btn-primary btn-block text-white" %>
     </div>
-  <% end %>
-  <%= link_to 'New Show', new_show_path, class: "btn btn-primary text-white" %>
+  </div>
 </div>
