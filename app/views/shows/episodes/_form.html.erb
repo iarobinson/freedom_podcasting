@@ -1,16 +1,13 @@
-<%= form_with url: episode, html: { method: :post } do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-
+<%= form_for @episode, url: show_episodes_path(@show, @episode), method: :post do |f| %>
   <div class="form-inputs">
-    <%= f.input :title %>
-    <%= f.input :link %>
-    <%= f.input :description %>
-    <%= f.input :client_cost %>
-    <%= f.hidden_field :show_id, value: show.id  %>
+    <%= f.text_field :title %>
+    <%= f.text_field :link %>
+    <%= f.text_field :description %>
+    <%= f.text_field :itunes_explicit %>
+    <%= f.hidden_field :show_id, value: @show.id  %>
   </div>
 
   <div class="form-actions">
-    <%= f.button :submit, class: "btn btn-success btn-block" %>
+    <%= f.submit "Submit", class: "btn btn-success btn-block" %>
   </div>
 <% end %>

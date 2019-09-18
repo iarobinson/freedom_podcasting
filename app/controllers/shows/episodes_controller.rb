@@ -1,6 +1,6 @@
 class Shows::EpisodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_show, only: [:index, :new, :show, :edit, :update, :destroy]
+  before_action :set_show
 
   def index
     @episodes = Episode.where(show_id: params[:show_id])
@@ -11,20 +11,18 @@ class Shows::EpisodesController < ApplicationController
   end
 
   def new
-    @episode = Episode.new
+    @episode = @show.episodes.build
   end
 
   def edit
   end
 
   def create
-    p "In Shows::EpisodesController#create"
-    binding.pry
     @episode = Episode.new(episode_params)
 
     respond_to do |format|
       if @episode.save
-        format.html { redirect_to @episode, notice: 'Episode was successfully created.' }
+        format.html { redirect_to show_episodes_path(@show, @episode), notice: 'Episode was successfully created.' }
         format.json { render :episode, status: :created, location: @episode }
       else
         format.html { render :new }
@@ -61,7 +59,10 @@ class Shows::EpisodesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def episode_params
       params.require(:episode).permit(
-        :title, :host, :website, :category, :description, :subtitle
+        :title, :pubDate, :link, :description, :content_encoded, :enclosure,
+        :itunes_duration, :itunes_explicit, :itunes_keywords, :itunes_subtitle,
+        :itunes_episode, :itunes_episodeType, :episode_number, :client_cost,
+        :show_id
       )
     end
 end

@@ -1,0 +1,8 @@
+episode_glam_one:
+  show: glambition
+  title: Glambition episode one
+  pubDate: <%= Time.now - 2.days %>
+  link: alibrown.com/ep1
+  description: First episode of Glambition Radio
+  episode_number: 1
+  client_cost: 150
