@@ -22,7 +22,7 @@ class Shows::EpisodesController < ApplicationController
 
     respond_to do |format|
       if @episode.save
-        format.html { redirect_to show_episodes_path(@show, @episode), notice: 'Episode was successfully created.' }
+        format.html { redirect_to show_episodes_path(@show), notice: 'Episode was successfully created.' }
         format.json { render :episode, status: :created, location: @episode }
       else
         format.html { render :new }

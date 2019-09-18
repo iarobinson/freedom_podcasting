@@ -1,12 +1,14 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <a class="navbar-brand" href="/">Freedom Podcasting</a>
+  <a class="navbar-brand" href="/">
+    Freedom Podcasting
+  </a>
   <button class="navbar-toggler" type="button" data-toggle="collapse"
           data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
           aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav">
+    <ul class="navbar-nav mr-auto">
       <li class="nav-item">
         <%= link_to shows_path, class: "nav-link" do %>
           All Shows <span class="sr-only">(current)</span>
@@ -17,6 +19,14 @@
           Sign Out
         <% end %>
       </li>
+      <li class="nav-item">
+        <%= link_to edit_user_path(current_user), class: "nav-link" do %>
+          Update My Information
+        <% end %>
+      </li>
     </ul>
+    <span class="navbar-text">
+      <%= "Hello #{current_user.first_name.capitalize}" if current_user.first_name %>
+    </span>
   </div>
 </nav>

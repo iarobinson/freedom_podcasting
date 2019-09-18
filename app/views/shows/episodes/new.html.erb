@@ -1,7 +1,8 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-8 offset-md-2">
-      <h1>New Episode of <%= @show.title %></h1>
+      <h1>New Episode</h1>
+      <p>Create a new episode of <%= @show.title %></p>
       <%= render 'form', episode: @episode, show: @show %><br>
       <div class="paddingbottom">
         <%= link_to 'Back', show_episodes_path, class: "btn btn-primary btn-block" %>

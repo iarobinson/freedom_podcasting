@@ -1,9 +1,17 @@
 <%= form_for @episode, url: show_episodes_path(@show, @episode), method: :post do |f| %>
-  <div class="form-inputs">
-    <%= f.text_field :title %>
-    <%= f.text_field :link %>
-    <%= f.text_field :description %>
-    <%= f.text_field :itunes_explicit %>
+  <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: 'form-control' %>
+
+    <%= f.label :link %>
+    <%= f.text_field :link, class: 'form-control' %>
+
+    <%= f.label :description %>
+    <%= f.text_field :description, class: 'form-control' %>
+
+    <%= f.label :itunes_explicit %>
+    <%= f.text_field :itunes_explicit, class: 'form-control' %>
+
     <%= f.hidden_field :show_id, value: @show.id  %>
   </div>
 

@@ -3,11 +3,22 @@
     <div class="col-8 offset-2">
       <div class="row">
         <div class="col-8">
-          <p><%= @user.email %></p>
-          <p><%= @user.name %></p>
+          <p><strong>Email:</strong> <%= @user.email %></p>
+          <p><strong>Name:</strong> <%= @user.name %></p>
+          <p><strong>Email:</strong> <%= @user.email %></p>
+          <p><strong>First Name:</strong> <%= @user.first_name %></p>
+          <p><strong>Last Name:</strong> <%= @user.last_name %></p>
+          <p><strong>Address:</strong> <%= @user.address %></p>
+          <p><strong>City:</strong> <%= @user.city %></p>
+          <p><strong>State:</strong> <%= @user.state %></p>
+          <p><strong>Country:</strong> <%= @user.country %></p>
+          <p><strong>Zip:</strong> <%= @user.zip %></p>
+          <p><strong>Status:</strong> <%= @user.status %></p>
         </div>
         <div class="col-4">
-          <%= image_tag @user.avatar, width: '100%' %>
+          <% if @user.avatar.present? %>
+            <%= image_tag @user.avatar, width: '100%' %>
+          <% end %>
         </div>
       </div>
     </div>
