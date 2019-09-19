@@ -27,7 +27,7 @@
       <% if @user.avatar.attached? %>
         <%= image_tag @user.avatar, width: "100%", class: "paddingbottom" %>
       <% else %>
-        <%= image_tag "default_user_avatar",  width: "100%", class: "paddingbottom" %>
+        <%= image_tag "default_user_avatar.jpg",  width: "100%", class: "paddingbottom" %>
       <% end %>
 
       <%= f.file_field :avatar, multiple: false, direct_upload: true %>
