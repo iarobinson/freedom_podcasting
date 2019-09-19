@@ -1,40 +1,42 @@
 <div class="container-fluid">
-  <div class="col-md-8 offset-md-2">
-    <p id="notice"><%= notice %></p>
+  <div class="row paddingbottom">
+    <div class="col-md-8 offset-md-2">
+      <p id="notice"><%= notice %></p>
 
-    <div class="row">
-      <div class="col">
-        <p><strong>Title:</strong> <%= @episode.title %></p>
-        <p><strong>Client cost:</strong> <%= @episode.client_cost %></p>
-        <p><strong>Id:</strong> <%= @episode.id %></p>
-        <p><strong>Title:</strong> <%= @episode.title %></p>
-        <p><strong>pubDate:</strong> <%= @episode.pubDate %></p>
-        <p><strong>link:</strong> <%= @episode.link %></p>
-        <p><strong>description:</strong> <%= @episode.description %></p>
-        <p><strong>content_encoded:</strong> <%= @episode.content_encoded %></p>
-        <p><strong>enclosure:</strong> <%= @episode.enclosure %></p>
+      <div class="row">
+        <div class="col">
+          <p><strong>Title:</strong> <%= @episode.title %></p>
+          <p><strong>Client cost:</strong> <%= @episode.client_cost %></p>
+          <p><strong>Id:</strong> <%= @episode.id %></p>
+          <p><strong>Title:</strong> <%= @episode.title %></p>
+          <p><strong>pubDate:</strong> <%= @episode.pubDate %></p>
+          <p><strong>link:</strong> <%= @episode.link %></p>
+          <p><strong>description:</strong> <%= @episode.description %></p>
+          <p><strong>content_encoded:</strong> <%= @episode.content_encoded %></p>
+          <p><strong>enclosure:</strong> <%= @episode.enclosure %></p>
+        </div>
+        <div class="col">
+          <p><strong>itunes_duration:</strong> <%= @episode.itunes_duration %></p>
+          <p><strong>itunes_explicit:</strong> <%= @episode.itunes_explicit %></p>
+          <p><strong>itunes_keywords:</strong> <%= @episode.itunes_keywords %></p>
+          <p><strong>itunes_subtitle:</strong> <%= @episode.itunes_subtitle %></p>
+          <p><strong>itunes_episode:</strong> <%= @episode.itunes_episode %></p>
+          <p><strong>itunes_episodeType:</strong> <%= @episode.itunes_episodeType %></p>
+          <p><strong>episode_number:</strong> <%= @episode.episode_number %></p>
+          <p><strong>client_cost:</strong> <%= @episode.client_cost %></p>
+          <p><strong>show_id:</strong> <%= @episode.show_id %></p>
+          <p><strong>created_at:</strong> <%= @episode.created_at %></p>
+          <p><strong>updated_at:</strong> <%= @episode.updated_at %></p>
+        </div>
       </div>
-      <div class="col">
-        <p><strong>itunes_duration:</strong> <%= @episode.itunes_duration %></p>
-        <p><strong>itunes_explicit:</strong> <%= @episode.itunes_explicit %></p>
-        <p><strong>itunes_keywords:</strong> <%= @episode.itunes_keywords %></p>
-        <p><strong>itunes_subtitle:</strong> <%= @episode.itunes_subtitle %></p>
-        <p><strong>itunes_episode:</strong> <%= @episode.itunes_episode %></p>
-        <p><strong>itunes_episodeType:</strong> <%= @episode.itunes_episodeType %></p>
-        <p><strong>episode_number:</strong> <%= @episode.episode_number %></p>
-        <p><strong>client_cost:</strong> <%= @episode.client_cost %></p>
-        <p><strong>show_id:</strong> <%= @episode.show_id %></p>
-        <p><strong>created_at:</strong> <%= @episode.created_at %></p>
-        <p><strong>updated_at:</strong> <%= @episode.updated_at %></p>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-6">
-        <%= link_to 'Edit', edit_show_episode_path(@show, @episode), class: "btn btn-primary btn-block" %>
-      </div>
-      <div class="col-md-6">
-        <%= link_to 'Back', show_episodes_path(@show), class: "btn btn-warning btn-block" %>
+      <div class="row">
+        <div class="col-md-6">
+          <%= link_to 'Edit', edit_show_episode_path(@show, @episode), class: "btn btn-primary btn-block" %>
+        </div>
+        <div class="col-md-6">
+          <%= link_to 'Back', show_episodes_path(@show), class: "btn btn-warning btn-block" %>
+        </div>
       </div>
     </div>
   </div>

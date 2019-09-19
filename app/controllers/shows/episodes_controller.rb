@@ -1,7 +1,7 @@
 class Shows::EpisodesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_show
-  before_action :set_episode, only: [:show, :edit]
+  before_action :set_episode, only: [:show, :edit, :update]
 
   def index
     @episodes = Episode.where(show_id: params[:show_id])
@@ -20,6 +20,7 @@ class Shows::EpisodesController < ApplicationController
 
   def create
     @episode = Episode.new(episode_params)
+    @episode.show_id = @show.id
 
     respond_to do |format|
       if @episode.save
@@ -35,7 +36,7 @@ class Shows::EpisodesController < ApplicationController
   def update
     respond_to do |format|
       if @episode.update(episode_params)
-        format.html { redirect_to @episode, notice: 'Episode was successfully updated.' }
+        format.html { redirect_to show_episode_path(@show, @episode), notice: 'Episode was successfully updated.' }
         format.json { render :show, status: :ok, location: @episode }
       else
         format.html { render :edit }
