@@ -17,7 +17,7 @@
         </div>
         <div class="col">
           <% if @user.avatar.present? %>
-            <%= image_tag @user.avatar, width: '100%', class: "paddingbottom" %>
+            <%= image_tag @user.avatar, width: 'auto', style: "max-height:500px", class: "paddingbottom" %>
           <% end %>
           <%= link_to "Edit My Profile", edit_user_path(@user), class: "btn btn-warning btn-block" %>
         </div>
