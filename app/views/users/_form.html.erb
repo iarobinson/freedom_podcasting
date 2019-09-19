@@ -3,7 +3,7 @@
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
   <div class="row form-inputs paddingbottom">
-    <div class="col">
+    <div class="col-md-8">
       <%= f.input :first_name %>
       <%= f.input :name %>
       <%= f.input :email %>
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <div class="col">
+    <div class="col-md-4">
       <label class="form-control-label string optional" for="user_avatar">Avatar</label>
 
       <% if @user.avatar.attached? %>
