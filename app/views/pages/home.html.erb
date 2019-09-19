@@ -1,11 +1,16 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-6 offset-md-3 text-center">
-      <h1>Freedom Podcasting</h1>
-      <p>Goal #1 is to make the Invoicing Process Easier</p>
-      <p><em>This application is in production.</em></p>
-      <p><em><strong>Don't expect your data to be secure here just yet.</strong></em></p>
-      <%= link_to "Get Started", new_user_session_path, class: "btn btn-primary btn-block" %>
-    </div>
+    <% if current_user.nil? %>
+      <%= render "unknown_user_dashboard" %>
+    <% elsif current_user.administrator? %>
+      <%= render "administrator_user_dashboard" %>
+    <% elsif current_user.producer? %>
+      <%= render "producer_user_dashboard" %>
+    <% elsif current_user.client? %>
+      <%= render "client_user_dashboard" %>
+    <% elsif current_user.stranger? %>
+      <%= render "stranger_user_dashboard" %>
+    <% end %>
+
   </div>
 </div>
