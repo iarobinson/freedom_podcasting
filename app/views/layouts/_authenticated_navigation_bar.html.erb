@@ -19,14 +19,15 @@
           Sign Out
         <% end %>
       </li>
-      <li class="nav-item">
-        <%= link_to edit_user_path(current_user), class: "nav-link" do %>
-          Update My Information
-        <% end %>
-      </li>
     </ul>
     <span class="navbar-text">
-      <%= "Hello #{current_user.first_name.capitalize}" if current_user.first_name %>
+      <%= link_to edit_user_path(current_user), class: "nav-link" do %>
+        <% if current_user.first_name %>
+          <%= "Hello #{current_user.first_name.capitalize}" %>
+        <% else %>
+          <%= "You're Signed In" %>
+        <% end %>
+      <% end %>
     </span>
   </div>
 </nav>
