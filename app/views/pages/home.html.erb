@@ -1,6 +1,6 @@
 <div class="container-fluid">
   <div class="row">
-    <% if current_user.nil? %>
+    <% if current_user.nil? || current_user.role.nil? %>
       <%= render "unknown_user_dashboard" %>
     <% elsif current_user.administrator? %>
       <%= render "administrator_user_dashboard" %>
@@ -11,6 +11,5 @@
     <% elsif current_user.stranger? %>
       <%= render "stranger_user_dashboard" %>
     <% end %>
-
   </div>
 </div>
