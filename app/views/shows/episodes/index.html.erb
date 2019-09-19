@@ -2,7 +2,7 @@
   <div class="row paddingbottom">
     <ul class="list-group" id="admin_actions">
       <% @episodes.all.each do |episode| %>
-        <a href="<%= show_episodes_path(episode) %>" class="list-group-item list-group-item-action">
+        <a href="<%= show_episode_path(@show, episode) %>" class="list-group-item list-group-item-action">
           <div class="row">
             <div class="col">
               <%= episode.title %>
@@ -20,7 +20,7 @@
   </div>
   <div class="row paddingbottom">
     <div class="col-6 offset-3">
-      <%= link_to "Create New", new_show_episode_path, class: "btn btn-primary btn-block" %>
+      <%= link_to "Create !New", new_show_episode_path, class: "btn btn-primary btn-block" %>
     </div>
   </div>
 </div>
