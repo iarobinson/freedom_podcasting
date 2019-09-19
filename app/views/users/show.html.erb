@@ -1,8 +1,8 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row">
     <div class="col-8 offset-2">
       <div class="row">
-        <div class="col-8">
+        <div class="col">
           <p><strong>Email:</strong> <%= @user.email %></p>
           <p><strong>Name:</strong> <%= @user.name %></p>
           <p><strong>Email:</strong> <%= @user.email %></p>
@@ -15,10 +15,11 @@
           <p><strong>Zip:</strong> <%= @user.zip %></p>
           <p><strong>Status:</strong> <%= @user.status %></p>
         </div>
-        <div class="col-4">
+        <div class="col">
           <% if @user.avatar.present? %>
-            <%= image_tag @user.avatar, width: '100%' %>
+            <%= image_tag @user.avatar, width: '100%', class: "paddingbottom" %>
           <% end %>
+          <%= link_to "Edit My Profile", edit_user_path(@user), class: "btn btn-warning btn-block" %>
         </div>
       </div>
     </div>
