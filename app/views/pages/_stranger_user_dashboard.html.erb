@@ -1,3 +1,21 @@
 <div class="col-md-6 offset-md-3 text-center">
-  <h1>Stranger Dashboard</h1>
+  <div class="card">
+    <div class="card-header">
+      <h1>Hello Stranger!</h1>
+    </div>
+    <div class="card-body">
+      <p>
+        If you want to use the app as a producer or a client, please
+        <a href="https://freedompodcasting.slack.com">
+          message me on Slack.
+        </a>
+      </p>
+    </div>
+    <div class="card-footer">
+      <p>
+        If you want, you could
+        <%= link_to "update your profile...", edit_user_path(current_user) %>
+      </p>
+    </div>
+  </div>
 </div>

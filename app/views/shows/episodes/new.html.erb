@@ -3,7 +3,7 @@
     <div class="col-md-8 offset-md-2">
       <h1>New Episode</h1>
       <p>Create a new episode of <%= @show.title %></p>
-      <%= render 'form', episode: @episode, show: @show %><br>
+      <%= render "form", url: show_episodes_url %><br>
       <div class="paddingbottom">
         <%= link_to 'Back', show_episodes_path, class: "btn btn-primary btn-block" %>
       </div>

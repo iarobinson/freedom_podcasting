@@ -1,38 +1,53 @@
 <div class="container">
-  <div class="row paddingbottom">
+  <div class="row">
     <h1>Shows</h1>
   </div>
   <div class="row paddingbottom">
     <% if @shows.size > 0 %>
-      <div class="card-deck">
-        <% @shows.each_with_index do |show, index| %>
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title"><%= show.title %></h5>
-              <div class="card-text"><%= show.description %></div>
-              <div class="card-text">
-                <small class="text-muted">
-                  Last updated <%= time_ago_in_words(show.updated_at) %>
-                </small>
-              </div>
-            </div>
-            <ul class="list-group list-group-flush">
-              <% details = [show.host, show.website, show.category, show.description, show.subtitle] %>
-              <%= if_it_exists_show_list_item(details) %>
-            </ul>
-            <div class="card-footer">
-              <div class="row">
-                <div class="col-6">
-                  <%= link_to 'Show', show, class: "btn btn-primary text-white btn-sm btn-block" %>
-                </div>
-                <div class="col-6">
-                  <%= link_to 'Edit', edit_show_path(show), class: "btn btn-success text-white btn-sm btn-block" %>
-                </div>
-              </div>
-            </div>
-          </div>
-        <% end %>
+      <div class="row">
+        <div class="col-md-10 offset-md-1">
+          <h1 class="text-center">Administrator Dashboard</h1>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Host</th>
+                <th scope="col">Website</th>
+                <th scope="col">Category</th>
+                <th scope="col">Description</th>
+                <th scope="col">Subtitle</th>
+                <th scope="col">Last Updated</th>
+                <th scope="col">Manage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @shows.each_with_index do |show, i| %>
+                <tr>
+                  <th scope="row"><%= i + 1 %></th>
+                  <td>
+                    <%= link_to show_path(show) do %>
+                      <%= show.title %>
+                    <% end %>
+                  </td>
+                  <td><%= show.host %></td>
+                  <td><%= show.website %></td>
+                  <td><%= show.category %></td>
+                  <td><%= show.description %></td>
+                  <td><%= show.subtitle %></td>
+                  <td><%= show.updated_at.to_formatted_s(:short) %></td>
+                  <td>
+                    <%= link_to edit_show_path(show) do %>
+                      <%= material_icon.edit %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
+    </div>
     <% else %>
       <p>You don't have any shows associated with your account.</p>
     <% end %>
@@ -42,4 +57,38 @@
       <%= link_to 'New Show', new_show_path, class: "btn btn-primary btn-block text-white" %>
     </div>
   </div>
+
+
+
+
+
+
+<div class="card-deck">
+  <% @shows.each_with_index do |show, index| %>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title"><%= show.title %></h5>
+        <div class="card-text"><%= show.description %></div>
+        <div class="card-text">
+          <small class="text-muted">
+            Last updated <%= time_ago_in_words(show.updated_at) %>
+          </small>
+        </div>
+      </div>
+      <ul class="list-group list-group-flush">
+        <% details = [show.host, show.website, show.category, show.description, show.subtitle] %>
+        <%= if_it_exists_show_list_item(details) %>
+      </ul>
+      <div class="card-footer">
+        <div class="row">
+          <div class="col-6">
+            <%= link_to 'Show', show, class: "btn btn-primary text-white btn-sm btn-block" %>
+          </div>
+          <div class="col-6">
+            <%= link_to 'Edit', edit_show_path(show), class: "btn btn-success text-white btn-sm btn-block" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
 </div>

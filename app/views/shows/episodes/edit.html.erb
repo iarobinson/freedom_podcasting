@@ -2,9 +2,7 @@
   <div class="row paddingbottom">
     <div class="col-md-8 offset-md-2">
       <h1>Editing Episode</h1>
-
-      <%= render 'form', show: @show, episode: @episode %>
-
+      <%= render "form", url: show_episode_path(@show, @episode), method: :patch %>
       <div class="row paddingtop">
         <div class="col">
           <%= link_to 'Show', show_episodes_path(@show, @episode), class: "btn btn-primary btn-block" %>

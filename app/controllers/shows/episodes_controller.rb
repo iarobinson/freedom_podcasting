@@ -1,14 +1,13 @@
 class Shows::EpisodesController < ApplicationController
   before_action :authenticate_user!
   before_action :set_show
-  before_action :set_episode, only: [:show, :edit, :update]
+  before_action :set_episode, only: [:show, :edit, :update, :destroy]
 
   def index
     @episodes = Episode.where(show_id: params[:show_id])
   end
 
   def show
-
   end
 
   def new

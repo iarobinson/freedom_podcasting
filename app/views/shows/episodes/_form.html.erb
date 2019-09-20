@@ -1,4 +1,4 @@
-<%= form_for new_show_episode_path(show, episode) do |f| %>
+<%= form_with(model: @episode, url: url, local: true) do |f| %>
   <div class="form-group">
     <%= f.label :title %>
     <%= f.text_field :title, class: 'form-control' %>

@@ -1,6 +1,38 @@
 <div class="col-md-8 offset-md-2">
-  <h1>Admin Dashboard</h1>
-  <% @users.each do |u| %>
-    <p><%= "#{u.role}: #{u.first_name} | #{u.inspect}" %></p>
-  <% end %>
+  <h1 class="text-center">Administrator Dashboard</h1>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Role</th>
+        <th scope="col">Email</th>
+        <th scope="col">First</th>
+        <th scope="col">Address</th>
+        <th scope="col">Status</th>
+        <th scope="col">Last Updated</th>
+        <th scope="col">Manage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each_with_index do |user, i| %>
+        <tr>
+          <th scope="row"><%= i + 1 %></th>
+          <td><%= user.role %></td>
+          <td><%= user.email %></td>
+          <td><%= "#{user.first_name} #{user.name}" %></td>
+          <td><%= "#{user.address} #{user.city} #{user.state} #{user.zip}" %></td>
+          <td><%= user.status %></td>
+          <td><%= user.updated_at.to_formatted_s(:short) %></td>
+          <td>
+            <%= link_to user_path(user) do %>
+              <%= material_icon.remove_red_eye %>
+            <% end %>
+            <%= link_to edit_user_path(user) do %>
+              <%= material_icon.edit %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

@@ -9,6 +9,7 @@ gem 'simple_form'
 gem 'popper_js'
 gem 'tether-rails'
 gem 'devise'
+gem 'material_icons'
 # Added this gem to fix the error when launching rails c
 gem 'rb-readline'
 
