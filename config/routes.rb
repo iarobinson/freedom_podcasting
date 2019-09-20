@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :feeds
   post "messages", to: "messages#create"
   root to: 'pages#home'
 
