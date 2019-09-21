@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_20_184544) do
+ActiveRecord::Schema.define(version: 2019_09_20_234920) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,9 @@ ActiveRecord::Schema.define(version: 2019_09_20_184544) do
     t.bigint "show_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "feed_id"
+    t.boolean "paid", default: false
+    t.index ["feed_id"], name: "index_episodes_on_feed_id"
     t.index ["show_id"], name: "index_episodes_on_show_id"
   end
 
@@ -61,8 +64,10 @@ ActiveRecord::Schema.define(version: 2019_09_20_184544) do
     t.string "name"
     t.string "url"
     t.text "description"
+    t.bigint "show_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["show_id"], name: "index_feeds_on_show_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -137,6 +142,7 @@ ActiveRecord::Schema.define(version: 2019_09_20_184544) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "episodes", "feeds"
   add_foreign_key "episodes", "shows"
   add_foreign_key "messages", "users"
   add_foreign_key "shows", "users", column: "users_id"

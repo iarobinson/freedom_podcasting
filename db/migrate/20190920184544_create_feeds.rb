@@ -4,7 +4,7 @@ class CreateFeeds < ActiveRecord::Migration[5.2]
       t.string :name
       t.string :url
       t.text :description
-
+      t.belongs_to :show
       t.timestamps
     end
   end

@@ -11,6 +11,11 @@ Rails.application.routes.draw do
   resources :pages
   resources :administrator_dashboard, only: [:index]
 
+  resources :feeds do
+    member do
+      resources :episodes, only: [:index, :show]
+    end
+  end
   resources :shows
   resources :shows, module: "shows" do
     resources :episodes

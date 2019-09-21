@@ -1,11 +1,11 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+glambition:
+  name: glambition radio feed
+  url: https://alibrown.com/category/glambition/feed/
+  description:
+  show: glambition
 
-one:
-  name: MyString
-  url: MyString
-  description: MyText
-
-two:
-  name: MyString
-  url: MyString
-  description: MyText
+jocko_podcast:
+  name: jocko podcast feed
+  url: http://jockopodcast.libsyn.com/rss
+  description:
+  show: jocko_podcast

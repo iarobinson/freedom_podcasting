@@ -1,48 +1,46 @@
-<div class="container">
+<div class="container-fluid">
   <div class="row paddingbottom">
     <% if @shows.size > 0 %>
-      <div class="row">
-        <div class="col-md-10 offset-md-1">
-          <h1 class="text-center">Shows</h1>
-          <table class="table table-hover">
-            <thead>
+      <div class="col-md-10 offset-md-1">
+        <h1 class="text-center">Shows</h1>
+        <table class="table table-responsive table-hover">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Host</th>
+              <th scope="col">Website</th>
+              <th scope="col">Category</th>
+              <th scope="col">Description</th>
+              <th scope="col">Subtitle</th>
+              <th scope="col">Last Updated</th>
+              <th scope="col">Manage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @shows.each_with_index do |show, i| %>
               <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Host</th>
-                <th scope="col">Website</th>
-                <th scope="col">Category</th>
-                <th scope="col">Description</th>
-                <th scope="col">Subtitle</th>
-                <th scope="col">Last Updated</th>
-                <th scope="col">Manage</th>
+                <th scope="row"><%= i + 1 %></th>
+                <td>
+                  <%= link_to show_path(show) do %>
+                    <%= show.title %>
+                  <% end %>
+                </td>
+                <td><%= show.host %></td>
+                <td><%= show.website %></td>
+                <td><%= show.category %></td>
+                <td><%= show.description %></td>
+                <td><%= show.subtitle %></td>
+                <td><%= show.updated_at.to_formatted_s(:short) %></td>
+                <td>
+                  <%= link_to edit_show_path(show) do %>
+                    <%= material_icon.edit %>
+                  <% end %>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              <% @shows.each_with_index do |show, i| %>
-                <tr>
-                  <th scope="row"><%= i + 1 %></th>
-                  <td>
-                    <%= link_to show_path(show) do %>
-                      <%= show.title %>
-                    <% end %>
-                  </td>
-                  <td><%= show.host %></td>
-                  <td><%= show.website %></td>
-                  <td><%= show.category %></td>
-                  <td><%= show.description %></td>
-                  <td><%= show.subtitle %></td>
-                  <td><%= show.updated_at.to_formatted_s(:short) %></td>
-                  <td>
-                    <%= link_to edit_show_path(show) do %>
-                      <%= material_icon.edit %>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
+            <% end %>
+          </tbody>
+        </table>
       </div>
     <% else %>
       <p>You don't have any shows associated with your account.</p>
