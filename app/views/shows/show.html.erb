@@ -1,4 +1,31 @@
 <div class="container">
+  <div class="row paddingbottom">
+    <div class="col-2">
+      <% if @show.show_art.attached? %>
+        <%= image_tag @show.show_art, width: "150px" %>
+      <% end %>
+    </div>
+    <div class="col-2">
+      <p><strong>Show Title:</strong></p>
+      <p><%= @show.title %></p>
+    </div>
+    <div class="col-2">
+      <p><strong>Host:</strong></p>
+      <p><%= @show.host %></p>
+      <p><strong>Website:</strong></p>
+      <p><%= @show.website %></p>
+    </div>
+    <div class="col-2">
+      <p><strong>Category:</strong></p>
+      <p><%= @show.category %></p>
+    </div>
+    <div class="col-4">
+      <p><strong>Description:</strong></p>
+      <p><%= truncate(@show.description, length: 140) %></p>
+      <p><strong>Subtitle:</strong></p>
+      <p><%= @show.subtitle %></p>
+    </div>
+  </div>
 
   <div class="row paddingbottom">
     <div class="col">
@@ -13,20 +40,6 @@
   </div>
 
   <div class="row paddingbottom">
-    <div class="col">
-      <p><strong>Show Title:</strong></p>
-      <p><%= @show.title %></p>
-      <p><strong>Host:</strong></p>
-      <p><%= @show.host %></p>
-      <p><strong>Website:</strong></p>
-      <p><%= @show.website %></p>
-      <p><strong>Category:</strong></p>
-      <p><%= @show.category %></p>
-      <p><strong>Description:</strong></p>
-      <p><%= @show.description %></p>
-      <p><strong>Subtitle:</strong></p>
-      <p><%= @show.subtitle %></p>
-    </div>
 
     <div class="col">
       <h2>Episodes</h2>

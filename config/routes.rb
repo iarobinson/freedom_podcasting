@@ -8,8 +8,6 @@ Rails.application.routes.draw do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
   resources :users
-  resources :pages
-  resources :administrator_dashboard, only: [:index]
 
   resources :feeds do
     member do

@@ -1,5 +1,13 @@
-<h1>New Feed</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
 
-<%= render 'form', feed: @feed %>
+      <h1>New Feed</h1>
 
-<%= link_to 'Back', feeds_path %>
+      <%= render 'form', feed: @feed %>
+
+      <%= link_to 'Back', feeds_path, class: "btn btn-primary btn-block" %>
+
+    </div>
+  </div>
+</div>

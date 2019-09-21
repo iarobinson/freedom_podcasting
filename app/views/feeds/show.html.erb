@@ -1,19 +1,33 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
 
-<p>
-  <strong>Name:</strong>
-  <%= @feed.name %>
-</p>
+      <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Url:</strong>
-  <%= @feed.url %>
-</p>
+      <p>
+        <strong>Name:</strong>
+        <%= @feed.name %>
+      </p>
 
-<p>
-  <strong>Description:</strong>
-  <%= @feed.description %>
-</p>
+      <p>
+        <strong>Url:</strong>
+        <%= @feed.url %>
+      </p>
 
-<%= link_to 'Edit', edit_feed_path(@feed) %> |
-<%= link_to 'Back', feeds_path %>
+      <p>
+        <strong>Description:</strong>
+        <%= @feed.description %>
+      </p>
+
+      <div class="row">
+        <div class="col-6">
+          <%= link_to 'Edit', edit_feed_path(@feed), class: "btn btn-primary btn-block" %>
+        </div>
+        <div class="col-6">
+          <%= link_to 'Back', feeds_path, class: "btn btn-primary btn-block" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

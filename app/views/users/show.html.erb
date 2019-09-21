@@ -2,20 +2,22 @@
   <div class="row">
     <div class="col-8 offset-2">
       <div class="row">
-        <div class="col-md-6">
-          <p><strong>Email:</strong> <%= @user.email %></p>
-          <p><strong>Name:</strong> <%= @user.name %></p>
-          <p><strong>Email:</strong> <%= @user.email %></p>
-          <p><strong>First Name:</strong> <%= @user.first_name %></p>
-          <p><strong>Last Name:</strong> <%= @user.last_name %></p>
-          <p><strong>Address:</strong> <%= @user.address %></p>
-          <p><strong>City:</strong> <%= @user.city %></p>
-          <p><strong>State:</strong> <%= @user.state %></p>
-          <p><strong>Country:</strong> <%= @user.country %></p>
-          <p><strong>Zip:</strong> <%= @user.zip %></p>
-          <p><strong>Status:</strong> <%= @user.status %></p>
+        <div class="col-md-4">
+          <p><strong>Email:</strong><br><%= @user.email %></p>
+          <p><strong>Name:</strong><br><%= @user.name %></p>
+          <p><strong>Email:</strong><br><%= @user.email %></p>
+          <p><strong>First Name:</strong><br><%= @user.first_name %></p>
+          <p><strong>Last Name:</strong><br><%= @user.last_name %></p>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-4">
+          <p><strong>Address:</strong><br><%= @user.address %></p>
+          <p><strong>City:</strong><br><%= @user.city %></p>
+          <p><strong>State:</strong><br><%= @user.state %></p>
+          <p><strong>Country:</strong><br><%= @user.country %></p>
+          <p><strong>Zip:</strong><br><%= @user.zip %></p>
+          <p><strong>Status:</strong><br><%= @user.status %></p>
+        </div>
+        <div class="col-md-4">
           <% if @user.avatar.attached? %>
             <%= image_tag @user.avatar, width: '100%', style: "max-height:500px;max-width:500px", class: "paddingbottom" %>
           <% else %>
@@ -23,7 +25,7 @@
           <% end %>
         </div>
       </div>
-      <div class="row">
+      <div class="row paddingbottom">
         <div class="col-md-6 offset-md-3">
           <%= link_to "Edit My Profile", edit_user_path(@user), class: "btn btn-warning btn-block" %>
         </div>

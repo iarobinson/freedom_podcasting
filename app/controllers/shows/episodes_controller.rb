@@ -1,6 +1,6 @@
 class Shows::EpisodesController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_show
+  before_action :set_show, except: [:new]
   before_action :set_episode, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -11,6 +11,7 @@ class Shows::EpisodesController < ApplicationController
   end
 
   def new
+    @show = Show.new
     @episode = @show.episodes.build
   end
 
