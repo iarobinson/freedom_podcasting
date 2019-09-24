@@ -11,10 +11,10 @@ Rails.application.routes.draw do
   end
   resources :episodes, only: [:index]
 
-  resources :users
   devise_for :users do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
+  resources :users
 
   resources :shows
   resources :shows, module: "shows" do

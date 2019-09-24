@@ -1,7 +1,12 @@
 <div class="col-md-8 offset-md-2">
   <h1 class="text-center">Producer Dashboard</h1>
   <% @shows.each do |show| %>
-    <p><%= show.title %></p>
+    <p>
+      <%= show.title %> 
+      <span class="float-right small">
+        Episode Count: <%= show.episodes.count %>
+      </span>
+    </p>
     <ul class="list-group">
       <% show.episodes.each do |episode| %>
         <li class="list-group-item d-flex justify-content-between align-items-center">
