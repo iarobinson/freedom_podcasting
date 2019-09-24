@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :invoices
   post "messages", to: "messages#create"
   root to: 'pages#home'
 
