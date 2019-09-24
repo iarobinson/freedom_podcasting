@@ -20,13 +20,9 @@
         <% end %>
       </li>
     </ul>
-    <span class="navbar-text">
+    <span class="navbar-text text-center">
       <%= link_to edit_user_path(current_user), class: "nav-link" do %>
-        <% if current_user.first_name %>
-          <%= "Hello #{current_user.first_name.capitalize}" %>
-        <% else %>
-          <%= "You're Signed In" %>
-        <% end %>
+        <%= material_icon.settings_application %>
       <% end %>
     </span>
   </div>

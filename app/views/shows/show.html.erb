@@ -3,6 +3,8 @@
     <div class="col-2">
       <% if @show.show_art.attached? %>
         <%= image_tag @show.show_art, width: "150px" %>
+      <% else %>
+        <%= image_tag "default/show-art.jpg", width: "150px" %>
       <% end %>
     </div>
     <div class="col-2">
@@ -36,6 +38,9 @@
     </div>
     <div class="col">
       <%= link_to 'All My Shows', shows_path, class: "btn btn-primary btn-block"  %>
+    </div>
+    <div class="col">
+      <%# <%= link_to 'Edit Feed', feeds_path(@show.feed), class: "btn btn-primary btn-block"  %> %>
     </div>
   </div>
 

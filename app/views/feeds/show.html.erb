@@ -3,6 +3,11 @@
     <div class="col-md-6 offset-md-3">
 
       <p id="notice"><%= notice %></p>
+      <%= image_tag @feed.show.show_art, class: "img-fluid" if @feed.show.show_art.attached? %>
+      <p>
+        <strong>Show:</strong>
+        <%= link_to "#{@feed.show.title}", show_path(@feed.show) %>
+      </p>
 
       <p>
         <strong>Name:</strong>

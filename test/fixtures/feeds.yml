@@ -9,3 +9,9 @@ jocko_podcast:
   url: http://jockopodcast.libsyn.com/rss
   description:
   show: jocko_podcast
+
+love_affair_travel:
+  name: Love Affair Travel
+  url: https://ianrobinson.net/feed/podcast/
+  description:
+  show: love_affair_travel

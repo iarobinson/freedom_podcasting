@@ -1,12 +1,18 @@
 <div class="container">
   <div class="row">
-    <div class=" offset-md-2 col-md-8">
+    <div class="offset-md-2 col-md-8">
       <h1>Editing Feed</h1>
 
       <%= render 'form', feed: @feed %>
 
-      <%= link_to 'Show', @feed %> |
-      <%= link_to 'Back', feeds_path %>
+      <div class="row">
+        <div class="col">
+          <%= link_to 'Show', @feed, class: "btn btn-primary btn-block" %>
+        </div>
+        <div class="col">
+          <%= link_to 'Back', feeds_path, class: "btn btn-primary btn-block" %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

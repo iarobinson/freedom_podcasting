@@ -12,6 +12,9 @@ class FeedsController < ApplicationController
     @feed = Feed.new
   end
 
+  def sync_feed
+  end
+
   def edit
   end
 

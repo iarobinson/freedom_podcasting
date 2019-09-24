@@ -1,5 +1,3 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
 glambition:
   title: Glambition Radio with Ali Brown
   host: Ali Brown
@@ -8,6 +6,14 @@ glambition:
   description: Interviews with today's leading women entrepreneurs
   subtitle:
 
+  jocko_podcast:
+    title: Jocko Podcast
+    host: Jocko Willink
+    website: www.jockopodcast.com
+    category: Personal Journals
+    description: Retired Navy SEAL, Jocko Willink and Director, Echo Charles discuss discipline and leadership in business, war, relationships and everyday life.
+    subtitle:
+
 love_affair_travel:
   title: Love Affair Travel Podcast - Stories of Adventure and Enterprise
   host: Ian Robinson
@@ -15,11 +21,3 @@ love_affair_travel:
   category: Personal Journals
   description: A show exploring the stories and adventures in long term travel
   subtitle: Hosted by Ian Robinson of Freedom Podcasting
-
-jocko_podcast:
-  title: Jocko Podcast
-  host: Jocko Willink
-  website: www.jockopodcast.com
-  category: Personal Journals
-  description: Retired Navy SEAL, Jocko Willink and Director, Echo Charles discuss discipline and leadership in business, war, relationships and everyday life.
-  subtitle: 
