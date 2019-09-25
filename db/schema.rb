@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_20_234920) do
+ActiveRecord::Schema.define(version: 2019_09_24_191518) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,26 @@ ActiveRecord::Schema.define(version: 2019_09_20_234920) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["show_id"], name: "index_feeds_on_show_id"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.integer "amount_due"
+    t.string "status"
+    t.integer "invoice_number"
+    t.datetime "invoice_date"
+    t.datetime "payment_due"
+    t.bigint "users_id"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["users_id"], name: "index_invoices_on_users_id"
+  end
+
+  create_table "invoices_users", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "invoice_id"
+    t.index ["invoice_id"], name: "index_invoices_users_on_invoice_id"
+    t.index ["user_id"], name: "index_invoices_users_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -135,6 +155,7 @@ ActiveRecord::Schema.define(version: 2019_09_20_234920) do
     t.string "name"
     t.string "status"
     t.integer "role"
+    t.integer "invoices"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -144,6 +165,7 @@ ActiveRecord::Schema.define(version: 2019_09_20_234920) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "episodes", "feeds"
   add_foreign_key "episodes", "shows"
+  add_foreign_key "invoices", "users", column: "users_id"
   add_foreign_key "messages", "users"
   add_foreign_key "shows", "users", column: "users_id"
 end

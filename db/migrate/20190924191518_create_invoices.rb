@@ -11,5 +11,12 @@ class CreateInvoices < ActiveRecord::Migration[5.2]
 
       t.timestamps
     end
+
+    create_table :invoices_users do |t|
+      t.belongs_to :user
+      t.belongs_to :invoice
+    end
+
+    add_column :users, :invoices, :integer
   end
 end

@@ -21,13 +21,14 @@ class Shows::EpisodesController < ApplicationController
   def create
     @episode = Episode.new(episode_params)
     @episode.show_id = @show.id
+    @episode.feed_id = Feed.where(show_id: @show.id).first.id
 
     respond_to do |format|
       if @episode.save
         format.html { redirect_to show_episodes_path(@show), notice: 'Episode was successfully created.' }
         format.json { render :episode, status: :created, location: @episode }
       else
-        format.html { render :new }
+        format.html { render :new, warning: "Something went wrong." }
         format.json { render json: @episode.errors, status: :unprocessable_entity }
       end
     end
