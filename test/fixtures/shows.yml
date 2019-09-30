@@ -6,13 +6,13 @@ glambition:
   description: Interviews with today's leading women entrepreneurs
   subtitle:
 
-  jocko_podcast:
-    title: Jocko Podcast
-    host: Jocko Willink
-    website: www.jockopodcast.com
-    category: Personal Journals
-    description: Retired Navy SEAL, Jocko Willink and Director, Echo Charles discuss discipline and leadership in business, war, relationships and everyday life.
-    subtitle:
+jocko_podcast:
+  title: Jocko Podcast
+  host: Jocko Willink
+  website: www.jockopodcast.com
+  category: Personal Journals
+  description: Retired Navy SEAL, Jocko Willink and Director, Echo Charles discuss discipline and leadership in business, war, relationships and everyday life.
+  subtitle:
 
 love_affair_travel:
   title: Love Affair Travel Podcast - Stories of Adventure and Enterprise
