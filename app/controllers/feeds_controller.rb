@@ -1,6 +1,7 @@
 class FeedsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_feed, only: [:show, :edit, :update, :destroy]
+  include FeedsHelper
 
   def index
     @feeds = Feed.all
@@ -26,11 +27,13 @@ class FeedsController < ApplicationController
       description: feed_params[:description],
     })
     @feed.show = @show
+    @show.users << current_user
 
     respond_to do |format|
       if @feed.save
         format.html { redirect_to @feed, notice: 'Feed was successfully created.' }
         format.json { render :show, status: :created, location: @feed }
+        fetch_episodes(@feed, @show)
       else
         format.html { render :new }
         format.json { render json: @feed.errors, status: :unprocessable_entity }

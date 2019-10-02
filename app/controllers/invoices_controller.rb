@@ -9,6 +9,7 @@ class InvoicesController < ApplicationController
         @invoices << i
       end
     end
+
     @invoices
   end
 

@@ -4,6 +4,10 @@
       <p id="notice"><%= notice %></p>
 
       <div class="row">
+        <audio controls>
+          <source src="<%= @episode.enclosure %>" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
         <div class="col">
           <p><strong>Title:</strong> <%= @episode.title %></p>
           <p><strong>Client cost:</strong> <%= @episode.client_cost %></p>

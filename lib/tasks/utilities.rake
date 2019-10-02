@@ -15,11 +15,11 @@ namespace :utilities do
 
   desc "Sync Episodes Based on Podcast Feeds"
   task sync_episodes_to_podcast_feeds: :environment do
+    p "Syncing episodes based on feeds."
     Feed.all.each do |feed|
       xml = HTTParty.get(feed.url).body
       content = Feedjira.parse(xml)
       content.entries.each do |episode|
-        p episode.title, " <= episode.title"
         if Episode.all.where(title: episode.title).size.zero?
           new_episode = Episode.new(
             title: episode.title,
@@ -32,9 +32,6 @@ namespace :utilities do
           new_episode.show = Show.find(feed.show_id)
           new_episode.feed = feed
           new_episode.save
-          p "#{new_episode.title} added to the database"
-        else
-          p "#{episode.title} skipped as it's already in the database."
         end
       end
     end
