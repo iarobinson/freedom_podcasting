@@ -36,4 +36,15 @@ namespace :utilities do
       end
     end
   end
+
+  desc "Generate invoices for all producers to be filled out"
+  task generate_new_round_of_monthly_invoices: :environment do
+    producers = User.where(role: "producer")
+    producers.each do |producer|
+      invoice = Invoice.new()
+      invoice.users << producer
+      invoice.save
+      p "Invoice added to #{producer.email}"
+    end
+  end
 end
