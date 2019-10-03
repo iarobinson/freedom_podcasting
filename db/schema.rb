@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_24_191518) do
+ActiveRecord::Schema.define(version: 2019_10_03_211151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,7 +56,9 @@ ActiveRecord::Schema.define(version: 2019_09_24_191518) do
     t.datetime "updated_at", null: false
     t.bigint "feed_id"
     t.boolean "paid", default: false
+    t.bigint "invoice_id"
     t.index ["feed_id"], name: "index_episodes_on_feed_id"
+    t.index ["invoice_id"], name: "index_episodes_on_invoice_id"
     t.index ["show_id"], name: "index_episodes_on_show_id"
   end
 
@@ -155,7 +157,6 @@ ActiveRecord::Schema.define(version: 2019_09_24_191518) do
     t.string "name"
     t.string "status"
     t.integer "role"
-    t.integer "invoices"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -164,8 +165,8 @@ ActiveRecord::Schema.define(version: 2019_09_24_191518) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "episodes", "feeds"
+  add_foreign_key "episodes", "invoices"
   add_foreign_key "episodes", "shows"
-  add_foreign_key "invoices", "users", column: "users_id"
   add_foreign_key "messages", "users"
   add_foreign_key "shows", "users", column: "users_id"
 end

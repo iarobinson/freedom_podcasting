@@ -28,12 +28,20 @@
 
       <p>
         <strong>Users:</strong>
-        <%= @invoice.users %>
+        <%= User.find(@invoice.users.first.id).name %>
       </p>
 
       <p>
         <strong>Notes:</strong>
         <%= @invoice.notes %>
+      </p>
+
+      <p>
+        <%= @invoice.episodes.all.first %>
+        <strong>Episodes:</strong>
+        <%= @invoice.episodes.each do |episode| %>
+          <%= episode.title %>
+        <% end %>
       </p>
 
       <%= link_to 'Edit', edit_invoice_path(@invoice), class: "btn btn-primary btn-block" %>
