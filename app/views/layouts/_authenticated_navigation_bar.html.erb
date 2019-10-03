@@ -8,17 +8,29 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav mr-auto text-center">
       <li class="nav-item">
         <%= link_to shows_path, class: "nav-link" do %>
-          My Shows <span class="sr-only">(current)</span>
+          <%= material_icon.slideshow %><br>Shows
         <% end %>
       </li>
       <li class="nav-item">
-        <%= link_to destroy_user_session_path, method: :delete, class: "nav-link" do %>
-          Sign Out
+        <%= link_to feeds_path, class: "nav-link" do %>
+          <%= material_icon.rss_feed %><br>Feeds
         <% end %>
       </li>
+      <li class="nav-item">
+        <%= link_to invoices_path, class: "nav-link" do %>
+          <%= material_icon.attach_money %><br>Invoices
+        <% end %>
+      </li>
+      <% if current_user.role === "administrator" %>
+        <li class="nav-item">
+          <%= link_to users_path, class: "nav-link" do %>
+            <%= material_icon.supervisor_account %><br>Users
+          <% end %>
+        </li>
+      <% end %>
     </ul>
     <span class="navbar-text text-center">
       <%= link_to edit_user_path(current_user), class: "nav-link" do %>

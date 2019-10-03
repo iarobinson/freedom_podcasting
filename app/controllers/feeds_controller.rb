@@ -26,6 +26,7 @@ class FeedsController < ApplicationController
       title: feed_params[:name],
       description: feed_params[:description],
     })
+    binding.pry
     @feed.show = @show
     @show.users << current_user
 

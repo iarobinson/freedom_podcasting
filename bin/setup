@@ -37,6 +37,9 @@ chdir APP_ROOT do
   puts "\n== Connecting fixture data =="
   system! 'bin/rails utilities:add_users_to_shows'
 
+  puts "\n== Sync episodes from feeds =="
+  system! 'bin/rails utilities:sync_episodes_to_podcast_feeds'
+
   puts "\n== Restarting application server =="
   system! 'bin/rails restart'
 end

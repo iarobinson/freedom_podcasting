@@ -2,9 +2,9 @@
   <div class="row paddingbottom">
     <div class="col-2">
       <% if @show.show_art.attached? %>
-        <%= image_tag @show.show_art, width: "150px" %>
+        <%= image_tag @show.show_art, class: "img-fluid" %>
       <% else %>
-        <%= image_tag "default/show-art.jpg", width: "150px" %>
+        <%= image_tag "default/show-art.jpg", class: "img-fluid" %>
       <% end %>
     </div>
     <div class="col-2">
@@ -40,7 +40,7 @@
       <%= link_to 'All My Shows', shows_path, class: "btn btn-primary btn-block"  %>
     </div>
     <div class="col">
-      <%# <%= link_to 'Edit Feed', feeds_path(@show.feed), class: "btn btn-primary btn-block"  %> %>
+      <%= link_to 'Feed', feed_path(@show.feed.id), class: "btn btn-primary btn-block"  %>
     </div>
   </div>
 

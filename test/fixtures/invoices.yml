@@ -8,6 +8,7 @@ one:
   payment_due: 2019-09-24 12:15:18
   users: one
   notes: MyText
+  users: [users(:producer_milo)]
 
 two:
   amount_due: 1
