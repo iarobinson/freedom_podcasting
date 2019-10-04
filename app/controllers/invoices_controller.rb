@@ -5,9 +5,15 @@ class InvoicesController < ApplicationController
 
   def index
     @invoices = []
-    Invoice.all.each do |i|
-      if i.users.include?(current_user)
+    if (current_user.role === "administrator")
+      Invoice.all.each do |i|
         @invoices << i
+      end
+    else
+      Invoice.all.each do |i|
+        if i.users.include?(current_user)
+          @invoices << i
+        end
       end
     end
 

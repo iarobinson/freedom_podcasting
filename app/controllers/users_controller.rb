@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :show]
+  before_action :authenticate_user!, only: [:index]
 
   def index
     @users = User.all
@@ -9,7 +10,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    unless current_user == @user
+    unless current_user === @user || current_user.role === "administrator"
       redirect_to users_path, notice: "You can't edit someone else's account."
     end
   end

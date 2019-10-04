@@ -1,5 +1,11 @@
-<h1>New Invoice</h1>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h1>New Invoice</h1>
 
-<%= render 'form', invoice: @invoice %>
+      <%= render 'form', invoice: @invoice %>
 
-<%= link_to 'Back', invoices_path %>
+      <%= link_to 'Back', invoices_path, class: "btn btn-warning btn-block" %>
+    </div>
+  </div>
+</div>

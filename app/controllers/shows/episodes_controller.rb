@@ -21,7 +21,6 @@ class Shows::EpisodesController < ApplicationController
   def create
     @episode = Episode.new(episode_params)
     @episode.show_id = @show.id
-    @episode.feed_id = Feed.where(show_id: @show.id).first.id
 
     respond_to do |format|
       if @episode.save

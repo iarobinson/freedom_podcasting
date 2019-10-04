@@ -38,7 +38,7 @@ chdir APP_ROOT do
   system! 'bin/rails utilities:add_users_to_shows'
 
   puts "\n== Sync episodes from feeds =="
-  system! 'bin/rails utilities:sync_episodes_to_podcast_feeds'
+  system! 'bin/rails utilities:sync_episodes_to_podcast_show_feed'
 
   puts "\n== Add an invoice to each producer =="
   system! 'bin/rails utilities:generate_new_round_of_monthly_invoices'

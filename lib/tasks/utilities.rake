@@ -14,9 +14,9 @@ namespace :utilities do
   end
 
   desc "Sync Episodes Based on Podcast Feeds"
-  task sync_episodes_to_podcast_feeds: :environment do
-    Feed.all.each do |feed|
-      xml = HTTParty.get(feed.url).body
+  task sync_episodes_to_podcast_show_feed: :environment do
+    Show.all.each do |show|
+      xml = HTTParty.get(show.url).body
       content = Feedjira.parse(xml)
       content.entries.each do |episode|
         if Episode.all.where(title: episode.title).size.zero?
@@ -28,8 +28,7 @@ namespace :utilities do
             link: episode.url,
             description: episode.itunes_summary
           )
-          new_episode.show = Show.find(feed.show_id)
-          new_episode.feed = feed
+          new_episode.show = show.id
           new_episode.save
         end
       end

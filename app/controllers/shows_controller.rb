@@ -1,6 +1,7 @@
 class ShowsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_show, only: [:show, :edit, :update, :destroy]
+  include FeedsHelper
 
   def index
     @shows = current_user.shows
@@ -20,6 +21,8 @@ class ShowsController < ApplicationController
   def create
     @show = Show.new(show_params)
     @show.users << current_user
+    fetch_episodes(@show)
+    # binding.pry
 
     respond_to do |format|
       if @show.save
@@ -59,9 +62,6 @@ class ShowsController < ApplicationController
     end
 
     def show_params
-      params.require(:show).permit(
-        :title, :host, :website, :category, :description, :subtitle,
-        :show_art, :show_id
-      )
+      params.require(:show).permit(:feed_url)
     end
 end

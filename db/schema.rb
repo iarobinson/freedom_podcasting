@@ -38,10 +38,35 @@ ActiveRecord::Schema.define(version: 2019_10_04_211205) do
 
   create_table "episodes", force: :cascade do |t|
     t.string "title"
-    t.integer "number"
+    t.datetime "pubDate"
+    t.string "link"
+    t.text "description"
+    t.string "content_encoded"
+    t.string "enclosure"
+    t.integer "itunes_duration"
+    t.boolean "itunes_explicit"
+    t.string "itunes_keywords"
+    t.string "itunes_subtitle"
+    t.string "itunes_episode"
+    t.string "itunes_episodeType"
     t.integer "client_cost"
+    t.boolean "paid"
     t.bigint "show_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
     t.index ["show_id"], name: "index_episodes_on_show_id"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.integer "amount_due"
+    t.string "status"
+    t.integer "invoice_number"
+    t.datetime "invoice_date"
+    t.datetime "payment_due"
+    t.bigint "users"
+    t.text "notes"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "messages", force: :cascade do |t|
