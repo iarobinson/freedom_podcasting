@@ -23,11 +23,11 @@ module FeedsHelper
       end
     end
 
-    show_art_from_feed = open(content.itunes_image)
-    show.show_art.attach(
-      io: show_art_from_feed,
-      filename: "#{content.title.underscore.gsub(" ", "_")}_show_art.jpg}"
-    )
+    # show_art_from_feed = open(content.itunes_image)
+    # show.show_art.attach(
+    #   io: show_art_from_feed,
+    #   filename: "#{content.title.underscore.gsub(" ", "_")}_show_art.jpg}"
+    # )
 
     show.title = content.title
     show.host = content.itunes_author
