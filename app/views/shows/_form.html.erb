@@ -3,25 +3,7 @@
   <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
 
   <div class="form-inputs">
-    <div class="row">
-      <div class="col">
-        <%= f.file_field :show_art, multiple: false, direct_upload: true %>
-      </div>
-      <div class="col">
-        <% if @show.show_art.attached? %>
-          <%= image_tag @show.show_art, style: "width:100px;" %>
-        <% else %>
-          <%= image_tag "default_user_avatar", style: "width:100px;" %>
-        <% end %>
-      </div>
-    </div>
-
-    <%= f.input :title %>
-    <%= f.input :host %>
-    <%= f.input :website %>
-    <%= f.input :category %>
-    <%= f.input :description %>
-    <%= f.input :subtitle %>
+    <%= f.input :feed_url %>
   </div>
 
   <div class="form-actions">

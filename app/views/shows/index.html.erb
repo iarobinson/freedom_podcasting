@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row paddingbottom">
-    <% if @shows.size > 0 %>
-      <div class="col-md-10 offset-md-1">
+    <div class="col-md-10 offset-md-1">
+      <% if @shows.size > 0 %>
         <h1 class="text-center">Shows</h1>
         <table class="table table-responsive table-hover">
           <thead>
@@ -41,10 +41,10 @@
             <% end %>
           </tbody>
         </table>
-      </div>
-    <% else %>
-      <p>You don't have any shows associated with your account.</p>
-    <% end %>
+        <% else %>
+        <p class="text-center">You don't have any shows associated with your account.</p>
+      <% end %>
+    </div>
   </div>
   <div class="row paddingbottom">
     <div class="col-4 offset-4">
