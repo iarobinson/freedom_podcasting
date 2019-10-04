@@ -1,39 +1,36 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-  <a class="navbar-brand text-center" href="/">Freedom<br>Podcasting</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse"
-          data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
-          aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavDropdown">
-    <ul class="navbar-nav mr-auto text-center">
-      <li class="nav-item">
-        <%= link_to shows_path, class: "nav-link" do %>
-          <%= material_icon.slideshow %><br>Shows
-        <% end %>
-      </li>
-      <li class="nav-item">
-        <%= link_to feeds_path, class: "nav-link" do %>
-          <%= material_icon.rss_feed %><br>Feeds
-        <% end %>
-      </li>
-      <li class="nav-item">
-        <%= link_to invoices_path, class: "nav-link" do %>
-          <%= material_icon.attach_money %><br>Invoices
-        <% end %>
-      </li>
-      <% if current_user.role === "administrator" %>
-        <li class="nav-item">
-          <%= link_to users_path, class: "nav-link" do %>
-            <%= material_icon.supervisor_account %><br>Users
-          <% end %>
-        </li>
+<ul class="nav justify-content-end text-center">
+
+  <li class="nav-item">
+    <%= link_to root_path, class: "nav-link" do %>
+      <%= material_icon.home %><br>Home
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to shows_path, class: "nav-link" do %>
+      <%= material_icon.slideshow %><br>Shows
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to feeds_path, class: "nav-link" do %>
+      <%= material_icon.rss_feed %><br>Feeds
+    <% end %>
+  </li>
+  <li class="nav-item">
+    <%= link_to invoices_path, class: "nav-link" do %>
+      <%= material_icon.attach_money %><br>Invoices
+    <% end %>
+  </li>
+  <% if current_user.role === "administrator" %>
+    <li class="nav-item">
+      <%= link_to users_path, class: "nav-link" do %>
+        <%= material_icon.supervisor_account %><br>Users
       <% end %>
-    </ul>
-    <span class="navbar-text text-center">
-      <%= link_to edit_user_path(current_user), class: "nav-link" do %>
-        <%= material_icon.settings_application %><br>Settings
-      <% end %>
-    </span>
-  </div>
-</nav>
+    </li>
+  <% end %>
+  <li class="nav-item">
+    <%= link_to edit_user_path(current_user), class: "nav-link" do %>
+      <%= material_icon.settings_application %><br>Settings
+    <% end %>
+  </li>
+
+</ul>

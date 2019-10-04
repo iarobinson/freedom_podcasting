@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_10_03_211151) do
+ActiveRecord::Schema.define(version: 2019_09_19_223808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,62 +34,6 @@ ActiveRecord::Schema.define(version: 2019_10_03_211151) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "episodes", force: :cascade do |t|
-    t.string "title"
-    t.date "pubDate"
-    t.string "link"
-    t.string "description"
-    t.string "content_encoded"
-    t.string "enclosure"
-    t.integer "itunes_duration"
-    t.boolean "itunes_explicit"
-    t.string "itunes_keywords"
-    t.string "itunes_subtitle"
-    t.string "itunes_episode"
-    t.string "itunes_episodeType"
-    t.integer "episode_number"
-    t.integer "client_cost"
-    t.bigint "show_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "feed_id"
-    t.boolean "paid", default: false
-    t.bigint "invoice_id"
-    t.index ["feed_id"], name: "index_episodes_on_feed_id"
-    t.index ["invoice_id"], name: "index_episodes_on_invoice_id"
-    t.index ["show_id"], name: "index_episodes_on_show_id"
-  end
-
-  create_table "feeds", force: :cascade do |t|
-    t.string "name"
-    t.string "url"
-    t.text "description"
-    t.bigint "show_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["show_id"], name: "index_feeds_on_show_id"
-  end
-
-  create_table "invoices", force: :cascade do |t|
-    t.integer "amount_due"
-    t.string "status"
-    t.integer "invoice_number"
-    t.datetime "invoice_date"
-    t.datetime "payment_due"
-    t.bigint "users_id"
-    t.text "notes"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["users_id"], name: "index_invoices_on_users_id"
-  end
-
-  create_table "invoices_users", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "invoice_id"
-    t.index ["invoice_id"], name: "index_invoices_users_on_invoice_id"
-    t.index ["user_id"], name: "index_invoices_users_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -164,9 +108,6 @@ ActiveRecord::Schema.define(version: 2019_10_03_211151) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "episodes", "feeds"
-  add_foreign_key "episodes", "invoices"
-  add_foreign_key "episodes", "shows"
   add_foreign_key "messages", "users"
   add_foreign_key "shows", "users", column: "users_id"
 end

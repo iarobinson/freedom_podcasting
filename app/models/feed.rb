@@ -1,4 +1,4 @@
 class Feed < ApplicationRecord
-  has_many :episodes, dependent: :destroy
+  has_many :episodes
   belongs_to :show
 end

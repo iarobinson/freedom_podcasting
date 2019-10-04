@@ -6,7 +6,7 @@ class InvoicesController < ApplicationController
   def index
     @invoices = []
     Invoice.all.each do |i|
-      if i.users.includes(current_user)
+      if i.users.include?(current_user)
         @invoices << i
       end
     end

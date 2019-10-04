@@ -21,4 +21,6 @@ Rails.application.routes.draw do
   resources :shows, module: "shows" do
     resources :episodes
   end
+
+  resources :dashboard, only: [:index]
 end
