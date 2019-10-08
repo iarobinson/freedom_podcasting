@@ -17,6 +17,24 @@ client_ali:
   encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
   role: client
 
+producer_ben:
+  name: ben
+  email: ben@testing.com
+  encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
+  role: producer
+
+producer_mason:
+  name: mason
+  email: mason@testing.com
+  encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
+  role: producer
+
+producer_matt:
+  name: matt
+  email: matt@testing.com
+  encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
+  role: producer
+
 producer_milo:
   name: milo
   email: milo@testing.com
@@ -26,6 +44,12 @@ producer_milo:
 producer_nomes:
   name: nomes
   email: nomes@testing.com
+  encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
+  role: producer
+
+producer_sylvia:
+  name: sylvia
+  email: sylvia@testing.com
   encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
   role: producer
 

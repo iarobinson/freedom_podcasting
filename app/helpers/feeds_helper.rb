@@ -1,4 +1,5 @@
 module FeedsHelper
+  require 'open-uri'
 
   def fetch_episodes(show)
     xml = HTTParty.get(show.feed_url).body
@@ -23,15 +24,26 @@ module FeedsHelper
       end
     end
 
+    # binding.pry
+
+    # download = open(content.itunes_image)
+    # IO.copy_stream(download, "#{content.title.underscore.gsub(" ", "_")}_show_art.jpg}")
+
+
+    # show.show_art.attach(content.itunes_image)
+    #
     # show_art_from_feed = open(content.itunes_image)
     # show.show_art.attach(
     #   io: show_art_from_feed,
     #   filename: "#{content.title.underscore.gsub(" ", "_")}_show_art.jpg}"
     # )
+    #
+    # show.show_art
 
     show.title = content.title
     show.host = content.itunes_author
     show.category = content.itunes_categories
     show.description = content.description
+    show.save
   end
 end

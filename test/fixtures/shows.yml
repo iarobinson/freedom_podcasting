@@ -1,8 +1,71 @@
 glambition:
   feed_url: https://alibrown.com/category/glambition/feed
 
-jocko_podcast:
-  feed_url: http://jockopodcast.libsyn.com/rss
+question_mark:
+  feed_url: https://ianrobinson.net/category/question-mark/feed
 
-love_affair_travel:
-  feed_url: http://rss.art19.com/the-daily
+stay_inspired:
+  feed_url: http://kongitfarrell.libsyn.com/rss
+
+venture_studios:
+  feed_url: http://feeds.soundcloud.com/users/soundcloud:users:171934475/sounds.rss
+
+successfully_ny:
+  feed_url: http://alexshalman.libsyn.com/rss
+
+voices_4_ed:
+  feed_url: http://voices4ed.libsyn.com/rss
+
+ready_set_love:
+  feed_url: http://readysetlove.libsyn.com/rss
+
+first_but_last:
+  feed_url: https://firstbutlast.libsyn.com/rss
+
+lets_talk_hemp:
+  feed_url: https://letstalkhemp.libsyn.com/rss
+
+beauty_biz:
+  feed_url: http://beautybiz.libsyn.com/rss
+
+money_twist:
+  feed_url: http://moneytwist.libsyn.com/rss
+
+shes_got_moxie:
+  feed_url: http://shesgotmoxie.libsyn.com/rss
+
+unstoppable:
+  feed_url: http://karagoldin.libsyn.com/rss
+
+the_terri_cole_show:
+  feed_url: https://terricole.libsyn.com/theterricoleshow
+
+the_rant_with_baeth:
+  feed_url: http://baethdavis.libsyn.com/rss
+
+the_mentor_files:
+  feed_url: http://conversationswith.libsyn.com/rss
+
+business_miracles:
+  feed_url: http://businessmiracles.libsyn.com/rss
+
+the_dr_steven_show:
+  feed_url: http://drsteven.libsyn.com/rss
+
+nion_radio:
+  feed_url: https://nionlife.com/feed/podcast/
+
+asian_efficiency:
+  feed_url: http://www.asianefficiency.com/feed/podcast/
+
+advanced_manufacturing_now:
+  feed_url: https://advancedmanufacturing.org/feed/podcast/
+
+leadership_and_business:
+  feed_url: http://leadershipandbusiness.libsyn.com/rss
+
+neuron_fire:
+  feed_url: http://neuronfire.libsyn.com/neuronfire
+
+top_traders_unplugged:
+  feed_url: http://www.toptradersunplugged.com/feed/podcast

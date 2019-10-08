@@ -8,6 +8,7 @@
     <% @users.each do |user| %>
       <div class="col-md-4 pb-3">
         <div class="card">
+          <%= image_tag user.avatar, class: "card-img-top" if user.avatar.attached? %>
           <div class="card-body">
             <ul class="list-group list-group-flush">
               <%= if_it_exists_show_list_item([
