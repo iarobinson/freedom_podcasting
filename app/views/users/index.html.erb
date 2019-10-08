@@ -5,26 +5,24 @@
     </div>
   </div>
   <div class="row pb-5">
-    <div class="card-deck">
-      <% @users.each do |user| %>
-        <div class="col-md-4 pb-3">
-          <div class="card">
-            <div class="card-body">
-              <ul class="list-group list-group-flush">
-                <%= if_it_exists_show_list_item([
-                  "<strong>Status</strong>: #{user.status}",
-                  "<strong>Name</strong>: #{user.first_name} #{user.name}",
-                  "<strong>Last updated</strong>: #{distance_of_time_in_words(Time.now, user.updated_at)}",
-                  "<strong>Email</strong>: #{user.email}"
-                ]) %>
-              </ul>
-            </div>
-            <div class="card-footer">
-              <%= link_to "Manage", edit_user_path(user), class: "btn btn-primary btn-block" %>
-            </div>
+    <% @users.each do |user| %>
+      <div class="col-md-4 pb-3">
+        <div class="card">
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <%= if_it_exists_show_list_item([
+                "<strong>Status</strong>: #{user.status}",
+                "<strong>Name</strong>: #{user.first_name} #{user.name}",
+                "<strong>Last updated</strong>: #{distance_of_time_in_words(Time.now, user.updated_at)}",
+                "<strong>Email</strong>: #{user.email}"
+              ]) %>
+            </ul>
+          </div>
+          <div class="card-footer">
+            <%= link_to "Manage", edit_user_path(user), class: "btn btn-primary btn-block" %>
           </div>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 </div>
