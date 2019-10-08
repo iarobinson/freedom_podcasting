@@ -5,10 +5,8 @@ namespace :utilities do
     @ian = User.where(email: "ian@testing.com").first
     @ali = User.where(email: "ali@testing.com").first
     @milo = User.where(email: "milo@testing.com").first
-    @glambition = Show.where(title: "Glambition Radio with Ali Brown").first
-    @love_affair_travel = Show.where(
-      title: "Love Affair Travel Podcast - Stories of Adventure and Enterprise"
-    ).first
+    @glambition = Show.third
+    @love_affair_travel = Show.second
     @love_affair_travel.users << [@milo, @ian]
     @glambition.users << [@ali, @ian]
   end
@@ -16,7 +14,7 @@ namespace :utilities do
   desc "Sync Episodes Based on Podcast Feeds"
   task sync_episodes_to_podcast_show_feed: :environment do
     Show.all.each do |show|
-      xml = HTTParty.get(show.url).body
+      xml = HTTParty.get(show.feed_url).body
       content = Feedjira.parse(xml)
       content.entries.each do |episode|
         if Episode.all.where(title: episode.title).size.zero?
@@ -25,10 +23,9 @@ namespace :utilities do
             updated_at: episode.published,
             content_encoded: episode.content,
             enclosure: episode.enclosure_url,
-            link: episode.url,
             description: episode.itunes_summary
           )
-          new_episode.show = show.id
+          new_episode.show = show
           new_episode.save
         end
       end

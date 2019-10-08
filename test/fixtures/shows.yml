@@ -1,23 +1,8 @@
 glambition:
-  title: Glambition Radio with Ali Brown
-  host: Ali Brown
-  website: www.AliBrown.com
-  category: Business
-  description: Interviews with today's leading women entrepreneurs
-  subtitle:
+  feed_url: https://alibrown.com/category/glambition/feed
 
 jocko_podcast:
-  title: Jocko Podcast
-  host: Jocko Willink
-  website: www.jockopodcast.com
-  category: Personal Journals
-  description: Retired Navy SEAL, Jocko Willink and Director, Echo Charles discuss discipline and leadership in business, war, relationships and everyday life.
-  subtitle:
+  feed_url: http://jockopodcast.libsyn.com/rss
 
 love_affair_travel:
-  title: Love Affair Travel Podcast - Stories of Adventure and Enterprise
-  host: Ian Robinson
-  website: www.loveaffairtravel.com
-  category: Personal Journals
-  description: A show exploring the stories and adventures in long term travel
-  subtitle: Hosted by Ian Robinson of Freedom Podcasting
+  feed_url: http://rss.art19.com/the-daily
