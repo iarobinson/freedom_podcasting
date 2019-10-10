@@ -29,5 +29,10 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
       t.text :notes
       t.timestamps
     end
+
+    create_table :invoices_users, id: false do |t|
+      t.belongs_to :invoice
+      t.belongs_to :user
+    end
   end
 end

@@ -69,6 +69,13 @@ ActiveRecord::Schema.define(version: 2019_10_04_211205) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "invoices_users", id: false, force: :cascade do |t|
+    t.bigint "invoice_id"
+    t.bigint "user_id"
+    t.index ["invoice_id"], name: "index_invoices_users_on_invoice_id"
+    t.index ["user_id"], name: "index_invoices_users_on_user_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.text "body"
     t.bigint "user_id"

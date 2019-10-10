@@ -11,34 +11,30 @@ namespace :utilities do
     @nomes = User.where(email: "nomes@testing.com").first
     @sylvia = User.where(email: "sylvia@testing.com").first
 
-    @glambition = Show.where(feed_url: "https://alibrown.com/category/glambition/feed").first
-    @glambition.users << [@ali, @nomes, @administrators]
-
-    @question_mark = Show.where(feed_url: "https://ianrobinson.net/category/question-mark/feed").first
-    @question_mark.users << [@matt, @administrators]
-
-    @stay_inspired = Show.where(feed_url: "http://kongitfarrell.libsyn.com/rss").first
-    @stay_inspired.users << [@nomes, @administrators]
-
-    @venture_studios = Show.where(feed_url: "http://feeds.soundcloud.com/users/soundcloud:users:171934475/sounds.rss").first
-    @venture_studios.users << [@matt, @administrators]
-
-    @successfully_ny = Show.where(feed_url: "http://alexshalman.libsyn.com/rss").first
-    @successfully_ny.users << [@matt, @administrators]
-
-    @voices_4_ed = Show.where(feed_url: "http://voices4ed.libsyn.com/rss").first
-    @voices_4_ed.users << [@mason, @administrators]
-
-    @ready_set_love = Show.where(feed_url: "http://readysetlove.libsyn.com/rss").first
-    @ready_set_love.users << [@mason, @administrators]
-
-    @first_but_last = Show.where(feed_url: "https://firstbutlast.libsyn.com/rss").first
-    @first_but_last.users << [@mason, @administrators]
-
-    @lets_talk_hemp = Show.where(feed_url: "https://letstalkhemp.libsyn.com/rss").first
-    @lets_talk_hemp.users << [@mason, @administrators]
-
+    add_users_to_show_by_feed("https://alibrown.com/category/glambition/feed", [@ali, @nomes, @administrators])
+    add_users_to_show_by_feed("https://ianrobinson.net/category/question-mark/feed", [@matt, @administrators])
+    add_users_to_show_by_feed("http://kongitfarrell.libsyn.com/rss", [@nomes, @administrators])
+    add_users_to_show_by_feed("http://feeds.soundcloud.com/users/soundcloud:users:171934475/sounds.rss", [@matt, @administrators])
+    add_users_to_show_by_feed("http://alexshalman.libsyn.com/rss", [@matt, @administrators])
+    add_users_to_show_by_feed("http://voices4ed.libsyn.com/rss", [@mason, @administrators])
+    add_users_to_show_by_feed("http://readysetlove.libsyn.com/rss", [@mason, @administrators])
+    add_users_to_show_by_feed("https://firstbutlast.libsyn.com/rss", [@mason, @administrators])
     add_users_to_show_by_feed("https://letstalkhemp.libsyn.com/rss", [@mason, @administrators])
+    add_users_to_show_by_feed("http://beautybiz.libsyn.com/rss", [@sylvia, @administrators])
+    add_users_to_show_by_feed("http://moneytwist.libsyn.com/rss", [@sylvia, @administrators])
+    add_users_to_show_by_feed("http://shesgotmoxie.libsyn.com/rss", [@sylvia, @administrators])
+    add_users_to_show_by_feed("http://karagoldin.libsyn.com/rss", [@sylvia, @administrators])
+    add_users_to_show_by_feed("https://terricole.libsyn.com/theterricoleshow", [@sylvia, @administrators])
+    add_users_to_show_by_feed("http://baethdavis.libsyn.com/rss", [@sylvia, @administrators])
+    add_users_to_show_by_feed("http://conversationswith.libsyn.com/rss", [@milo, @administrators])
+    add_users_to_show_by_feed("http://businessmiracles.libsyn.com/rss", [@milo, @administrators])
+    add_users_to_show_by_feed("http://drsteven.libsyn.com/rss", [@milo, @administrators])
+    add_users_to_show_by_feed("https://nionlife.com/feed/podcast/", [@milo, @administrators])
+    add_users_to_show_by_feed("http://www.asianefficiency.com/feed/podcast/", [@milo, @administrators])
+    add_users_to_show_by_feed("https://advancedmanufacturing.org/feed/podcast/", [@ben, @administrators])
+    add_users_to_show_by_feed("http://leadershipandbusiness.libsyn.com/rss", [@ben, @administrators])
+    add_users_to_show_by_feed("http://neuronfire.libsyn.com/neuronfire", [@ben, @administrators])
+    add_users_to_show_by_feed("http://www.toptradersunplugged.com/feed/podcast", [@ben, @administrators])
   end
 
   def add_users_to_show_by_feed(feed, user_array)
@@ -46,7 +42,6 @@ namespace :utilities do
     user_array.each do |user|
       @show.users << user unless @show.users.include?(user)
     end
-    # binding.pry
   end
 
   desc "Sync Episodes Based on Podcast Feeds"
@@ -80,9 +75,9 @@ namespace :utilities do
     @producers = User.where(role: "producer")
     @administrators = User.where(role: "administrator")
     @producers.each do |producer|
-      invoice = Invoice.new()
-      invoice.users << [producer, @administrators]
-      invoice.save
+      @invoice = Invoice.new()
+      @invoice.users << [producer, @administrators]
+      @invoice.save
       p "Invoice added to #{producer.email}"
     end
   end
