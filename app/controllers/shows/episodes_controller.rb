@@ -69,7 +69,7 @@ class Shows::EpisodesController < ApplicationController
         :title, :pubDate, :link, :description, :content_encoded, :enclosure,
         :itunes_duration, :itunes_explicit, :itunes_keywords, :itunes_subtitle,
         :itunes_episode, :itunes_episodeType, :episode_number, :client_cost,
-        :show_id
+        :show_id, :paid
       )
     end
 end

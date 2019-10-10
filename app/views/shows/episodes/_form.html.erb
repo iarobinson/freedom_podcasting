@@ -12,6 +12,9 @@
     <%= f.label :itunes_explicit %>
     <%= f.text_field :itunes_explicit, class: 'form-control' %>
 
+    <%= f.label :paid %>
+    <%= f.collection_radio_buttons :paid, [[true, 'Yes'], [false, 'No']], :first, :last, class: 'form-control' %>
+
     <%= f.hidden_field :show_id, value: @show.id  %>
   </div>
 
