@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
 
-  resources :invoices
   post "messages", to: "messages#create"
   root to: 'pages#home'
 
@@ -15,4 +14,6 @@ Rails.application.routes.draw do
   end
 
   resources :dashboard, only: [:index]
+  resources :invoices
+  resources :episodes
 end

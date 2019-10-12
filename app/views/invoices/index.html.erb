@@ -44,13 +44,17 @@
     <% else %>
       <div class="col-md-6 offset-md-3 mb-2 text-center mb-5">
         <p>No invoices are currently associated with your account.</p>
+        <p>An invoice will be automatically generated based on the episodes you produced last month.</p>
+        <p>Thanks for working with Freedom Podcasting.</p>
       </div>
     <% end %>
 
     <br>
-    <div class="col-md-6 offset-md-3 mb-2 text-center mb-5">
+    <% if current_user.role == "administrator" %>
+      <div class="col-md-6 offset-md-3 mb-2 text-center mb-5">
 
-      <%= link_to 'New Invoice', new_invoice_path, class: "btn btn-primary btn-block" %>
-    </div>
+        <%= link_to 'New Invoice', new_invoice_path, class: "btn btn-primary btn-block" %>
+      </div>
+    <% end %>
   </div>
 </div>

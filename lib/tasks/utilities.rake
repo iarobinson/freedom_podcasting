@@ -50,6 +50,7 @@ namespace :utilities do
     Show.all.each do |show|
       xml = HTTParty.get(show.feed_url).body
       content = Feedjira.parse(xml)
+      index = 0
       content.entries.each do |episode|
         if Episode.all.where(title: episode.title).size.zero?
           new_episode = Episode.new(
@@ -57,10 +58,15 @@ namespace :utilities do
             updated_at: episode.published,
             content_encoded: episode.content,
             enclosure: episode.enclosure_url,
-            description: episode.itunes_summary
+            description: episode.itunes_summary,
+            itunes_duration: episode.itunes_duration
           )
           new_episode.show = show
           new_episode.save
+          if index = 0
+            binding.pry
+            index += 1
+          end
         end
       end
 
