@@ -16,6 +16,7 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
       t.integer :client_cost
       t.boolean :paid
       t.references :show, foreign_key: true
+      t.belongs_to :invoice
       t.timestamps
     end
 

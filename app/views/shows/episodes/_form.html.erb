@@ -9,11 +9,16 @@
     <%= f.label :description %>
     <%= f.text_field :description, class: 'form-control' %>
 
-    <%= f.label :itunes_explicit %>
+    <%= f.label :itunes_explicit, "iTunes Explicit" %>
     <%= f.text_field :itunes_explicit, class: 'form-control' %>
 
     <%= f.label :paid %>
     <%= f.collection_radio_buttons :paid, [[true, 'Yes'], [false, 'No']], :first, :last, class: 'form-control' %>
+
+    <div class="custom-control custom-switch">
+      <input type="checkbox" class="custom-control-input" id="episode_paid_true">
+      <label class="custom-control-label" for="episode_paid_true">Toggle this switch element</label>
+    </div>
 
     <%= f.hidden_field :show_id, value: @show.id  %>
   </div>

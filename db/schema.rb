@@ -52,8 +52,10 @@ ActiveRecord::Schema.define(version: 2019_10_04_211205) do
     t.integer "client_cost"
     t.boolean "paid"
     t.bigint "show_id"
+    t.bigint "invoice_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["invoice_id"], name: "index_episodes_on_invoice_id"
     t.index ["show_id"], name: "index_episodes_on_show_id"
   end
 

@@ -4,10 +4,14 @@
       <p id="notice"><%= notice %></p>
 
       <div class="row">
-        <audio controls>
-          <source src="<%= @episode.enclosure %>" type="audio/mpeg">
-          Your browser does not support the audio element.
-        </audio>
+        <div class="col-md-6 offset-md-3">
+          <audio controls>
+            <source src="<%= @episode.enclosure %>" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+      </div>
+      <div class="row">
         <div class="col">
           <p><strong>Title:</strong> <%= @episode.title %></p>
           <p><strong>Client cost:</strong> <%= @episode.client_cost %></p>
@@ -18,7 +22,6 @@
           <p><strong>link:</strong> <%= @episode.link %></p>
           <p><strong>description:</strong> <%= @episode.description %></p>
           <p><strong>content_encoded:</strong> <%= @episode.content_encoded %></p>
-          <p><strong>enclosure:</strong> <%= @episode.enclosure %></p>
         </div>
         <div class="col">
           <p><strong>itunes_duration:</strong> <%= @episode.itunes_duration %></p>
@@ -31,6 +34,7 @@
           <p><strong>show_id:</strong> <%= @episode.show_id %></p>
           <p><strong>created_at:</strong> <%= @episode.created_at %></p>
           <p><strong>updated_at:</strong> <%= @episode.updated_at %></p>
+          <p><strong>enclosure:</strong> <%= @episode.enclosure %></p>
         </div>
       </div>
 

@@ -1,7 +1,9 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
   <head>
+    <meta charset="utf-8">
     <title>Freedom Podcasting - Podcast Production Tools</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
@@ -10,12 +12,14 @@
   </head>
 
   <body>
-    <% if user_signed_in? %>
-      <%= render 'layouts/authenticated_navigation_bar' %>
-    <% else %>
-      <%= render 'layouts/unauthenticated_navigation_bar' %>
-    <% end %>
-    <%= render "layouts/alert" %>
-    <%= yield %>
+    <div class="container-fluid">
+      <% if user_signed_in? %>
+        <%= render 'layouts/authenticated_navigation_bar' %>
+      <% else %>
+        <%= render 'layouts/unauthenticated_navigation_bar' %>
+      <% end %>
+      <%= render "layouts/alert" %>
+      <%= yield %>
+    </div>
   </body>
 </html>

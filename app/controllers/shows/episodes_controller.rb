@@ -63,7 +63,6 @@ class Shows::EpisodesController < ApplicationController
       @show = Show.find(params[:show_id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def episode_params
       params.require(:episode).permit(
         :title, :pubDate, :link, :description, :content_encoded, :enclosure,
