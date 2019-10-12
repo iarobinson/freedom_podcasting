@@ -46,7 +46,7 @@ namespace :utilities do
   end
 
   desc "Sync Episodes Based on Podcast Feeds"
-  task sync_episodes_to_podcast_show_feed: :environment do
+  task sync_with_podcast_feed: :environment do
     Show.all.each do |show|
       xml = HTTParty.get(show.feed_url).body
       content = Feedjira.parse(xml)

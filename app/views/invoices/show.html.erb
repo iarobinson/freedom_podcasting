@@ -7,32 +7,35 @@
         </span><br>
       </div>
       <div class="row pb-3">
-        <ul class="list-group">
-          <% @invoice.episodes.each do |episode| %>
-            <li class="list-group-item">
-              <div class="row">
-                <div class="col-1">
-                  <% if episode.show.show_art.attached? %>
-                    <%= image_tag episode.show.show_art, width: "100%" %>
-                  <% else %>
-                    <%= image_tag "default_user_avatar.jpg", width: "100%" %>
-                  <% end %>
+        <% if @invoice.episodes.size > 0 %>
+          <ul class="list-group">
+            <% @invoice.episodes.each do |episode| %>
+              <li class="list-group-item">
+                <div class="row">
+                  <div class="col-1">
+                    <% if episode.show.show_art.attached? %>
+                      <%= image_tag episode.show.show_art, width: "100%" %>
+                    <% else %>
+                      <%= image_tag "default_user_avatar.jpg", width: "100%" %>
+                    <% end %>
+                  </div>
+                  <div class="col-5">
+                    <%= episode.title %>
+                  </div>
+                  <div class="col-2">
+                    <%= episode.show.title %>
+                  </div>
+                  <div class="col-2">
+                    <p>episode.duration</p>
+                  </div>
                 </div>
-                <div class="col-5">
-                  <%= episode.title %>
-                </div>
-                <div class="col-2">
-                  <%= episode.show.title %>
-                </div>
-                <div class="col-2">
-                  <p>episode.duration</p>
-                </div>
-              </div>
-            </li>
-          <% end %>
-        </ul>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
       </div>
-
+        <p>You currently have no episodes tracked on this invoice.</p>
+      <% end %>
       <div class="row">
         <%= link_to 'Edit', edit_invoice_path(@invoice), class: "btn btn-primary btn-block" %>
         <%= link_to 'Back', invoices_path, class: "btn btn-primary btn-block" %>

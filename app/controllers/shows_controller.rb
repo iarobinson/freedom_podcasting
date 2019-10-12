@@ -21,8 +21,6 @@ class ShowsController < ApplicationController
   def create
     @show = Show.new(show_params)
     @show.users << current_user
-    fetch_episodes(@show)
-    # binding.pry
 
     respond_to do |format|
       if @show.save

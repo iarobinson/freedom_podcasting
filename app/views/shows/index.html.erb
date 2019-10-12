@@ -23,13 +23,16 @@
                 <th scope="row"><%= i + 1 %></th>
                 <td>
                   <%= link_to show_path(show) do %>
+                    <% if show.show_art.attached? %>
+                      <%= image_tag show.show_art, width: "100%" %>
+                    <% end %>
                     <%= show.title %>
                   <% end %>
                 </td>
                 <td><%= show.host %></td>
                 <td><%= show.website %></td>
                 <td><%= show.category %></td>
-                <td><%= show.description.truncate(150) %></td>
+                <td><%= show.description.truncate(150) if show.description %></td>
                 <td><%= show.subtitle %></td>
                 <td><%= show.updated_at.to_formatted_s(:short) %></td>
                 <td>
