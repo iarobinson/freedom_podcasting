@@ -1,4 +1,5 @@
 namespace :utilities do
+  require 'open-uri'
 
   desc "Add Users to Shows"
   task add_users_to_shows: :environment do
@@ -62,6 +63,10 @@ namespace :utilities do
           new_episode.save
         end
       end
+
+      file = open(content.itunes_image)
+      custom_file_name = content.title.downcase.gsub(/[^a-z ]/, '').gsub(" ", "_") + "_show_art"
+      show.show_art.attach(io: file, filename: custom_file_name, content_type: "image/jpg")
       show.title = content.title
       show.host = content.itunes_author
       show.category = content.itunes_categories

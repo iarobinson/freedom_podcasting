@@ -1,51 +1,42 @@
-<div class="container-fluid">
+<div class="container">
   <div class="row">
-    <div class="col-8 offset-2 pb-5">
-      <p>
-        <strong>Amount due:</strong>
-        <%= @invoice.amount_due %>
-      </p>
+    <div class="col-8-md offset-2-md pb-5">
+      <div class="row">
+        <span class="float-right">
+          Episodes: <%= @invoice.episodes.size %>
+        </span><br>
+      </div>
+      <div class="row pb-3">
+        <ul class="list-group">
+          <% @invoice.episodes.each do |episode| %>
+            <li class="list-group-item">
+              <div class="row">
+                <div class="col-1">
+                  <% if episode.show.show_art.attached? %>
+                    <%= image_tag episode.show.show_art, width: "100%" %>
+                  <% else %>
+                    <%= image_tag "default_user_avatar.jpg", width: "100%" %>
+                  <% end %>
+                </div>
+                <div class="col-5">
+                  <%= episode.title %>
+                </div>
+                <div class="col-2">
+                  <%= episode.show.title %>
+                </div>
+                <div class="col-2">
+                  <p>episode.duration</p>
+                </div>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      </div>
 
-      <p>
-        <strong>Status:</strong>
-        <%= @invoice.status %>
-      </p>
-
-      <p>
-        <strong>Invoice number:</strong>
-        <%= @invoice.invoice_number %>
-      </p>
-
-      <p>
-        <strong>Invoice date:</strong>
-        <%= @invoice.invoice_date %>
-      </p>
-
-      <p>
-        <strong>Payment due:</strong>
-        <%= @invoice.payment_due %>
-      </p>
-
-      <p>
-        <strong>Users:</strong>
-        <%= User.find(@invoice.users.first.id).name %>
-      </p>
-
-      <p>
-        <strong>Notes:</strong>
-        <%= @invoice.notes %>
-      </p>
-
-      <p>
-        <%= @invoice.episodes.all.first %>
-        <strong>Episodes:</strong>
-        <%= @invoice.episodes.each do |episode| %>
-          <%= episode.title %>
-        <% end %>
-      </p>
-
-      <%= link_to 'Edit', edit_invoice_path(@invoice), class: "btn btn-primary btn-block" %>
-      <%= link_to 'Back', invoices_path, class: "btn btn-primary btn-block" %>
+      <div class="row">
+        <%= link_to 'Edit', edit_invoice_path(@invoice), class: "btn btn-primary btn-block" %>
+        <%= link_to 'Back', invoices_path, class: "btn btn-primary btn-block" %>
+      </div>
     </div>
   </div>
 </div>
