@@ -83,7 +83,11 @@ namespace :utilities do
       @invoice = Invoice.new()
       @invoice.users << [producer, @administrators]
       @invoice.save
-      p "Invoice added to #{producer.email}"
+
+      producer.shows.each do |show|
+        @invoice.episodes << show.episodes.where("updated_at > ?", 30.days.ago)
+      end
     end
+
   end
 end
