@@ -30,7 +30,7 @@ class InvoicesControllerTest < ActionDispatch::IntegrationTest
 
   test "should get edit" do
     get edit_invoice_url(@invoice)
-    assert_response :success
+    assert page.body.includes?("No invoices are currently associated with your account.")
   end
 
   test "should update invoice" do
