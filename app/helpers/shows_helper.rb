@@ -1,4 +1,6 @@
 module ShowsHelper
+  require 'open-uri'
+
   def if_it_exists_show_list_item(list_items, pretext="", posttext="")
     strings_of_list_group_items = ""
     list_items.each do |item|
@@ -6,4 +8,5 @@ module ShowsHelper
     end
     strings_of_list_group_items.html_safe
   end
+
 end

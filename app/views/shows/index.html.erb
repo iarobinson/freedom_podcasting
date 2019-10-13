@@ -2,14 +2,12 @@
   <div class="row paddingbottom">
     <div class="col-md-10 offset-md-1">
       <% if @shows.size > 0 %>
-        <h1 class="text-center">Shows</h1>
+        <h1 class="text-center">Shows</h1><span class="float-right">Count: <%=  @shows.size %></span>
         <table class="table table-responsive table-hover">
           <thead>
             <tr>
               <th scope="col">Title</th>
               <th scope="col">Host</th>
-              <th scope="col">Category</th>
-              <th scope="col">Description</th>
               <th scope="col">Last Updated</th>
               <th scope="col">Manage</th>
             </tr>
@@ -28,8 +26,6 @@
                   <% end %>
                 </th>
                 <td><%= show.host %></td>
-                <td><%= show.category %></td>
-                <td><%= show.description.truncate(150) if show.description %></td>
                 <td><%= show.updated_at.to_formatted_s(:short) %></td>
                 <td>
                   <%= link_to edit_show_path(show) do %>

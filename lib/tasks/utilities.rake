@@ -52,7 +52,15 @@ namespace :utilities do
       content = Feedjira.parse(xml)
       index = 0
       content.entries.each do |episode|
+
+
         if Episode.all.where(title: episode.title).size.zero?
+
+
+          episode.itunes_duration.split(":")
+
+
+
           new_episode = Episode.new(
             title: episode.title,
             updated_at: episode.published,
@@ -63,10 +71,6 @@ namespace :utilities do
           )
           new_episode.show = show
           new_episode.save
-          if index = 0
-            binding.pry
-            index += 1
-          end
         end
       end
 
@@ -77,6 +81,7 @@ namespace :utilities do
       show.host = content.itunes_author
       show.category = content.itunes_categories
       show.description = content.description
+
       show.save
     end
   end
@@ -94,6 +99,5 @@ namespace :utilities do
         @invoice.episodes << show.episodes.where("updated_at > ?", 30.days.ago)
       end
     end
-
   end
 end

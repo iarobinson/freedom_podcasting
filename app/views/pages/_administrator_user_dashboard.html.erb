@@ -1,5 +1,6 @@
 <div class="col-md-8 offset-md-2">
   <h1 class="text-center">Administrator Dashboard</h1>
+  <p><span class="small float-right">Users: <%= @users.size %></span></p>
   <table class="table table-hover">
     <thead>
       <tr>
@@ -7,8 +8,6 @@
         <th scope="col">Role</th>
         <th scope="col">Email</th>
         <th scope="col">First</th>
-        <th scope="col">Address</th>
-        <th scope="col">Status</th>
         <th scope="col">Last Updated</th>
         <th scope="col">Manage</th>
       </tr>
@@ -20,8 +19,6 @@
           <td><%= user.role %></td>
           <td><%= user.email %></td>
           <td><%= "#{user.first_name} #{user.name}" %></td>
-          <td><%= "#{user.address} #{user.city} #{user.state} #{user.zip}" %></td>
-          <td><%= user.status %></td>
           <td><%= user.updated_at.to_formatted_s(:short) %></td>
           <td>
             <%= link_to user_path(user) do %>

@@ -15,5 +15,5 @@ Rails.application.routes.draw do
 
   resources :dashboard, only: [:index]
   resources :invoices
-  resources :episodes
+  resources :episodes, only: [:index]
 end

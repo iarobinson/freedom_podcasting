@@ -7,7 +7,8 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
       t.text :description
       t.string :content_encoded
       t.string :enclosure
-      t.integer :itunes_duration
+      t.string :itunes_duration
+      t.integer :duration
       t.boolean :itunes_explicit
       t.string :itunes_keywords
       t.string :itunes_subtitle
@@ -27,6 +28,8 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
       t.datetime :invoice_date
       t.datetime :payment_due
       t.bigint :users
+      t.datetime :start_date
+      t.datetime :end_date
       t.text :notes
       t.timestamps
     end
