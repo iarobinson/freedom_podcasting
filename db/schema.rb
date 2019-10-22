@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(version: 2019_10_04_211205) do
 
   create_table "invoices", force: :cascade do |t|
     t.integer "amount_due_from_client"
-    t.integer "amount_due_from_client_to_producer"
+    t.integer "amount_due_to_producer"
     t.string "status"
     t.integer "invoice_number"
     t.datetime "invoice_date"

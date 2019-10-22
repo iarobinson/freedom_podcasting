@@ -22,7 +22,19 @@
                         <%= "<h2>#{u.name.to_s.capitalize}</h2>".html_safe unless u.name.nil? %>
                       <% end %>
                     <% end %>
-                    <p>Invoice Total: $<%= (invoice.amount_due_from_client.to_i * 0.33) %></p>
+
+                    <div class="row">
+                      <div class="col">
+                        <div class="d-inline-flex p-2">
+                          <p>Amount Due from Client: $<%= invoice.amount_due_from_client %></p>
+                        </div>
+                      </div>
+                      <div class="col">
+                        <div class="d-inline-flex p-2">
+                          <p>Amount Due to Producer: $<%= invoice.amount_due_to_producer %></p>
+                        </div>
+                      </div>
+                    </div>
 
                     <% if invoice.episodes.size > 0 %>
                       <% invoice.episodes.each do |episode| %>
