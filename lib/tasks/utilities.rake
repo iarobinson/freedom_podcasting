@@ -32,7 +32,7 @@ namespace :utilities do
     add_users_to_show_by_feed("http://drsteven.libsyn.com/rss", [@milo, @administrators])
     add_users_to_show_by_feed("https://nionlife.com/feed/podcast/", [@milo, @administrators])
     add_users_to_show_by_feed("http://www.asianefficiency.com/feed/podcast/", [@milo, @administrators])
-    add_users_to_show_by_feed("https://advancedmanufacturing.org/feed/podcast/", [@ben, @administrators])
+    # add_users_to_show_by_feed("https://advancedmanufacturing.org/feed/podcast/", [@ben, @administrators])
     add_users_to_show_by_feed("http://leadershipandbusiness.libsyn.com/rss", [@ben, @administrators])
     add_users_to_show_by_feed("http://neuronfire.libsyn.com/neuronfire", [@ben, @administrators])
     add_users_to_show_by_feed("http://www.toptradersunplugged.com/feed/podcast", [@ben, @administrators])
@@ -50,16 +50,9 @@ namespace :utilities do
     Show.all.each do |show|
       xml = HTTParty.get(show.feed_url).body
       content = Feedjira.parse(xml)
-      index = 0
       content.entries.each do |episode|
-
-
         if Episode.all.where(title: episode.title).size.zero?
-
-
-          episode.itunes_duration.split(":")
-
-
+          cost = calculate_episode_cost(episode.itunes_duration) if episode.itunes_duration
 
           new_episode = Episode.new(
             title: episode.title,
@@ -67,7 +60,8 @@ namespace :utilities do
             content_encoded: episode.content,
             enclosure: episode.enclosure_url,
             description: episode.itunes_summary,
-            itunes_duration: episode.itunes_duration
+            itunes_duration: episode.itunes_duration,
+            client_cost: cost
           )
           new_episode.show = show
           new_episode.save
@@ -98,6 +92,50 @@ namespace :utilities do
       producer.shows.each do |show|
         @invoice.episodes << show.episodes.where("updated_at > ?", 30.days.ago)
       end
+      @invoice.calculate_total
+    end
+  end
+
+  def calculate_episode_cost(duration_string)
+    total_minutes = 0
+    time_array = duration_string.split(":")
+    index = time_array.length - 1
+    while index >= 0
+      if time_array.length == 3
+        total_minutes += time_array[index].to_i if index == 1
+        total_minutes += (time_array[index].to_i * 60) if index == 0
+      elsif time_array.length == 2
+        total_minutes += time_array[index].to_i if index == 0
+      end
+      index -= 1
+    end
+
+    if total_minutes < 10
+      "80"
+    elsif total_minutes < 20
+      "110"
+    elsif total_minutes < 30
+      "130"
+    elsif total_minutes < 40
+      "150"
+    elsif total_minutes < 50
+      "170"
+    elsif total_minutes < 60
+      "190"
+    elsif total_minutes < 70
+      "210"
+    elsif total_minutes < 80
+      "230"
+    elsif total_minutes < 90
+      "250"
+    elsif total_minutes < 100
+      "270"
+    elsif total_minutes < 110
+      "290"
+    elsif total_minutes < 120
+      "310"
+    else
+      "Unknown"
     end
   end
 end

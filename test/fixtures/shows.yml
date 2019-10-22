@@ -58,8 +58,8 @@ nion_radio:
 asian_efficiency:
   feed_url: http://www.asianefficiency.com/feed/podcast/
 
-advanced_manufacturing_now:
-  feed_url: https://advancedmanufacturing.org/feed/podcast/
+# advanced_manufacturing_now:
+#   feed_url: https://advancedmanufacturing.org/feed/podcast
 
 leadership_and_business:
   feed_url: http://leadershipandbusiness.libsyn.com/rss

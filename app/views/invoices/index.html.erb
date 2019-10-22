@@ -2,13 +2,12 @@
   <div class="row">
     <% if @invoices.size > 0 %>
       <div class="col-md-12 mb-3">
-        <h1>Invoices</h1>
+        <center><h1>Invoices</h1></center>
         <div class="table-responsive">
           <table class="table table-borderless">
             <thead>
               <tr>
-                <th colspan="6">Episdoes</th>
-                <th colspan="3">User</th>
+                <th colspan="9"></th>
                 <th colspan="3">Manage</th>
               </tr>
             </thead>
@@ -16,16 +15,21 @@
             <tbody>
               <% @invoices.each do |invoice| %>
                 <tr>
-                  <td scope="row" colspan="6">
-                    <% invoice.episodes.each do |episode| %>
-                      <%= episode.title %><br>
-                    <% end %>
-                  </td>
-                  <td colspan="3">
+                  <td scope="row" colspan="9">
+
                     <% invoice.users.each do |u| %>
                       <% if u.role == "producer" %>
-                        <%= "#{u.name.to_s.capitalize}<br>".html_safe unless u.name.nil? %>
+                        <%= "<h2>#{u.name.to_s.capitalize}</h2>".html_safe unless u.name.nil? %>
                       <% end %>
+                    <% end %>
+                    <p>Invoice Total: $<%= (invoice.amount_due_from_client.to_i * 0.33) %></p>
+
+                    <% if invoice.episodes.size > 0 %>
+                      <% invoice.episodes.each do |episode| %>
+                        <p><%= image_tag episode.show.show_art, width: "25px" %> <%= episode.title %><br></p>
+                      <% end %>
+                    <% else %>
+                      <p>No podcasts produced this month.</p>
                     <% end %>
                   </td>
                   <td colspan="3">

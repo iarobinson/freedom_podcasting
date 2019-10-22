@@ -14,7 +14,7 @@ class InvoicesTest < ApplicationSystemTestCase
     visit invoices_url
     click_on "New Invoice"
 
-    fill_in "Amount due", with: @invoice.amount_due
+    fill_in "Amount due", with: @invoice.amount_due_from_client
     fill_in "Invoice date", with: @invoice.invoice_date
     fill_in "Invoice number", with: @invoice.invoice_number
     fill_in "Notes", with: @invoice.notes
@@ -31,7 +31,7 @@ class InvoicesTest < ApplicationSystemTestCase
     visit invoices_url
     click_on "Edit", match: :first
 
-    fill_in "Amount due", with: @invoice.amount_due
+    fill_in "Amount due", with: @invoice.amount_due_from_client
     fill_in "Invoice date", with: @invoice.invoice_date
     fill_in "Invoice number", with: @invoice.invoice_number
     fill_in "Notes", with: @invoice.notes

@@ -3,9 +3,15 @@
     <div class="col-8-md offset-2-md pb-5">
 
       <div class="row">
-        <span class="float-right">
+        <div class="col">
           Episodes: <%= @invoice.episodes.size %>
-        </span><br>
+        </div>
+        <div class="col">
+          Total Charged to Client: <%= @invoice.episodes.size %>
+        </div>
+        <div class="col">
+          Total for Producer: <%= @invoice.episodes.size %>
+        </div>
       </div>
 
       <div class="row pb-3">
@@ -35,8 +41,8 @@
                     <%= link_to episode.title, show_episode_path(episode.show, episode) %>
                   </td>
                   <td><%= episode.show.title %></td>
-                  <td><%= episode.itunes_duration.to_i %></td>
-                  <td><%= episode.client_cost %></td>
+                  <td><%= episode.itunes_duration %></td>
+                  <td>$<%= episode.client_cost %></td>
                 </tr>
               <% end %>
             </tbody>

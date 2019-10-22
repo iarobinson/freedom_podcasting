@@ -61,12 +61,15 @@ ActiveRecord::Schema.define(version: 2019_10_04_211205) do
   end
 
   create_table "invoices", force: :cascade do |t|
-    t.integer "amount_due"
+    t.integer "amount_due_from_client"
+    t.integer "amount_due_from_client_to_producer"
     t.string "status"
     t.integer "invoice_number"
     t.datetime "invoice_date"
     t.datetime "payment_due"
     t.bigint "users"
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.text "notes"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

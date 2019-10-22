@@ -6,9 +6,7 @@ class InvoicesController < ApplicationController
   def index
     @invoices = []
     if (current_user.role === "administrator")
-      Invoice.all.each do |i|
-        @invoices << i
-      end
+      @invoices = Invoice.all
     else
       Invoice.all.each do |i|
         if i.users.include?(current_user)
@@ -74,6 +72,6 @@ class InvoicesController < ApplicationController
     end
 
     def invoice_params
-      params.require(:invoice).permit(:amount_due, :status, :invoice_number, :invoice_date, :payment_due, :users_id, :notes)
+      params.require(:invoice).permit(:amount_due_from_client, :status, :invoice_number, :invoice_date, :payment_due, :users_id, :notes)
     end
 end
