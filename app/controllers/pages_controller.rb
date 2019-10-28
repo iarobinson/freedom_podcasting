@@ -10,6 +10,7 @@ class PagesController < ApplicationController
     elsif current_user.client?
       # Client data
     elsif current_user.stranger?
+      @show = Show.new
       # Stranger data
     end
   end

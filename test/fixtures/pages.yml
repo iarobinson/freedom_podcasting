@@ -1,9 +1,0 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  title: First Page
-  heading: Heading for the first page.
-
-two:
-  title: Second Page
-  heading: The second page's heading.

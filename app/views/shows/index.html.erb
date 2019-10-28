@@ -26,7 +26,7 @@
                     </center>
                   <% end %>
                 </th>
-                <td><%= show.description %> </td>
+                <td><%= truncate(show.description, length: 150) %> </td>
                 <td><%= show.host %></td>
                 <td><%= show.updated_at.to_formatted_s(:short) %></td>
                 <td>

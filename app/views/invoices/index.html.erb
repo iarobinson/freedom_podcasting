@@ -19,7 +19,7 @@
 
                     <% invoice.users.each do |u| %>
                       <% if u.role == "producer" %>
-                        <%= "<h2>#{u.name.to_s.capitalize}</h2>".html_safe unless u.name.nil? %>
+                        <%= "<h2>#{u.first_name.capitalize}</h2>".html_safe unless u.first_name.nil? %>
                       <% end %>
                     <% end %>
 

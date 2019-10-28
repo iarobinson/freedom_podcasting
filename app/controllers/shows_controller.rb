@@ -4,7 +4,11 @@ class ShowsController < ApplicationController
   include FeedsHelper
 
   def index
-    @shows = current_user.shows
+    if current_user.role == "stranger"
+      @shows = Show.all
+    else
+      @shows = current_user.shows
+    end
   end
 
   def show

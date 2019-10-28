@@ -31,13 +31,19 @@ chdir APP_ROOT do
   puts "\n== Removing old logs and tempfiles =="
   system! 'bin/rails log:clear tmp:clear'
 
-  puts "\n== Loading fixture data =="
-  system! 'bin/rails db:fixtures:load'
+  # puts "\n== Loading fixture data =="
+  # system! 'bin/rails db:fixtures:load'
 
-  puts "\n== Connecting fixture data =="
+  puts "\n== Add Founding Users =="
+  system! 'bin/rails utilities:add_founding_users'
+
+  puts "\n== Add Founding Shows =="
+  system! 'bin/rails utilities:add_founding_shows'
+
+  puts "\n== Add Users to Shows =="
   system! 'bin/rails utilities:add_users_to_shows'
 
-  puts "\n== Sync episodes from feeds =="
+  puts "\n== Sync Episodes by Podcast Feed =="
   system! 'bin/rails utilities:sync_with_podcast_feed'
 
   puts "\n== Add an invoice to each producer =="
