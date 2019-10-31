@@ -6,7 +6,7 @@ namespace :utilities do
     User.new(email: "ali@testing.com", password: "testing", role: "client",
       first_name: "Ali", last_name: ""
     ).save
-    User.new(email: "v@testing.com", password: "testing", role: "producer",
+    User.new(email: "v@testing.com", password: "testing", role: "administrator",
       first_name: "V", last_name: ""
     ).save
     User.new(email: "ben@testing.com", password: "testing", role: "producer",
@@ -100,8 +100,9 @@ namespace :utilities do
       @invoice.users << [producer, @administrators]
       @invoice.save
 
+      now = Time.now
       producer.shows.each do |show|
-        @invoice.episodes << show.episodes.where("updated_at > ?", 30.days.ago)
+        @invoice.episodes << show.episodes.where("pub_date > ?", Date.new(now.year, (now.month - 1), 15))
       end
       @invoice.calculate_total
     end

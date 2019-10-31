@@ -8,9 +8,9 @@ class InvoicesController < ApplicationController
     if (current_user.role === "administrator")
       @invoices = Invoice.all
     else
-      Invoice.all.each do |i|
-        if i.users.include?(current_user)
-          @invoices << i
+      Invoice.all.each do |invoice|
+        if invoice.users.include?(current_user)
+          @invoices << invoice
         end
       end
     end
@@ -19,6 +19,13 @@ class InvoicesController < ApplicationController
   end
 
   def show
+    @amount_due_from_client = 0
+    @invoice.episodes.each do |episode|
+      @amount_due_from_client += episode.client_cost
+    end
+    @amount_due_from_client.round(2)
+    @amount_due_to_producer = (@amount_due_from_client * 0.66).round(2)
+    @producer = fetch_producer(@invoice.users)
   end
 
   def new
@@ -72,6 +79,17 @@ class InvoicesController < ApplicationController
     end
 
     def invoice_params
-      params.require(:invoice).permit(:amount_due_from_client, :status, :invoice_number, :invoice_date, :payment_due, :users_id, :notes)
+      params.require(:invoice).permit(
+        :amount_due_from_client, :status, :invoice_number, :invoice_date,
+        :payment_due, :users_id, :notes
+      )
+    end
+
+    def fetch_producer(users_array)
+      users_array.to_a.each do |user|
+        if user.role == "producer"
+          return user
+        end
+      end
     end
 end

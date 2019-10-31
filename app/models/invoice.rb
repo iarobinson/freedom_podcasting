@@ -9,6 +9,7 @@ class Invoice < ApplicationRecord
     end
     self.amount_due_from_client = total_due
     self.amount_due_to_producer = total_due * 0.66
+    total_due = 0
     return self.save
   end
 end

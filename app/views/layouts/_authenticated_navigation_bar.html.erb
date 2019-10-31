@@ -13,16 +13,18 @@
           <%= material_icon.home %><br>Home
         <% end %>
       </li>
-      <li class="nav-item">
-        <%= link_to shows_path, class: "nav-link" do %>
-          <%= material_icon.slideshow %><br>Shows
-        <% end %>
-      </li>
-      <li class="nav-item">
-        <%= link_to invoices_path, class: "nav-link" do %>
-          <%= material_icon.attach_money %><br>Invoices
-        <% end %>
-      </li>
+      <% if current_user.role == "administrator" || current_user.role == "producer" %>
+        <li class="nav-item">
+          <%= link_to shows_path, class: "nav-link" do %>
+            <%= material_icon.slideshow %><br>Shows
+          <% end %>
+        </li>
+        <li class="nav-item">
+          <%= link_to invoices_path, class: "nav-link" do %>
+            <%= material_icon.attach_money %><br>Invoices
+          <% end %>
+        </li>
+      <% end %>
       <% if current_user.role === "administrator" %>
         <li class="nav-item">
           <%= link_to users_path, class: "nav-link" do %>
@@ -31,11 +33,15 @@
         </li>
       <% end %>
       <li class="nav-item">
+        <%= link_to tools_path, class: "nav-link" do %>
+        <%= material_icon.format_paint %><br>Tools
+        <% end %>
+      </li>
+      <li class="nav-item">
         <%= link_to edit_user_path(current_user), class: "nav-link" do %>
           <%= material_icon.settings_application %><br>Settings
         <% end %>
       </li>
-
     </ul>
   </div>
 </nav>

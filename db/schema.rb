@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2019_10_04_211205) do
 
   create_table "episodes", force: :cascade do |t|
     t.string "title"
-    t.datetime "pubDate"
+    t.datetime "pub_date"
     t.string "link"
     t.text "description"
     t.string "content_encoded"

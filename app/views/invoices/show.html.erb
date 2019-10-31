@@ -1,67 +1,77 @@
+
 <div class="container">
-  <div class="row">
-    <div class="col-8-md offset-2-md pb-5">
+  <div class="col-md-8 offset-md-2 pb-5">
 
-      <div class="row">
-        <div class="col">
-          Episodes: <%= @invoice.episodes.size %>
-        </div>
-        <div class="col">
-          Total Charged to Client: <%= @invoice.episodes.size %>
-        </div>
-        <div class="col">
-          Total for Producer: <%= @invoice.episodes.size %>
-        </div>
+    <div class="row text-center">
+      <div class="col">
+        <strong>
+          Episode Count:
+        </strong><br><%= @invoice.episodes.size %>
       </div>
+      <div class="col">
+        <strong>
+          Total due from <%= "client".pluralize(@amount_due_from_client) %>:
+        </strong><br><%= number_to_currency(@amount_due_from_client) %>
+      </div>
+      <div class="col">
+        <strong>
+          Total due to producer:
+        </strong><br><%= number_to_currency(@amount_due_to_producer) %>
+      </div>
+      <div class="col">
+        <strong>
+          Producer:
+        </strong>
+        <br><%= @producer.first_name %>
+      </div>
+    </div>
 
-      <div class="row pb-3">
-        <% if @invoice.episodes.size > 0 %>
+    <div class="row pb-3">
+      <% if @invoice.episodes.size > 0 %>
 
-          <table class="table table-sm">
-            <thead>
+        <table class="table table-sm">
+          <thead>
+            <tr>
+              <th scope="col">Show</th>
+              <th scope="col">Episode Title</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Publication Date</th>
+              <th scope="col">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @invoice.episodes.each do |episode| %>
               <tr>
-                <th scope="col">Show</th>
-                <th scope="col">Episode Title</th>
-                <th scope="col">Show Title</th>
-                <th scope="col">Duration</th>
-                <th scope="col">Price</th>
+                <th scope="row">
+                  <% if episode.show.show_art.attached? %>
+                    <%= image_tag episode.show.show_art, width: "50px" %>
+                  <% else %>
+                    <%= image_tag "default_user_avatar.jpg", width: "50px" %>
+                  <% end %>
+                </th>
+                <td>
+                  <%= link_to episode.title, show_episode_path(episode.show, episode) %>
+                </td>
+                <td><%= episode.itunes_duration %></td>
+                <td><%= episode.created_at.strftime("%m-%d-%Y") %></td>
+                <td><%= number_to_currency(episode.client_cost) %></td>
               </tr>
-            </thead>
-            <tbody>
-              <% @invoice.episodes.each do |episode| %>
-                <tr>
-                  <th scope="row">
-                    <% if episode.show.show_art.attached? %>
-                      <%= image_tag episode.show.show_art, width: "25px" %>
-                    <% else %>
-                      <%= image_tag "default_user_avatar.jpg", width: "25px" %>
-                    <% end %>
-                  </th>
-                  <td>
-                    <%= link_to episode.title, show_episode_path(episode.show, episode) %>
-                  </td>
-                  <td><%= episode.show.title %></td>
-                  <td><%= episode.itunes_duration %></td>
-                  <td>$<%= episode.client_cost %></td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
+            <% end %>
+          </tbody>
+        </table>
 
-        <% else %>
-          <p>You currently have no episodes tracked on this invoice.</p>
-        <% end %>
+      <% else %>
+        <p>No episodes are associated with this invoice at this time.</p>
+      <% end %>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <%= link_to 'Edit', edit_invoice_path(@invoice), class: "btn btn-warning btn-block" %>
       </div>
-
-      <div class="row">
-        <div class="col">
-          <%= link_to 'Edit', edit_invoice_path(@invoice), class: "btn btn-warning btn-block" %>
-        </div>
-        <div class="col">
-          <%= link_to 'View', invoices_path, class: "btn btn-primary btn-block" %>
-        </div>
+      <div class="col">
+        <%= link_to 'View', invoices_path, class: "btn btn-primary btn-block" %>
       </div>
-
     </div>
   </div>
 </div>

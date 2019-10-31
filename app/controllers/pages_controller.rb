@@ -14,4 +14,7 @@ class PagesController < ApplicationController
       # Stranger data
     end
   end
+
+  def tools
+  end
 end

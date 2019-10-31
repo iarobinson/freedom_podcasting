@@ -2,12 +2,12 @@ Rails.application.routes.draw do
 
   post "messages", to: "messages#create"
   root to: 'pages#home'
+  get '/tools', to: 'pages#tools'
 
   devise_for :users do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
   resources :users
-
   resources :shows
   resources :shows, module: "shows" do
     resources :episodes

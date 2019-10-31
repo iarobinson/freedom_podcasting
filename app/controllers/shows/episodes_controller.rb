@@ -65,7 +65,7 @@ class Shows::EpisodesController < ApplicationController
 
     def episode_params
       params.require(:episode).permit(
-        :title, :pubDate, :link, :description, :content_encoded, :enclosure,
+        :title, :pub_date, :link, :description, :content_encoded, :enclosure,
         :itunes_duration, :itunes_explicit, :itunes_keywords, :itunes_subtitle,
         :itunes_episode, :itunes_episodeType, :episode_number, :client_cost,
         :show_id, :paid

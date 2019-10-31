@@ -47,7 +47,7 @@
       <h2>Episodes</h2>
       <% if @episodes.count > 0 %>
         <div class="list-group">
-          <% @episodes.each do |episode| %>
+          <% @episodes.reverse.each do |episode| %>
             <a href="<%= show_episode_path(@show, episode) %>" class="list-group-item list-group-item-action list-group-item-primary">
               <p><strong>Title:</strong> <%= episode.title %></p>
             </a>

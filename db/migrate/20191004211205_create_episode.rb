@@ -2,7 +2,7 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
   def change
     create_table :episodes do |t|
       t.string :title
-      t.datetime :pubDate
+      t.datetime :pub_date
       t.string :link
       t.text :description
       t.string :content_encoded

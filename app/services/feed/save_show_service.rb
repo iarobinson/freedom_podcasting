@@ -14,7 +14,7 @@ class Feed::SaveShowService < ApplicationService
         new_episode = Episode.new(
           client_cost: cost,
           title: episode.title,
-          updated_at: episode.published,
+          pub_date: episode.published,
           content_encoded: episode.content,
           enclosure: episode.enclosure_url,
           description: episode.itunes_summary,

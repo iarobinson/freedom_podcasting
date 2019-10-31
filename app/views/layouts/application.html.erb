@@ -12,14 +12,12 @@
   </head>
 
   <body>
-    <div class="container-fluid">
-      <% if user_signed_in? %>
-        <%= render 'layouts/authenticated_navigation_bar' %>
-      <% else %>
-        <%= render 'layouts/unauthenticated_navigation_bar' %>
-      <% end %>
-      <%= render "layouts/alert" %>
-      <%= yield %>
-    </div>
+    <% if user_signed_in? %>
+      <%= render 'layouts/authenticated_navigation_bar' %>
+    <% else %>
+      <%= render 'layouts/unauthenticated_navigation_bar' %>
+    <% end %>
+    <%= render "layouts/alert" %>
+    <%= yield %>
   </body>
 </html>
