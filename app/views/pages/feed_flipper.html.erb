@@ -6,17 +6,10 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-md-8 offset-md-2">
-      <div class="text-center">
-        <h1>iTunes Podcast RSS Tool</h1>
-      </div>
-      <p>
-        Add an iTunes podcast link below and this tool will provide the source RSS feed.
-        This is helpful for isolating issues related to how you show up in iTunes.
-      </p>
-
+    <div class="col text-center">
+      <h1>iTunes Podcast RSS Tool</h1>
     </div>
-    <div class="col-md-12 text-center pt-3">
+    <div class="col-md-12 text-center">
       <small class="tiny">
         <strong>Example</strong>:<br>
         https://podcasts.apple.com/us/podcast/freedom-podcasting-company-podcast-production-podcast/id1102195899
@@ -26,6 +19,19 @@
       </form>
       <small class="font-weight-light">Please allow 2 seconds for us to grab it...</small>
       <h3 id="feed-results" class="alert alert-dark mt-3">The source RSS Feed Will Appear Here</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-9"">
+      <%= image_tag "screen_shots/rss_feed_flipper_for_debugging_itunes.jpg", width: "100%" %>
+    </div>
+    <div class="col-md-3">
+      <div class="text-center">
+      </div>
+      <p>
+        Add an iTunes podcast link below and this tool will provide the source RSS feed.
+        This is helpful for isolating issues related to how you show up in iTunes.
+      </p>
     </div>
   </div>
 </div>

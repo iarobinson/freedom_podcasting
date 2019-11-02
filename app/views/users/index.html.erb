@@ -12,7 +12,6 @@
           <div class="card-body">
             <ul class="list-group list-group-flush">
               <%= if_it_exists_show_list_item([
-                "<strong>Status</strong>: #{user.status}",
                 "<strong>Name</strong>: #{user.first_name} #{user.name}",
                 "<strong>Last updated</strong>: #{distance_of_time_in_words(Time.now, user.updated_at)}",
                 "<strong>Email</strong>: #{user.email}"
