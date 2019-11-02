@@ -1,0 +1,69 @@
+<style>
+  input[type="text"]{
+    text-align: center;
+  }
+</style>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 offset-md-2">
+      <div class="text-center">
+        <h1>iTunes Podcast RSS Tool</h1>
+      </div>
+      <p>Add an iTunes podcast link below and this tool will provide the source RSS feed. This is helpful for isolating issues related to how you show up in iTunes.</p>
+
+      <small class="tiny">
+        <strong>Example</strong>: https://podcasts.apple.com/us/podcast/the-show-with-ian-robinson/id1482701757
+      </small>
+    </div>
+    <div class="col-md-12 text-center pt-3">
+      <small>Please allow 2 seconds for us to grab it...</small>
+      <form name="getURL" class="p-3">
+        <input type="text" id="feed" class="form-control" size="100%" onkeyup="scrape_url();" placeholder="Add Your iTunes Show Link Here" >
+      </form>
+      <h3 id="feed-results">The source RSS feed will appear here.</h3>
+    </div>
+  </div>
+</div>
+<script>
+  var artist_id, userGeneratedURL;
+  var FEED_URL = "";
+  var ITUNES_API = 'https://itunes.apple.com/lookup?id=';
+  var feedResultsSpace = document.getElementById("feed-results");
+
+  async function scrape_url() {
+    // Parses and assigns to variables artist_id and userGeneratedURL
+    var form = document.forms['getURL'];
+    userGeneratedURL = form.feed.value;
+    artist_id = filterArtistID(userGeneratedURL);
+    retrieveFeedFromAPI(artist_id);
+
+    setTimeout( function() {
+      showFeedUrl();
+    }, 2000 );
+  }
+
+  function filterArtistID(url) {
+    var match = url.match(/id=?([\d]+)/i);
+    if (match) {
+      return match[1];
+    } else {
+      return false;
+    }
+  }
+
+  function retrieveFeedFromAPI(artist_id) {
+    $.get(ITUNES_API + artist_id, function(data, status) {
+      FEED_URL = data["results"][0]["feedUrl"];
+    }, 'jsonp')
+  }
+
+  function showFeedUrl() {
+    if (FEED_URL != "") {
+      feedResultsSpace.innerHTML = `<a href='${FEED_URL}' target="_blank">`+ FEED_URL + "</a>";
+    } else {
+      feedResultsSpace.innerText = 'Failed to retrieve feed from the iTunes API';
+    }
+  }
+
+</script>

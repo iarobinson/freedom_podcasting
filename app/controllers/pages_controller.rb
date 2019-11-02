@@ -16,5 +16,11 @@ class PagesController < ApplicationController
   end
 
   def tools
+    @result_url = Itunes::ShowLookupService.new("google.com")
+    @result_url.perform
+    @result_url
+  end
+
+  def feed_flipper
   end
 end

@@ -38,7 +38,7 @@
 
                     <% if invoice.episodes.size > 0 %>
                       <% invoice.episodes.each do |episode| %>
-                        <p><%= image_tag episode.show.show_art, width: "25px" %> <%= episode.title %> <%= episode.created_at.strftime("%m-%d-%Y") %><br></p>
+                        <p><%= image_tag episode.show.show_art, width: "25px" %> <%= episode.title %> <%= episode.pub_date.strftime("%m-%d-%Y") %><br></p>
                       <% end %>
                     <% else %>
                       <p>No podcasts produced this month.</p>
