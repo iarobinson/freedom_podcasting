@@ -21,7 +21,7 @@
           <% if @user.avatar.attached? %>
             <%= image_tag @user.avatar, width: '100%', style: "max-height:500px;max-width:500px", class: "paddingbottom" %>
           <% else %>
-            <%= image_tag "default_user_avatar", width: '100%', style: "max-height:500px;max-width:500px", class: "paddingbottom" %>
+            <%= image_tag "default_user_avatar.jpg", width: '100%', style: "max-height:500px;max-width:500px", class: "paddingbottom" %>
           <% end %>
         </div>
       </div>
