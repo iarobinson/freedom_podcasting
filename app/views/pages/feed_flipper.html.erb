@@ -10,18 +10,22 @@
       <div class="text-center">
         <h1>iTunes Podcast RSS Tool</h1>
       </div>
-      <p>Add an iTunes podcast link below and this tool will provide the source RSS feed. This is helpful for isolating issues related to how you show up in iTunes.</p>
+      <p>
+        Add an iTunes podcast link below and this tool will provide the source RSS feed.
+        This is helpful for isolating issues related to how you show up in iTunes.
+      </p>
 
-      <small class="tiny">
-        <strong>Example</strong>: https://podcasts.apple.com/us/podcast/the-show-with-ian-robinson/id1482701757
-      </small>
     </div>
     <div class="col-md-12 text-center pt-3">
-      <small>Please allow 2 seconds for us to grab it...</small>
+      <small class="tiny">
+        <strong>Example</strong>:<br>
+        https://podcasts.apple.com/us/podcast/freedom-podcasting-company-podcast-production-podcast/id1102195899
+      </small><br>
       <form name="getURL" class="p-3">
         <input type="text" id="feed" class="form-control" size="100%" onkeyup="scrape_url();" placeholder="Add Your iTunes Show Link Here" >
       </form>
-      <h3 id="feed-results">The source RSS feed will appear here.</h3>
+      <small class="font-weight-light">Please allow 2 seconds for us to grab it...</small>
+      <h3 id="feed-results" class="alert alert-dark mt-3">The source RSS Feed Will Appear Here</h3>
     </div>
   </div>
 </div>
@@ -61,6 +65,8 @@
   function showFeedUrl() {
     if (FEED_URL != "") {
       feedResultsSpace.innerHTML = `<a href='${FEED_URL}' target="_blank">`+ FEED_URL + "</a>";
+      feedResultsSpace.classList.remove("alert-dark")
+      feedResultsSpace.classList.add("alert-success")
     } else {
       feedResultsSpace.innerText = 'Failed to retrieve feed from the iTunes API';
     }
