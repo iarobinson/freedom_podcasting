@@ -15,7 +15,7 @@
             <tbody>
               <% @invoices.each do |invoice| %>
                 <tr>
-                  <td scope="row" colspan="9">
+                  <td scope="row" colspan="7">
 
                     <% invoice.users.each do |u| %>
                       <% if u.role == "producer" %>
@@ -35,10 +35,12 @@
                         </div>
                       </div>
                     </div>
-
                     <% if invoice.episodes.size > 0 %>
                       <% invoice.episodes.each do |episode| %>
-                        <p><%= image_tag episode.show.show_art, width: "25px" %> <%= episode.title %> <%= episode.pub_date.strftime("%m-%d-%Y") %><br></p>
+                        <p>
+                          <%= image_tag episode.show.show_art, width: "25px" %>
+                          <%= episode.title %> <%= episode.pub_date.strftime("%m %d %Y") %><br>
+                        </p>
                       <% end %>
                     <% else %>
                       <p>No podcasts produced this month.</p>

@@ -1,6 +1,8 @@
 class PagesController < ApplicationController
 
   def home
+    @shows = Show.all
+
     if current_user.nil?
       # Nothing data...
     elsif current_user.administrator?
