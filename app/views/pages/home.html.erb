@@ -14,10 +14,8 @@
   </div>
   <div class="row">
     <% unless @shows == nil %>
-      <div class="col-md-6 offset-md-3">
-        <h1>Shows</h1>
-      </div>
       <div class="col-md-10 offset-md-1">
+        <h1>Our Favorite Shows</h1>
         <% @shows.each do |show| %>
           <div class="card mb-4">
             <div class="card-body">

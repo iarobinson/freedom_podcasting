@@ -1,6 +1,14 @@
 <div class="container">
-  <div class="row">
-    <p class="notice"><%= notice %></p>
-    <p class="alert"><%= alert %></p>
+  <div class="row p-3">
+    <% if notice %>
+      <div class="alert alert-success full-width" role="alert">
+        <%= notice %>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="alert alert-danger full-width" role="alert">
+        <%= alert %>
+      </div>
+    <% end %>
   </div>
 </div>
