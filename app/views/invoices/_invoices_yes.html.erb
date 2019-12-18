@@ -1,0 +1,59 @@
+<div class="col-md-12 mb-3">
+  <center><h1>Invoices</h1></center>
+  <div class="table-responsive">
+    <table class="table table-borderless">
+      <thead>
+        <tr>
+          <th colspan="9"></th>
+          <th colspan="3">Manage</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @invoices.each do |invoice| %>
+          <tr>
+            <td scope="row" colspan="7">
+
+              <% invoice.users.each do |u| %>
+                <% if u.role == "producer" %>
+                  <%= "<h2>#{u.first_name.capitalize}</h2>".html_safe unless u.first_name.nil? %>
+                <% end %>
+              <% end %>
+
+              <div class="row">
+                <div class="col">
+                  <div class="d-inline-flex p-2">
+                    <p>Amount Due from Client: $<%= invoice.amount_due_from_client %></p>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="d-inline-flex p-2">
+                    <p>Amount Due to Producer: $<%= invoice.amount_due_to_producer %></p>
+                  </div>
+                </div>
+              </div>
+              <% if invoice.episodes.size > 0 %>
+                <% invoice.episodes.each do |episode| %>
+                  <p>
+                    <%= image_tag episode.show.show_art, width: "25px" %>
+                    <%= episode.title %> <%= episode.pub_date.strftime("%m %d %Y") %><br>
+                  </p>
+                <% end %>
+              <% else %>
+                <p>No podcasts produced this month.</p>
+              <% end %>
+            </td>
+            <td colspan="3">
+              <%= link_to invoice do %>
+                <%= material_icon.remove_red_eye %>
+              <% end %>
+              <%= link_to edit_invoice_path(invoice) do %>
+                <%= material_icon.edit %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,5 @@
+one:
+  amount_due_from_client: 100
+  amount_due_to_producer: 66
+  status: pending
+  invoice_number: 1

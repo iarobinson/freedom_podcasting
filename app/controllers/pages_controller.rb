@@ -25,4 +25,8 @@ class PagesController < ApplicationController
 
   def feed_flipper
   end
+
+  def random_episode
+    @random_episode = Episode.sample;
+  end
 end
