@@ -3,12 +3,22 @@
     <div class="card-deck">
       <div class="card">
         <div class="card-header">
-          <ul class="nav nav-pills card-header-pills">
+          <ul class="nav nav-tabs card-header-tabs">
             <li class="nav-item">
               <a class="nav-link" href="#">Details</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Episodes</a>
+            </li>
+            <li class="nav-item">
+              <%= link_to invoice, class: "nav-link" do %>
+                <%= material_icon.remove_red_eye %>
+              <% end %>
+            </li>
+            <li class="nav-item">
+              <%= link_to edit_invoice_path(invoice), class: "nav-link" do %>
+                <%= material_icon.edit %>
+              <% end %>
             </li>
           </ul>
         </div>
@@ -56,14 +66,6 @@
                         <% end %>
                       <% else %>
                         <p>No podcasts produced this month.</p>
-                      <% end %>
-                    </td>
-                    <td colspan="3">
-                      <%= link_to invoice do %>
-                        <%= material_icon.remove_red_eye %>
-                      <% end %>
-                      <%= link_to edit_invoice_path(invoice) do %>
-                        <%= material_icon.edit %>
                       <% end %>
                     </td>
                   </tr>
