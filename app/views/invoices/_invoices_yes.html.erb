@@ -1,5 +1,5 @@
 <% @invoices.each do |invoice| %>
-  <div class="col-sm-6 pb-3">
+  <div class="col-sm-4 pb-3">
     <div class="card-deck">
       <div class="card">
         <div class="card-header">
@@ -25,15 +25,6 @@
         <div class="card-body">
           <div class="table-responsive">
             <table class="table table-borderless">
-
-              <h5 class="card-title">
-                <thead>
-                  <tr>
-                    <th colspan="9"></th>
-                    <th colspan="3">Manage</th>
-                  </tr>
-                </thead>
-              </h5>
               <p class="card-text">
                 <tbody>
                   <tr>
@@ -58,7 +49,7 @@
                         </div>
                       </div>
                       <% if invoice.episodes.size > 0 %>
-                        <% invoice.episodes.each do |episode| %>
+                        <% invoice.episodes.limit(3).each do |episode| %>
                           <p>
                             <%= image_tag episode.show.show_art, width: "25px" %>
                             <%= episode.title %> <%= episode.pub_date.strftime("%m %d %Y") %><br>
