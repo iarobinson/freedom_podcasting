@@ -60,7 +60,7 @@
             <div class="card-body">
               <p>
                 <strong>Content Encoded:</strong>
-                <%# <%= @episode.content_encoded.html_safe %> %>
+                <%= @episode.content_encoded.html_safe if @episode.content_encoded %>
               </p>
             </div>
           </div>

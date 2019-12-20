@@ -13,6 +13,7 @@ class ShowsController < ApplicationController
 
   def show
     @episodes = @show.episodes
+    @categories = JSON.parse(@show.category)
   end
 
   def new
