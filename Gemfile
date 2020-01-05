@@ -22,7 +22,7 @@ gem 'rails', '6.0.0'
 # Use postgres as the database for Active Record
 gem 'pg'
 # Use Puma as the app server
-gem 'puma', '~> 3.11'
+gem "puma", ">= 3.12.2"
 # Use Amazon s3 for image, audio and video storage
 gem "aws-sdk-s3", require: false
 # Use SCSS for stylesheets

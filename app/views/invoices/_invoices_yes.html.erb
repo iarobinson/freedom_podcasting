@@ -14,7 +14,13 @@
               <%= format_clean_invoice_range(invoice.created_at) %>
             <% end %>
           </td>
-          <td>$ <%= invoice.amount_due_to_producer %></td>
+          <td>
+            <% if invoice.amount_due_to_producer.nil? %>
+              Nothing yet. Check in later.
+            <% else %>
+              <%= "$ " + invoice.amount_due_to_producer.to_s %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
