@@ -93,18 +93,21 @@ namespace :utilities do
 
   desc "Generate invoices for all producers to be filled out"
   task generate_new_round_of_monthly_invoices: :environment do
-    @administrators = User.where(role: "administrator")
-    @producers = User.where(role: "producer")
-    @producers.each do |producer|
-      @invoice = Invoice.new()
-      @invoice.users << [producer, @administrators]
-      @invoice.save
-
-      now = Time.now
-      producer.shows.each do |show|
-        @invoice.episodes << show.episodes.where("pub_date > ?", Date.new(now.year, (now.month - 1), 15))
+    if Time.now.day == 15
+      @administrators = User.where(role: "administrator")
+      @producers = User.where(role: "producer")
+      @producers.each do |producer|
+        @invoice = Invoice.new()
+        @invoice.users << [producer, @administrators]
+        puts "New invoice generated for #{producer.first_name}"
+        @invoice.save
       end
-      @invoice.calculate_total
+    end
+  end
+
+  desc "Associate all episodes the producer worked on to most recent invoice"
+  task associate_previous_months_episodes_with_invoice: :environment do
+    if Time.now.day == 15
     end
   end
 
