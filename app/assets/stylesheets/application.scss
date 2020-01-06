@@ -15,3 +15,13 @@
 .full-width {
   width: 100%;
 }
+
+.btn-primary {
+  background-color: $primaryColor;
+  border-color: $primaryColor;
+}
+
+.btn-primary:hover {
+  background-color: black;
+  border-color: black;
+}
