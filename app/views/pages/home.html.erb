@@ -1,15 +1,11 @@
-<div class="container-fluid">
-  <div class="row">
-    <% if current_user.nil? %>
-      <%= render "unknown_user_dashboard" %>
-    <% elsif current_user.administrator? %>
-      <%= render "administrator_user_dashboard" %>
-    <% elsif current_user.producer? %>
-      <%= render "producer_user_dashboard" %>
-    <% elsif current_user.client? %>
-      <%= render "client_user_dashboard" %>
-    <% elsif current_user.stranger? %>
-      <%= render "stranger_user_dashboard" %>
-    <% end %>
-  </div>
-</div>
+<% if current_user.nil? %>
+  <%= render "unknown_user_dashboard" %>
+<% elsif current_user.administrator? %>
+  <%= render "administrator_user_dashboard" %>
+<% elsif current_user.producer? %>
+  <%= render "producer_user_dashboard" %>
+<% elsif current_user.client? %>
+  <%= render "client_user_dashboard" %>
+<% elsif current_user.stranger? %>
+  <%= render "stranger_user_dashboard" %>
+<% end %>

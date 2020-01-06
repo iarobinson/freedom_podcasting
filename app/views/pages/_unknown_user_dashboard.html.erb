@@ -1,14 +1,95 @@
-<div class="col-md-6 offset-md-3 text-center pb-5">
-  <p>
-    A collection of public and private tools which support podcast producers and hosts.
-  </p>
-  <p><em>This application is in production.</em></p>
-  <p>
-    <em>
-      <strong>
-        Please don't expect your data to be secure here just yet.
-      </strong>
-    </em>
-  </p>
-  <%= link_to "Get Started", new_user_session_path, class: "btn btn-primary btn-block" %>
-</div>
+<header class="masthead text-center">
+  <div class="overlay"></div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-9 mx-auto">
+        <h1 class="mb-5">Professional Podcast Production</h1>
+        <p>
+          Podcast prodcution tools that empower you to produce with the fewest steps.
+          Also, you own your own content.
+          If you've previously used apps like Podbean, Buzzsprouts, Spreaker or Anchor you are probably ready for a change to something better.
+        </p>
+      </div>
+      <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
+        <form>
+          <div class="form-row">
+            <%= link_to "Get Started", new_user_registration_path, class: "btn btn-primary btn-block" %>
+            <%= link_to "Sign In", new_user_session_path, class: "btn btn-success btn-block" %>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section class="features-icons bg-light text-center">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="material-icons icon-screen-desktop m-auto text-primary">wb_iridescent</i>
+          </div>
+          <h3>Automated Distribution</h3>
+          <p class="lead mb-0">
+            When you launch with us we ensure your podcast appears on all podcast platforms.
+          </p><br>
+          <p class="lead mb-0">iTunes, Overcast, Spotify and more.</p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="material-icons icon-screen-desktop m-auto text-primary">settings_input_composite</i>
+          </div>
+          <h3>Automated Tasks</h3>
+          <p class="lead mb-0">
+            Automate .mp3 tagging<br>
+            Automate RSS syndication<br>
+            Automate Publication Process<br><br>
+            Automate Everything
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+          <div class="features-icons-icon d-flex">
+            <i class="material-icons icon-check m-auto text-primary">format_paint</i>
+          </div>
+          <h3>Easy to Use</h3>
+          <p class="lead mb-0">
+            We have been producing podcasts for years.<br><br>
+            This is our in-house solution to skipping the drudgery.<br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+        <ul class="list-inline mb-2">
+          <li class="list-inline-item">
+            <a href="http://www.freedompodcasting.com/about">About</a>
+          </li>
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="http://www.freedompodcasting.com/start">Contact</a>
+          </li>
+          <!-- <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="/terms_of_use">Terms of Use</a>
+          </li>
+          <li class="list-inline-item">&sdot;</li>
+          <li class="list-inline-item">
+            <a href="/privacy_policy">Privacy Policy</a>
+          </li> -->
+        </ul>
+        <p class="text-muted small mb-4 mb-lg-0">&copy; 2020 Freedom Podcasting Company LLC.<br>All Rights Reserved.</p>
+      </div>
+    </div>
+  </div>
+</footer>
