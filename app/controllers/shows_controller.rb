@@ -4,11 +4,7 @@ class ShowsController < ApplicationController
   include FeedsHelper
 
   def index
-    if current_user.role == "stranger"
-      @shows = Show.all
-    else
-      @shows = current_user.shows
-    end
+    @shows = current_user.shows
   end
 
   def show
@@ -26,6 +22,8 @@ class ShowsController < ApplicationController
   def create
     @show = Show.new(show_params)
     @show.users << current_user
+    new_feed = Feed::SaveShowService.new(@show)
+    new_feed.perform
 
     respond_to do |format|
       if @show.save

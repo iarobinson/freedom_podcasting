@@ -1,28 +1,40 @@
-<div class="container">
-  <div class= "row pb-2">
-    <div class="col-md-8 offset-md-2 text-center">
-      <h1>Users</h1>
-    </div>
-  </div>
-  <div class="row pb-5">
-    <% @users.each do |user| %>
-      <div class="col-md-4 pb-3">
-        <div class="card">
-          <%= image_tag user.avatar, class: "card-img-top" if user.avatar.attached? %>
-          <div class="card-body">
-            <ul class="list-group list-group-flush">
-              <%= if_it_exists_show_list_item([
-                "<strong>Name</strong>: #{user.first_name} #{user.name}",
-                "<strong>Last updated</strong>: #{distance_of_time_in_words(Time.now, user.updated_at)}",
-                "<strong>Email</strong>: #{user.email}"
-              ]) %>
-            </ul>
-          </div>
-          <div class="card-footer">
-            <%= link_to "Manage", edit_user_path(user), class: "btn btn-primary btn-block" %>
-          </div>
-        </div>
+<div class="row p-3 mt-5 mb-5">
+  <div class="col-md-8 offset-md-2">
+    <div class="card">
+      <div class="card-header">
+        Manage Users
       </div>
-    <% end %>
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Role</th>
+            <th scope="col">Email</th>
+            <th scope="col">First</th>
+            <th scope="col">Last Updated</th>
+            <th scope="col">Manage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.reverse.each_with_index do |user, i| %>
+            <tr>
+              <th scope="row"><%= i + 1 %></th>
+              <td><%= user.role %></td>
+              <td><%= user.email %></td>
+              <td><%= "#{user.first_name} #{user.name}" %></td>
+              <td><%= user.updated_at.to_formatted_s(:short) %></td>
+              <td>
+                <%= link_to user_path(user) do %>
+                  <%= material_icon.remove_red_eye %>
+                <% end %>
+                <%= link_to edit_user_path(user) do %>
+                  <%= material_icon.edit %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>

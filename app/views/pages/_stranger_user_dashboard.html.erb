@@ -1,57 +1,11 @@
-<div class="col-md-6 offset-md-3 text-center">
-  <div class="card">
-    <div class="card-header">
-      <h1>Hello Stranger!</h1>
-    </div>
-    <div class="card-body">
-      <p>
-        If you want to use the app as a producer or a client, please
-        <a href="https://freedompodcasting.slack.com">
-          message me on Slack.
-        </a>
-      </p>
-      <%= render "shows/form" %>
-    </div>
-    <div class="card-footer">
-      <p>
-        If you want, you could
-        <%= link_to "update your profile...", edit_user_path(current_user) %>
-      </p>
-    </div>
-  </div>
-</div>
-<div class="row">
-  <% unless @shows == nil %>
-    <div class="col-md-10 offset-md-1">
-      <h1>Our Favorite Shows</h1>
-      <% @shows.each do |show| %>
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-2">
-                <p>
-                  <%= image_tag show.show_art, width: "100%" %>
-                </p>
-                <p class="text-center">
-                  <%= pluralize show.episodes.count, "Episode" %>
-                </p>
-              </div>
-              <div class="col-10">
-                <div class="row">
-                  <div class="col-6">
-                    <p><%= link_to show.title, show %></p>
-                    <p><strong>Host:</strong> <%= show.host %></p>
-                  </div>
-                  <div class="col-6">
-                    <p><%= link_to "Feed URL", show.feed_url, target: "_blank" %></p>
-                  </div>
-                </div>
-                <p><%= show.description %></p>
-              </div>
-            </div>
-          </div>
-        </div>
+<div class="row p-3 mt-5 mb-5">
+  <div class="col-md-8 offset-md-2">
+    <% if current_user.shows.size > 0 %>
+      <% current_user.shows.each do |show| %>
+        <%= show.inspect %>
       <% end %>
-    </div>
-  <% end %>
+    <% else %>
+      <%= render "start_new_show_card" %>
+    <% end %>
+  </div>
 </div>

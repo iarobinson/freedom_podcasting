@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+  xmlns:rawvoice="http://www.rawvoice.com/rawvoiceRssModule/"
+  xmlns:googleplay="http://www.google.com/schemas/play-podcasts/1.0"
+	xmlns:georss="http://www.georss.org/georss"
+	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	>
+
+<channel>
+	<title>Art, Adventure and Enterprise</title>
+	<atom:link href="https://ianrobinson.net/category/question-mark/feed/" rel="self" type="application/rss+xml" />
+	<link>https://ianrobinson.net/category/question-mark/</link>
+	<description>A podcast about adventure and enterprise. Formerly the Love Affair Travel podcast.</description>
+	<lastBuildDate>Tue, 24 Dec 2019 00:51:59 +0000</lastBuildDate>
+	<language>en-US</language>
+	<sy:updatePeriod>hourly</sy:updatePeriod>
+	<sy:updateFrequency>1</sy:updateFrequency>
+
+<!-- podcast_generator="Blubrry PowerPress/8.0.3" mode="advanced" category="915" Blubrry PowerPress Podcasting plugin for WordPress (https://www.blubrry.com/powerpress/) -->
+	<itunes:summary>A podcast exploring art, adventure and enterprise. This was formerly the Love Affair Travel Podcast.</itunes:summary>
+	<itunes:author>Ian Robinson</itunes:author>
+	<itunes:explicit>yes</itunes:explicit>
+	<itunes:image href="https://ianrobinson.net/wp-content/uploads/powerpress/question-mark-podcast-art.jpg" />
+	<itunes:type>episodic</itunes:type>
+	<itunes:owner>
+		<itunes:name>Ian Robinson</itunes:name>
+		<itunes:email>ian@ianrobinson.net</itunes:email>
+	</itunes:owner>
+	<managingEditor>ian@ianrobinson.net (Ian Robinson)</managingEditor>
+	<copyright>NO &#xA9; - Be Free</copyright>
+	<itunes:subtitle>
+		A podcast about art, adventure and enterprise. Formerly the Love Affair Travel Podcast
+	</itunes:subtitle>
+	<image>
+		<title>Art, Adventure and Enterprise</title>
+		<url>http://ianrobinson.net/wp-content/uploads/powerpress/Three_Favorite_Books_Podcast_1400.jpg</url>
+		<link>https://ianrobinson.net/category/question-mark/</link>
+	</image>
+	<itunes:category text="Comedy">
+		<itunes:category text="Comedy Interviews"></itunes:category>
+	</itunes:category>
+	<googleplay:category text="Comedy"/>
+	<itunes:category text="Business">
+		<itunes:category text="Careers"></itunes:category>
+	</itunes:category>
+	<itunes:category text="Society &amp; Culture">
+		<itunes:category text="Places &amp; Travel"></itunes:category>
+	</itunes:category>
+	<rawvoice:location>Laniakea</rawvoice:location>
+	<rawvoice:frequency>Custom</rawvoice:frequency>
+	<rawvoice:subscribe feed="https://ianrobinson.net/category/question-mark/feed/" itunes="https://podcasts.apple.com/us/podcast/the-show-with-ian-robinson/id1482701757"></rawvoice:subscribe>
+	<site xmlns="com-wordpress:feed-additions:1">118246035</site>
+	<item>
+		<title>How to Become a Sea Plane Pilot with Fred Welsh</title>
+		<link>https://ianrobinson.net/how-to-become-a-seaplane-pilot/</link>
+		<comments>https://ianrobinson.net/how-to-become-a-seaplane-pilot/#respond</comments>
+		<pubDate>Sat, 21 Dec 2019 16:33:25 +0000</pubDate>
+		<dc:creator><![CDATA[Ian Robinson]]></dc:creator>
+		<category><![CDATA[?]]></category>
+		<category><![CDATA[Podcast]]></category>
+		<guid isPermaLink="false">https://ianrobinson.net/?p=6870</guid>
+		<description>
+			<![CDATA[<p>In this podcast Fred describes how he became a sea plane pilot. As the host, I know almost nothing about the subject. Therefore, we approach the subject from the perspective of a novice. I hope you find this useful if you&#8217;re seeking to become a recreational pilot. Enjoy! Fred Welsh is a friend I met &#8230; </p>
+			<p class="link-more"><a href="https://ianrobinson.net/how-to-become-a-seaplane-pilot/" class="more-link">Continue reading<span class="screen-reader-text"> "How to Become a Sea Plane Pilot with Fred Welsh"</span></a></p>
+			<p>The post <a rel="nofollow" href="https://ianrobinson.net/how-to-become-a-seaplane-pilot/">How to Become a Sea Plane Pilot with Fred Welsh</a> appeared first on <a rel="nofollow" href="https://ianrobinson.net">The Blog of Ian Robinson</a>.</p>
+			]]>
+		</description>
+		<wfw:commentRss>
+			https://ianrobinson.net/how-to-become-a-seaplane-pilot/feed/
+		</wfw:commentRss>
+		<slash:comments>0</slash:comments>
+		<enclosure url="http://feeds.soundcloud.com/stream/731923438-independentian-how-to-become-a-sea-plane-pilot-with-fred-welsh.mp3" length="42350843" type="audio/mpeg" />
+		<itunes:subtitle>
+			In this podcast Fred describes how he became a sea plane pilot. As the host, I know almost nothing about the subject. Therefore, we approach the subject from the perspective of a novice. I hope you find this useful if you’re seeking to become a recreat...
+		</itunes:subtitle>
+		<itunes:summary>
+			<![CDATA[In this podcast Fred describes how he became a sea plane pilot. As the host, I know almost nothing about the subject. Therefore, we approach the subject from the perspective of a novice. I hope you find this useful if you&#8217;re seeking to become a recreational pilot. Enjoy!<br />
+			<br />
+			Fred Welsh is a friend I met in 2010 when I first visited Australia. On that trip he taught me to surf and showed me a great time in Yamba, Australia. He is awesome.<br />
+			<br />
+			<a href="/applepodcast" target="_blank" rel="noopener noreferrer">SUBSCRIBE ON APPLE PODCASTS</a><br />
+			<br />
+			How to Become a Sea Plane Pilot Time Stamps<br />
+			<br />
+			* 6:50 &#8211; History &amp; Categorization of Recreational Pilots Licensing<br />
+			* 8:30 &#8211; Understanding the Cost and Process of a Recreational Pilots License<br />
+			* 15:10 &#8211; On the Economics of Purchasing an Airplane<br />
+			* 17:00 &#8211; The Benefits of a Sea Plane<br />
+			* 24:30 &#8211; Thoughts on Securing, Parking and Operating a Sea Plane<br />
+			* 28:30 &#8211; Sea Plane Endurance<br />
+			* 31:12 &#8211; Radio Communication Endorsement<br />
+			* 33:20 &#8211; Why Fly?<br />
+			* 40:00 &#8211; On Sea Plane Speed<br />
+			* 40:30 &#8211; Why a Sea Plane is Better than a Trailer/RV<br />
+			* 42:20 &#8211; Mapping out Sea Plane Adventures<br />
+			* 48:17 &#8211; Can You Do Work on Your Own Plane? &#8211; Maintaining a Sea Plane<br />
+			* 54:07 &#8211; Can Australia Sea Plane Pilots Fly Internationally?<br />
+			* 1:06:04 &#8211; Where You Inspired by <a href="https://www.margaritaville.com/" target="_blank" rel="noopener noreferrer">Jimmy Buffett</a>?<br />
+			* 1:16:40 &#8211; Lifestyle Questions &#8211; Weddings in Australia<br />
+			*  1:17:15 &#8211; The First Step to Becoming a Pilot<br />
+			<br />
+			<br />
+			We call that tiger county. It&#8217;s when there isn&#8217;t anything down there to land on and you just hope nothing goes wrong<br />
+			<br />
+			It is a life or death situation. If you run into a huge storm, it can put you down hard. If in doubt, you stay home.<br />
+			<br />
+			The pay-off for me is&#8230; I&#8217;ll say to my wife, &#8220;I think the whales are breaching today, let&#8217;s fly out and have a look.&#8221; You see sharks and dolphins&#8230; the rewards outweighs the costs of getting a license and a plane.<br />
+			<br />
+			When you&#8217;re flying long distances, you want to make sure you have plenty of room where you don&#8217;t have to get back for something.<br />
+			<br />
+			Out of all of Australia, there are only 100 sea plane pilots. Of that, only 70 are operational. It&#8217;s a very, very small fraternity of pilots.<br />
+			<br />
+			The beauty of my category is that they have made the books more easy to understand for laymen. I found it enjoyable and not overly difficult. I found the process of learning to be exhilarating.<br />
+			<br />
+			Related Links<br />
+			<br />
+			* <a href="https://www.superpetrelusa.com/" target="_blank" rel="noopener noreferrer">Petrel</a> &#8211; Check out the Company that Built Fred&#8217;s Sea Plane<br />
+			* Jimmy Buffett &#8211; <a href="https://youtu.be/SW515iq33eg" target="_blank" rel="noopener noreferrer">No Plane on Sunday</a> | <a href="https://youtu.be/N8Z6HJClDu4" target="_blank" rel="noopener noreferrer">A Pirate Looks at 40</a><br />
+			* <a href="http://yambaweddingretreat.com.au/" target="_blank" rel="noopener noreferrer">Riverside Ranch Website</a><br />
+			* <a href="https://www.instagram.com/riversideranchyamba" target="_blank" rel="noopener noreferrer">Riverside Ranch Instagram</a><br />
+			* Learn more about <a href="https://en.m.wikipedia.org/wiki/Seaplane" target="_blank" rel="noopener noreferrer">Sea Planes</a><br />
+			* Want to Contact Fred? Email him at FCWelsh@bigpond.com<br />
+			<br />
+			<br />
+			A Note on the Sound Quality Of This Podcast<br />
+			I apologize for the poor sound quality on this one. Fred and I spoke while he was in Australia and I was in the United States. We suffered during the conversation because there was a second delay from us speaking to when the other woul...]]>
+		</itunes:summary>
+		<itunes:author>Ian Robinson</itunes:author>
+		<itunes:explicit>yes</itunes:explicit>
+		<itunes:duration>1:26:51</itunes:duration>
+		<post-id xmlns="com-wordpress:feed-additions:1">6870</post-id>
+	</item>
+	<item>
+		---NEXT EPISODE SAME AS ABOVE---
+	</item>
+	</channel>
+</rss>

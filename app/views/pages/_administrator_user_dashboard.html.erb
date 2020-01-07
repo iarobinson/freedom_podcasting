@@ -1,41 +1,5 @@
-<div class="col-md-8 offset-md-2">
-  <div class="card">
-    <div class="card-header">
-      <h1 class="text-center">Administrator Dashboard</h1>
-    </div>
-    <div class="card-body">
-      <p><span class="small float-right">Users: <%= @users.size %></span></p>
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Role</th>
-            <th scope="col">Email</th>
-            <th scope="col">First</th>
-            <th scope="col">Last Updated</th>
-            <th scope="col">Manage</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @users.each_with_index do |user, i| %>
-            <tr>
-              <th scope="row"><%= i + 1 %></th>
-              <td><%= user.role %></td>
-              <td><%= user.email %></td>
-              <td><%= "#{user.first_name} #{user.name}" %></td>
-              <td><%= user.updated_at.to_formatted_s(:short) %></td>
-              <td>
-                <%= link_to user_path(user) do %>
-                  <%= material_icon.remove_red_eye %>
-                <% end %>
-                <%= link_to edit_user_path(user) do %>
-                  <%= material_icon.edit %>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+<div class="row p-3 mt-5 mb-5">
+  <div class="col-md-8 offset-md-2">
+    what is useful for the administrator?
   </div>
 </div>
