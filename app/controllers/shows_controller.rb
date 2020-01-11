@@ -9,7 +9,11 @@ class ShowsController < ApplicationController
 
   def show
     @episodes = @show.episodes
-    @categories = JSON.parse(@show.category)
+    if @show.category.nil?
+      @categories = []
+    else
+      @categories = JSON.parse(@show.category)
+    end
   end
 
   def new
@@ -63,6 +67,8 @@ class ShowsController < ApplicationController
     end
 
     def show_params
-      params.require(:show).permit(:feed_url)
+      params.require(:show).permit(
+        :feed_url,:title, :host, :website, :description, :subtitle, :show_art
+      )
     end
 end

@@ -20,8 +20,12 @@
     <div class="col-2">
       <p><strong>Category:</strong></p>
       <p>
-        <% @categories.each do |category| %>
-          <span class="badge badge-primary"><%= category %></span>
+        <% if @categories.size > 0 %>
+          <% @categories.each do |category| %>
+            <span class="badge badge-primary"><%= category %></span>
+          <% end %>
+        <% else %>
+          No Categories Selected
         <% end %>
       </p>
     </div>

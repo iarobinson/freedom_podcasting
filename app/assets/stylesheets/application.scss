@@ -25,3 +25,9 @@
   background-color: black;
   border-color: black;
 }
+
+.btn-link:focus {
+  text-decoration: none;
+  background-color: $primaryColor;
+  border-color: $primaryColor;
+}
