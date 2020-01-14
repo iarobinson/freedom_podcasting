@@ -64,6 +64,7 @@ class Shows::EpisodesController < ApplicationController
     end
 
     def episode_params
+      binding.pry
       params.require(:episode).permit(
         :title, :pub_date, :link, :description, :content_encoded, :enclosure,
         :itunes_duration, :itunes_explicit, :itunes_keywords, :itunes_subtitle,

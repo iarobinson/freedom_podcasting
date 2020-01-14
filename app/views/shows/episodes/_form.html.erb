@@ -1,26 +1,38 @@
 <%= form_with(model: @episode, url: url, local: true) do |f| %>
   <div class="form-group">
-    <%= f.label :title %>
+
+    <%= f.label :title, class: "pt-3" %>
     <%= f.text_field :title, class: 'form-control' %>
 
-    <%= f.label :link %>
-    <%= f.text_field :link, class: 'form-control' %>
+    <%= f.label :content_encoded, class: "pt-3" %>
+    <%= f.text_area :content_encoded, class: 'form-control' %>
 
-    <%= f.label :description %>
+    <%= f.label :description, class: "pt-3" %>
     <%= f.text_field :description, class: 'form-control' %>
 
-    <%= f.label :itunes_explicit, "iTunes Explicit" %>
-    <%= f.text_field :itunes_explicit, class: 'form-control' %>
-
-    <%= f.label :paid %>
-    <%= f.collection_radio_buttons :paid, [[true, 'Yes'], [false, 'No']], :first, :last, class: 'form-control' %>
-
-    <div class="custom-control custom-switch">
-      <input type="checkbox" class="custom-control-input" id="episode_paid_true">
-      <label class="custom-control-label" for="episode_paid_true">Toggle this switch element</label>
+    <div class="row pt-3">
+      <div class="col-6">
+        <%= f.label :itunes_explicit %><br>
+        <span class="badge badge-primary">Do you want your show to be listed as explicit?</span><br>
+        <div class="custom-control custom-radio custom-control-inline pt-3">
+          <input value="false" type="radio" id="itunes_explicit[clean]" name="episode[itunes_explicit]" class="custom-control-input">
+          <label class="custom-control-label" for="itunes_explicit[clean]">Clean</label>
+        </div>
+        <div class="custom-control custom-radio custom-control-inline">
+          <input value="true" type="radio" id="itunes_explicit[explicit]" name="episode[itunes_explicit]" class="custom-control-input">
+          <label class="custom-control-label" for="itunes_explicit[explicit]">Explicit</label>
+        </div>
+      </div>
+      <div class="col-6">
+        <%= f.label :enclosure %><br>
+        <span class="badge badge-primary">Please upload an .mp3 file for the episode.</span><br>
+        <%= f.file_field :enclosure, multiple: false, direct_upload: true, class: "pt-3" %>
+      </div>
     </div>
 
-    <%= f.hidden_field :show_id, value: @show.id  %>
+    <%= f.label :itunes_keywords, class: "pt-3" %><br>
+    <small>Please add your iTunes keywords in separated by commas.</small>
+    <%= f.text_area :itunes_keywords, class: 'form-control' %>
   </div>
 
   <div class="form-actions">

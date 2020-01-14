@@ -26,8 +26,8 @@ class ShowsController < ApplicationController
   def create
     @show = Show.new(show_params)
     @show.users << current_user
-    new_feed = Feed::SaveShowService.new(@show)
-    new_feed.perform
+    # new_feed = Feed::SaveShowService.new(@show)
+    # new_feed.perform
 
     respond_to do |format|
       if @show.save
