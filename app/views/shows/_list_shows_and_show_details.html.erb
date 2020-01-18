@@ -1,15 +1,16 @@
 <!-- Not using this yet, but I coded it up so maybe it'll be useful one day -->
-<div class="row">
+<div class="row pt-5">
   <% unless @shows == nil %>
     <div class="col-md-10 offset-md-1">
-      <h1>Our Favorite Shows</h1>
       <% @shows.each do |show| %>
         <div class="card mb-4">
           <div class="card-body">
             <div class="row">
               <div class="col-2">
                 <p>
-                  <%= image_tag show.show_art, width: "100%" %>
+                  <% if show.show_art.attached? %>
+                    <%= image_tag show.show_art, width: "100%" %>
+                  <% end %>
                 </p>
                 <p class="text-center">
                   <%= pluralize show.episodes.count, "Episode" %>
@@ -21,8 +22,15 @@
                     <p><%= link_to show.title, show %></p>
                     <p><strong>Host:</strong> <%= show.host %></p>
                   </div>
-                  <div class="col-6">
-                    <p><%= link_to "Feed URL", show.feed_url, target: "_blank" %></p>
+                  <div class="col-6 text-center">
+                    <%= link_to show.feed_url, target: "_blank", class: "btn btn-primary" do %>
+                      <%= material_icon.rss_feed %>
+                      <br>RSS Feed
+                    <% end %>
+                    <%= link_to show, class: "btn btn-primary" do %>
+                      <%= material_icon.remove_red_eye %>
+                      <br>Show Details
+                    <% end %>
                   </div>
                 </div>
                 <p><%= show.description %></p>

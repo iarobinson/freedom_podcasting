@@ -24,7 +24,7 @@ class Shows::EpisodesController < ApplicationController
 
     respond_to do |format|
       if @episode.save
-        format.html { redirect_to show_episodes_path(@show), notice: 'Episode was successfully created.' }
+        format.html { redirect_to show_path(@show), notice: 'Episode was successfully created.' }
         format.json { render :episode, status: :created, location: @episode }
       else
         format.html { render :new, warning: "Something went wrong." }
@@ -64,7 +64,6 @@ class Shows::EpisodesController < ApplicationController
     end
 
     def episode_params
-      binding.pry
       params.require(:episode).permit(
         :title, :pub_date, :link, :description, :content_encoded, :enclosure,
         :itunes_duration, :itunes_explicit, :itunes_keywords, :itunes_subtitle,

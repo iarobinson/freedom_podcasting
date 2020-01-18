@@ -9,4 +9,12 @@ module ShowsHelper
     strings_of_list_group_items.html_safe
   end
 
+  def select_podcast_category_menu_item
+    options = "<option selected>Choose...</option>"
+
+    @show.categories.each do |category|
+      options += "<option value='" + category + "'>" + category + "</option>"
+    end
+    options.html_safe
+  end
 end

@@ -26,8 +26,13 @@ class ShowsController < ApplicationController
   def create
     @show = Show.new(show_params)
     @show.users << current_user
-    # new_feed = Feed::SaveShowService.new(@show)
-    # new_feed.perform
+
+    if show_params[:feed_url] == nil
+      @show.feed_url = "https://www.app.freedompodcasting.com/feed/#{@show.title.gsub(" ", "-").downcase}"
+    else
+      new_feed = Feed::SaveShowService.new(@show)
+      new_feed.perform
+    end
 
     respond_to do |format|
       if @show.save
@@ -68,7 +73,8 @@ class ShowsController < ApplicationController
 
     def show_params
       params.require(:show).permit(
-        :feed_url,:title, :host, :website, :description, :subtitle, :show_art
+        :feed_url,:title, :host, :website, :description, :subtitle, :show_art,
+        :category_one, :category_two, :category_three
       )
     end
 end

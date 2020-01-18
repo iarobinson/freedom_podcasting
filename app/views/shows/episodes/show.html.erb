@@ -60,7 +60,7 @@
             <div class="card-body">
               <p>
                 <strong>Content Encoded:</strong>
-                <%= @episode.content_encoded.html_safe if @episode.content_encoded %>
+                <%= @episode.content_encoded if @episode.content_encoded %>
               </p>
             </div>
           </div>
@@ -85,7 +85,7 @@
                 <small><strong>Creation Date:</strong> <%= @episode.created_at.strftime("%m-%d-%Y") %></small>
               </li>
               <li class="list-group-item">
-                <small><strong>Date Published:</strong> <%= @episode.pub_date.strftime("%m-%d-%Y") %></small>
+                <small><strong>Date Published:</strong> <%= @episode.pub_date.strftime("%m-%d-%Y") if @episode.pub_date %></small>
               </li>
             </ul>
           </div>

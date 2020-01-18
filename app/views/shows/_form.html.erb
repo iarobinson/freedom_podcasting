@@ -23,6 +23,41 @@
     <%= f.input :subtitle %>
   </div>
 
+  <label class="form-control-label string optional">Categories</label><br>
+
+  <div class="form-inputs">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="show_category_one">1st Category</label>
+      </div>
+      <select class="custom-select" id="show_category_one" name="show[:category_one]">
+        <%= select_podcast_category_menu_item %>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-inputs">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="show_category_two">2nd Category</label>
+      </div>
+      <select class="custom-select" id="show_category_two" name="show[category_two]">
+        <%= select_podcast_category_menu_item %>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-inputs">
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="show_category_three">3rd Category</label>
+      </div>
+      <select class="custom-select" id="show_category_three" name="show[category_three]">
+        <%= select_podcast_category_menu_item %>
+      </select>
+    </div>
+  </div>
+
   <div class="form-inputs">
     <%= f.input :show_art %>
   </div>

@@ -1,47 +1,6 @@
-<div class="container-fluid">
+<div class="container">
   <div class="row paddingbottom">
-    <div class="col-md-10 offset-md-1">
-      <% if @shows.size > 0 %>
-        <h1 class="text-center">Shows</h1>
-        <table class="table table-responsive table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Description</th>
-              <th scope="col">Host</th>
-              <th scope="col">Last Updated</th>
-              <th scope="col">Manage</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @shows.each_with_index do |show, i| %>
-              <tr>
-                <th scope="row">
-                  <%= link_to show_path(show) do %>
-                    <center>
-                      <% if show.show_art.attached? %>
-                        <%= image_tag show.show_art, width: "50px" %>
-                      <% end %>
-                      <br><p class="small"><%= show.title %></p>
-                    </center>
-                  <% end %>
-                </th>
-                <td><%= truncate(show.description, length: 150) %> </td>
-                <td><%= show.host %></td>
-                <td><%= show.updated_at.to_formatted_s(:short) %></td>
-                <td>
-                  <%= link_to edit_show_path(show) do %>
-                    <%= material_icon.edit %>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <% else %>
-        <p class="text-center">You don't have any shows associated with your account.</p>
-      <% end %>
-    </div>
+    <%= render "list_shows_and_show_details" %>
   </div>
   <div class="row paddingbottom">
     <div class="col-4 offset-4">

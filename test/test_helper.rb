@@ -1,6 +1,24 @@
-ENV['RAILS_ENV'] ||= 'test'
-require_relative '../config/environment'
-require 'rails/test_help'
+ENV["RAILS_ENV"] = "test"
+require File.expand_path("../../config/environment", __FILE__)
+
+require "rails/test_help"
+# require "minitest/rails/capybara"
+require "delorean"
+require "mocha/minitest"
+
+Capybara.register_driver :headless_chrome do |app|
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    chromeOptions: { args: %w(headless disable-gpu) },
+  )
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, desired_capabilities: capabilities).tap do |driver|
+    driver.browser.manage.window.size = Selenium::WebDriver::Dimension.new(1024, 768)
+  end
+end
+
+Capybara.javascript_driver = :headless_chrome
+
+Capybara.default_max_wait_time = 5
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.

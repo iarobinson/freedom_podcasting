@@ -15,7 +15,6 @@ Rails.application.routes.draw do
     resources :episodes
   end
 
-  resources :dashboard, only: [:index]
   resources :invoices
   resources :episodes, only: [:index]
 end

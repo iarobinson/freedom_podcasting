@@ -2,10 +2,10 @@
   <div class="col-md-8 offset-md-2">
     <% if current_user.shows.size > 0 %>
       <% current_user.shows.each do |show| %>
-        <%= show.inspect %>
+        <%= render "shows/list_shows_and_show_details" %>
       <% end %>
     <% else %>
-      <%= render "start_new_show_card" %>
+      <%= render "pages/start_new_show_card" %>
     <% end %>
   </div>
 </div>

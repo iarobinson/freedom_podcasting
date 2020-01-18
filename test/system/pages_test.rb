@@ -1,10 +1,10 @@
 require "application_system_test_case"
 
-class PagesTest < ApplicationSystemTestCase
+class PagesTest < Capybara::Rails::TestCase
 
   test "visiting the index" do
     visit root_path
-    assert_selector "h1", text: "Freedom Podcasting"
+    assert_selector "h1", text: "Podcast Production Services"
   end
 
   # test "creating a Page" do

@@ -1,5 +1,5 @@
 <div class="container">
-  <div class="row paddingbottom">
+  <div class="row pb-5 pt-5">
     <div class="col-2">
       <% if @show.show_art.attached? %>
         <%= image_tag @show.show_art, class: "img-fluid" %>
@@ -7,33 +7,18 @@
         <%= image_tag "default/show-art.jpg", class: "img-fluid" %>
       <% end %>
     </div>
-    <div class="col-2">
-      <p><strong>Show Title:</strong></p>
-      <p><%= @show.title %></p>
-    </div>
-    <div class="col-2">
-      <p><strong>Host:</strong></p>
-      <p><%= @show.host %></p>
-      <p><strong>Website:</strong></p>
-      <p><%= @show.website %></p>
-    </div>
-    <div class="col-2">
-      <p><strong>Category:</strong></p>
-      <p>
-        <% if @categories.size > 0 %>
-          <% @categories.each do |category| %>
-            <span class="badge badge-primary"><%= category %></span>
-          <% end %>
-        <% else %>
-          No Categories Selected
-        <% end %>
-      </p>
+    <div class="col-6">
+      <p><strong>Show Title:</strong> <%= @show.title %></p>
+      <p><strong>Subtitle:</strong> <%= @show.subtitle %></p>
+      <p><strong>Host:</strong> <%= @show.host %></p>
+      <p><strong>Website:</strong> <%= @show.website %></p>
+      <p><strong>Description:</strong> <%= truncate(@show.description, length: 140) %></p>
     </div>
     <div class="col-4">
-      <p><strong>Description:</strong></p>
-      <p><%= truncate(@show.description, length: 140) %></p>
-      <p><strong>Subtitle:</strong></p>
-      <p><%= @show.subtitle %></p>
+      <p><strong>Categories:</strong></p>
+      <span class="badge badge-primary"><%= @show.category_one if @show.category_one %></span><br>
+      <span class="badge badge-primary"><%= @show.category_two if @show.category_two %></span><br>
+      <span class="badge badge-primary"><%= @show.category_three if @show.category_three %></span>
     </div>
   </div>
 
@@ -54,13 +39,7 @@
     <div class="col">
       <h2><span class="badge badge-success"><%= @episodes.count %></span> Episodes</h2>
       <% if @episodes.count > 0 %>
-        <div class="list-group">
-          <% @episodes.reverse.each do |episode| %>
-            <a href="<%= show_episode_path(@show, episode) %>" class="list-group-item list-group-item-action list-group-item-primary">
-              <p><strong>Title:</strong> <%= episode.title %></p>
-            </a>
-          <% end %>
-        </div>
+        <%= render "show_episode_list_item" %>
       <% else %>
         <p>You currently have no episodes.</p>
         <p><%= link_to "Create an Episode", new_show_episode_path(@show), class: "btn btn-success btn-block" %></p>
