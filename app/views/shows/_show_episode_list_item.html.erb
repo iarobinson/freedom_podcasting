@@ -1,6 +1,6 @@
 <ul class="list-group">
   <% @episodes.reverse.each do |episode| %>
-    <a href="<%= url_path episode %>" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
+    <a href="<%= show_episode_path @show, episode %>" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
 
   <% end %>
 </ul>
