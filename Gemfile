@@ -3,7 +3,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.3'
 
-gem 'minitest-rails'
 gem 'whenever', require: false
 gem 'feedjira'
 gem 'httparty'
@@ -58,10 +57,6 @@ group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem "webdrivers"
   gem "delorean"
-  gem "capybara"
-  gem "minitest"
-  gem "minitest-rails-capybara"
-  gem "minitest-reporters"
   gem "mocha"
   gem "selenium-webdriver"
   gem "simplecov"

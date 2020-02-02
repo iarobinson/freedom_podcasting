@@ -2,6 +2,7 @@
   <table class="table table-hover">
     <thead>
       <tr>
+        <th scope="col">Producer</th>
         <th scope="col">Period</th>
         <th scope="col">Amount Owed to Producer</th>
       </tr>
@@ -9,6 +10,9 @@
     <tbody>
       <% @invoices.reverse.each do |invoice| %>
         <tr>
+          <td>
+            <%= invoice.users.where(role: "producer").first.first_name %>
+          </td>
           <td>
             <%= link_to invoice do %>
               <%= format_clean_invoice_range(invoice.created_at) %>

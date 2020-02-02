@@ -70,6 +70,13 @@ ActiveRecord::Schema.define(version: 2020_01_14_103454) do
     t.index ["show_id"], name: "index_episodes_on_show_id"
   end
 
+  create_table "episodes_invoices", id: false, force: :cascade do |t|
+    t.bigint "invoice_id"
+    t.bigint "episode_id"
+    t.index ["episode_id"], name: "index_episodes_invoices_on_episode_id"
+    t.index ["invoice_id"], name: "index_episodes_invoices_on_invoice_id"
+  end
+
   create_table "invoices", force: :cascade do |t|
     t.integer "amount_due_from_client"
     t.integer "amount_due_to_producer"
@@ -77,7 +84,6 @@ ActiveRecord::Schema.define(version: 2020_01_14_103454) do
     t.integer "invoice_number"
     t.datetime "invoice_date"
     t.datetime "payment_due"
-    t.bigint "users"
     t.datetime "start_date"
     t.datetime "end_date"
     t.text "notes"

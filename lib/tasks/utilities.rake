@@ -93,7 +93,7 @@ namespace :utilities do
 
   desc "Generate invoices for all producers to be filled out"
   task generate_new_round_of_monthly_invoices: :environment do
-    if Time.now.day == 15
+    # if Time.now.day == 15
       @administrators = User.where(role: "administrator")
       @producers = User.where(role: "producer")
       @producers.each do |producer|
@@ -102,7 +102,7 @@ namespace :utilities do
         puts "New invoice generated for #{producer.first_name}"
         @invoice.save
       end
-    end
+    # end
   end
 
   desc "Associate all episodes the producer worked on to most recent invoice"

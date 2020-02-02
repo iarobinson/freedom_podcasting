@@ -1,5 +1,13 @@
 require 'test_helper'
+require "action_dispatch/testing/test_process"
+require "spec_helper"
 
+feature "PagesControllerTest" do
+  include AuthenticationHelper
+  setup do
+    p 'Printing tests'
+  end
+end
 class PagesControllerTest < ActionDispatch::IntegrationTest
   include AuthenticationHelper
 

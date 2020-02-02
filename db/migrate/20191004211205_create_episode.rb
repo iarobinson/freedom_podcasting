@@ -28,7 +28,6 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
       t.integer :invoice_number
       t.datetime :invoice_date
       t.datetime :payment_due
-      t.bigint :users
       t.datetime :start_date
       t.datetime :end_date
       t.text :notes
@@ -38,6 +37,11 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
     create_table :invoices_users, id: false do |t|
       t.belongs_to :invoice
       t.belongs_to :user
+    end
+
+    create_table :episodes_invoices, id: false do |t|
+      t.belongs_to :invoice
+      t.belongs_to :episode
     end
   end
 end
