@@ -97,7 +97,7 @@ namespace :utilities do
       @administrators = User.where(role: "administrator")
       @producers = User.where(role: "producer")
       @producers.each do |producer|
-        @invoice = Invoice.new()
+        @invoice = Invoice.new
         @invoice.users << [producer, @administrators]
         puts "New invoice generated for #{producer.first_name}"
         @invoice.save
@@ -107,7 +107,20 @@ namespace :utilities do
 
   desc "Associate all episodes the producer worked on to most recent invoice"
   task associate_previous_months_episodes_with_invoice: :environment do
-    if Time.now.day == 15
+    User.all.each do |user|
+      if user.role == "producer"
+        @user_shows = user.shows
+
+        p user.first_name
+        @user_shows.each do |user_show|
+          user_show.episodes.each do |user_show_episode|
+            if user_show_episode.pub_date.year == Time.now.year
+              p user_show_episode.pub_date
+            end
+          end
+        end
+        p "-----------"
+      end
     end
   end
 
