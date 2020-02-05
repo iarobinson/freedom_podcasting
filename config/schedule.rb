@@ -7,10 +7,10 @@
 #
 # set :output, "/path/to/my/cron_log.log"
 #
-every 1.day do
-  rake "utilities:sync_episodes_to_podcast_feeds"
-end
-
-every 1.month, :at => 'January 15th 1:00am' do
-  rake "utilities:generate_new_round_of_monthly_invoices"
-end
+# every 1.day do
+#   rake "utilities:sync_episodes_to_podcast_feeds"
+# end
+#
+# every 1.month, :at => 'January 15th 1:00am' do
+#   rake "utilities:generate_new_round_of_monthly_invoices"
+# end
