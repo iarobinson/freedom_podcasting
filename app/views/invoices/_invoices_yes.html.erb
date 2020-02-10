@@ -1,32 +1,30 @@
-<div class="col-md-6 offset-md-3">
-  <table class="table table-hover">
-    <thead>
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Producer</th>
+      <th scope="col">Period</th>
+      <th scope="col">Amount Owed to Producer</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% invoices.reverse.each do |invoice| %>
       <tr>
-        <th scope="col">Producer</th>
-        <th scope="col">Period</th>
-        <th scope="col">Amount Owed to Producer</th>
+        <td>
+          <%= invoice.users.first.first_name %>
+        </td>
+        <td>
+          <%= link_to invoice do %>
+            <%= format_clean_invoice_range(invoice.created_at) %>
+          <% end %>
+        </td>
+        <td>
+          <% if invoice.amount_due_to_producer.nil? %>
+            Nothing yet. Check in later.
+          <% else %>
+            <%= "$ " + invoice.amount_due_to_producer.to_s %>
+          <% end %>
+        </td>
       </tr>
-    </thead>
-    <tbody>
-      <% @invoices.reverse.each do |invoice| %>
-        <tr>
-          <td>
-            <%= invoice.users.where(role: "producer").first.first_name %>
-          </td>
-          <td>
-            <%= link_to invoice do %>
-              <%= format_clean_invoice_range(invoice.created_at) %>
-            <% end %>
-          </td>
-          <td>
-            <% if invoice.amount_due_to_producer.nil? %>
-              Nothing yet. Check in later.
-            <% else %>
-              <%= "$ " + invoice.amount_due_to_producer.to_s %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-</div>
+    <% end %>
+  </tbody>
+</table>

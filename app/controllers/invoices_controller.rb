@@ -4,9 +4,16 @@ class InvoicesController < ApplicationController
   before_action :set_user
 
   def index
-    @invoices = []
-    if (current_user.role === "administrator")
-      @invoices = Invoice.all
+    if current_user.role === "administrator"
+      @producer_invoices = []
+      @client_invoices = []
+      Invoice.all.each do |i|
+        if i.users.first.role == "producer"
+          @producer_invoices << i
+        elsif i.users.first.role == "client"
+          @client_invoices << i
+        end
+      end
     else
       Invoice.all.each do |invoice|
         if invoice.users.include?(current_user)
@@ -15,7 +22,6 @@ class InvoicesController < ApplicationController
       end
     end
 
-    @invoices
   end
 
   def show

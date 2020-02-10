@@ -1,24 +1,20 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <center>
-        <h1>Invoices</h1>
-      </center>
+    <div class="col-6">
+      <h1>Producer Invoices</h1>
+      <% if @producer_invoices.size > 0 %>
+        <%= render "invoices_yes", invoices: @producer_invoices %>
+      <% else %>
+        <%= render "invoices_no" %>
+      <% end %>
     </div>
-  </div>
-  <div class="row">
-    <% if @invoices.size > 0 %>
-      <%= render "invoices_yes" %>
-    <% else %>
-      <%= render "invoices_no" %>
-    <% end %>
-
-    <br>
-    <% if current_user.role == "administrator" %>
-      <div class="col-md-6 offset-md-3 mb-2 text-center mb-5">
-
-        <%= link_to 'New Invoice', new_invoice_path, class: "btn btn-primary btn-block" %>
-      </div>
-    <% end %>
+    <div class="col-6">
+      <h1>Client Invoices</h1>
+      <% if @client_invoices.size > 0 %>
+        <%= render "invoices_yes", invoices: @client_invoices %>
+      <% else %>
+        <%= render "invoices_no" %>
+      <% end %>
+    </div>
   </div>
 </div>
