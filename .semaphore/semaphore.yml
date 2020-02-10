@@ -1,5 +1,5 @@
 version: v1.0
-name: Test MyApp
+name: Freedom Podcasting Company LLC
 agent:
   machine:
     type: e1-standard-2
@@ -24,3 +24,4 @@ blocks:
           - cache store
           - bundle exec rake db:setup
           - bundle exec rspec
+          - rails test
