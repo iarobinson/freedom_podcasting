@@ -49,4 +49,4 @@ blocks:
       jobs:
       - name: RSpec - feature specs
         commands:
-          - bin/rake test
+          - bundle exec rake test
