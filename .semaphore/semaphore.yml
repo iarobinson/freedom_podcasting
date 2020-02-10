@@ -31,21 +31,7 @@ blocks:
           # to be used in next blocks and future workflows:
           - cache store
 
-  - name: Code scanning
-    task:
-      jobs:
-        - name: check style + security
-          commands:
-            - checkout
-            - cache restore
-            # Bundler requires `install` to run even though cache has been
-            # restored, but generally this is not the case with other package
-            # managers. Installation will not actually run and command will
-            # finish quickly:
-            - sem-version ruby 2.6.0
-            - bundle install --deployment --path vendor/bundle
-
-  - name: Unit tests
+  - name: Application tests
     task:
       # This block runs two jobs in parallel and they both share common
       # setup steps. We can group them in a prologue.
@@ -61,31 +47,6 @@ blocks:
           - bundle install --deployment --path vendor/bundle
           - bundle exec rake db:setup
 
-      jobs:
-      - name: RSpec - model tests
+      - name: Rails Test
         commands:
-          - bundle exec rspec spec/models
-
-      - name: RSpec - controller tests
-        commands:
-          - bundle exec rspec spec/controllers
-
-  # Note that it's possible to define an agent on a per-block level.
-  # For example, if your integration tests need more RAM, you could override
-  # agent configuration here to use e1-standard-8.
-  # See https://docs.semaphoreci.com/article/50-pipeline-yaml#agent-in-task
-  - name: Integration tests
-    task:
-      prologue:
-        commands:
-          - checkout
-          - cache restore
-          - sem-service start postgres
-          - sem-version ruby 2.6.0
-          - bundle install --deployment --path vendor/bundle
-          - bundle exec rake db:setup
-
-      jobs:
-      - name: RSpec - feature specs
-        commands:
-          - bundle exec rspec spec/features
+          - rails test
