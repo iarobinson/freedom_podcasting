@@ -47,7 +47,7 @@ chdir APP_ROOT do
   system! 'bin/rails utilities:sync_with_podcast_feed'
 
   puts "\n== Add an invoice to each producer =="
-  system! 'bin/rails create_new_round_of_invoices_on_the_15th_of_each_month'
+  system! 'bin/rails create_new_round_of_invoices'
 
   puts "\n== Restarting application server =="
   system! 'bin/rails restart'

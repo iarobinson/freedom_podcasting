@@ -39,6 +39,27 @@ namespace :utilities do
     end
   end
 
+  desc "Create New Round of Invoices"
+  task create_new_round_of_invoices: :environment do
+    @producers = User.where(role: "producer")
+
+    @producers.each do |producer|
+      @new_invoice = Invoice.new
+      @new_invoice.users << producer
+
+      producer.shows.each do |producer_show|
+        producer_show.episodes.each do |producer_show_episode|
+          the_15th_of_last_month = Date.new(Time.now.year, Time.now.month, 15).prev_month
+          if producer_show_episode.pub_date > the_15th_of_last_month
+            @new_invoice.episodes << producer_show_episode
+          end
+        end
+      end
+      
+      @new_invoice.save
+    end
+  end
+
   desc "Add Users to Shows"
   task add_users_to_shows: :environment do
     @administrators = User.where(role: "administrator")
