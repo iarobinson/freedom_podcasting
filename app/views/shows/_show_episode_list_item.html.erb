@@ -1,6 +1,17 @@
 <ul class="list-group">
   <% @episodes.reverse.each do |episode| %>
-    <a href="<%= show_episode_path @show, episode %>" class="list-group-item list-group-item-action">Dapibus ac facilisis in</a>
-
+    <a href="<%= show_episode_path @show, episode %>" class="list-group-item list-group-item-action">
+      <div class="row">
+        <div class="col">
+          <p><%= episode.title %></p>
+        </div>
+        <div class="col embed-responsive">
+          <audio controls class="embed-responsive-item">
+            <source src="<%= episode.enclosure %>" type="audio/mpeg">
+            Your browser does not support the audio tag.
+          </audio>
+        </div>
+      </div>
+    </a>
   <% end %>
 </ul>

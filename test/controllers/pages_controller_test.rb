@@ -6,5 +6,6 @@ class PagesControllerTest < ActionDispatch::IntegrationTest
     get root_path
     assert_match(/[a-zA-Z]/,"kaboom", "MEssage here")
     assert_match(//, "asadfasdfasdf.")
+    # expect(response.body).to include "Bestsellers"
   end
 end
