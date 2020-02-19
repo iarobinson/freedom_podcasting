@@ -15,13 +15,15 @@
                   "<strong>Title</strong>: #{show.title}",
                   "<strong>Total Episode Count</strong>: #{show.episodes.count}",
                 ]) %>
-              <% show.episodes.limit(3).each do |episode| %>
+              <% show.episodes.reverse.each_with_index do |episode, index| %>
+                <% if episode.pub_date > the_15th_of_last_month %>
                   <li class="list-group-item d-flex justify-content-between align-items-center">
                     <%= link_to episode.title, show_episode_path(show, episode) %>
                     <span class="badge badge-primary badge-pill">
-                      <%= episode.updated_at.strftime("%F") %>
+                      <%= episode.pub_date.strftime("%F") %>
                     </span>
                   </li>
+                <% end %>
               <% end %>
             </ul>
           </div>
