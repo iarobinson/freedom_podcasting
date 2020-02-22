@@ -31,5 +31,8 @@
         </div>
       </div>
     </div>
+    <h3>Associated Shows:</h3>
+    <% @shows = @user.shows %>
+    <%= render "shows/list_shows_and_show_details" %>
   </div>
 </div>

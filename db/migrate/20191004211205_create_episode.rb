@@ -2,11 +2,20 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
   def change
     create_table :episodes do |t|
       t.string :title
+      t.string :itunes_author
+      t.string :itunes_summary
+      t.string :entry_id
+      t.string :summary
       t.datetime :pub_date
+      t.published :published
       t.string :link
+      t.string :url
       t.text :description
       t.string :content_encoded
       t.string :enclosure
+      t.string :enclosure_url
+      t.string :enclosure_type
+      t.string :enclosure_length
       t.string :itunes_duration
       t.integer :duration
       t.boolean :itunes_explicit

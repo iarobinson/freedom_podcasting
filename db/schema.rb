@@ -10,20 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_14_103454) do
+ActiveRecord::Schema.define(version: 2019_09_19_223808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "action_text_rich_texts", force: :cascade do |t|
-    t.string "name", null: false
-    t.text "body"
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
-  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -44,58 +34,6 @@ ActiveRecord::Schema.define(version: 2020_01_14_103454) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "episodes", force: :cascade do |t|
-    t.string "title"
-    t.datetime "pub_date"
-    t.string "link"
-    t.text "description"
-    t.string "content_encoded"
-    t.string "enclosure"
-    t.string "itunes_duration"
-    t.integer "duration"
-    t.boolean "itunes_explicit"
-    t.string "itunes_keywords"
-    t.string "itunes_subtitle"
-    t.string "itunes_episode"
-    t.string "itunes_episodeType"
-    t.integer "client_cost"
-    t.boolean "paid"
-    t.bigint "show_id"
-    t.bigint "invoice_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["invoice_id"], name: "index_episodes_on_invoice_id"
-    t.index ["show_id"], name: "index_episodes_on_show_id"
-  end
-
-  create_table "episodes_invoices", id: false, force: :cascade do |t|
-    t.bigint "invoice_id"
-    t.bigint "episode_id"
-    t.index ["episode_id"], name: "index_episodes_invoices_on_episode_id"
-    t.index ["invoice_id"], name: "index_episodes_invoices_on_invoice_id"
-  end
-
-  create_table "invoices", force: :cascade do |t|
-    t.integer "amount_due_from_client"
-    t.integer "amount_due_to_producer"
-    t.string "status"
-    t.integer "invoice_number"
-    t.datetime "invoice_date"
-    t.datetime "payment_due"
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.text "notes"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "invoices_users", id: false, force: :cascade do |t|
-    t.bigint "invoice_id"
-    t.bigint "user_id"
-    t.index ["invoice_id"], name: "index_invoices_users_on_invoice_id"
-    t.index ["user_id"], name: "index_invoices_users_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -174,7 +112,6 @@ ActiveRecord::Schema.define(version: 2020_01_14_103454) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "episodes", "shows"
   add_foreign_key "messages", "users"
   add_foreign_key "shows", "users", column: "users_id"
 end
