@@ -7,7 +7,7 @@ class CreateEpisode < ActiveRecord::Migration[6.0]
       t.string :entry_id
       t.string :summary
       t.datetime :pub_date
-      t.published :published
+      t.string :published
       t.string :link
       t.string :url
       t.text :description
