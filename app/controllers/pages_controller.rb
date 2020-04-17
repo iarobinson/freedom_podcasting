@@ -13,7 +13,7 @@ class PagesController < ApplicationController
       # Client data
     else current_user.stranger?
       @show = Show.new
-      @shows = current_user.shows
+      @shows = Show.all
       # Stranger data
     end
   end

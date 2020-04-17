@@ -30,7 +30,7 @@ class Feed::SaveShowService < ApplicationService
     @show.show_art.attach(io: file, filename: custom_file_name, content_type: "image/jpg")
     @show.title = content.title
     @show.host = content.itunes_author
-    @show.category = content.itunes_categories
+    @show.category_one = content.itunes_categories
     @show.description = content.description
 
     @show.save
@@ -80,5 +80,4 @@ class Feed::SaveShowService < ApplicationService
         "Unknown"
       end
     end
-
 end
