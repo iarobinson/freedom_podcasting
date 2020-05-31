@@ -15,11 +15,13 @@ class InvoicesController < ApplicationController
         end
       end
     else
+      @invoices = []
       Invoice.all.each do |invoice|
         if invoice.users.include?(current_user)
           @invoices << invoice
         end
       end
+      @invoices
     end
 
   end

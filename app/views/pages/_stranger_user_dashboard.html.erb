@@ -1,11 +1,13 @@
-<div class="row p-3 mt-5 mb-5">
-  <div class="col-md-8 offset-md-2">
-    <% if current_user.shows.size > 0 %>
-      <% current_user.shows.each do |show| %>
-        <%= render "shows/list_shows_and_show_details" %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-8 offset-xl-2">
+      <% if current_user.shows.size > 0 %>
+        <% current_user.shows.each do |show| %>
+          <%= render "shows/list_shows_and_show_details" %>
+        <% end %>
+      <% else %>
+        <%= render "pages/start_new_show_card" %>
       <% end %>
-    <% else %>
-      <%= render "pages/start_new_show_card" %>
-    <% end %>
+    </div>
   </div>
 </div>

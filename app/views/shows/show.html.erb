@@ -1,5 +1,20 @@
 <div class="container">
-  <div class="row pb-5 pt-5">
+
+  <% if @show.users.include?(current_user) %>
+    <div class="row py-3">
+      <div class="col">
+        <%= link_to "Create an Episode", new_show_episode_path(@show), class: "btn btn-primary btn-block" %>
+      </div>
+      <div class="col">
+        <%= link_to 'Edit Show Details', edit_show_path(@show), class: "btn btn-primary btn-block" %>
+      </div>
+      <div class="col">
+        <%= link_to 'All My Shows', shows_path, class: "btn btn-primary btn-block"  %>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="row py-3">
     <div class="col-2">
       <% if @show.show_art.attached? %>
         <%= image_tag @show.show_art, class: "img-fluid" %>
@@ -7,35 +22,40 @@
         <%= image_tag "default/show-art.jpg", class: "img-fluid" %>
       <% end %>
     </div>
-    <div class="col-6">
-      <p><strong>Show Title:</strong> <%= @show.title %></p>
-      <p><strong>Subtitle:</strong> <%= @show.subtitle %></p>
-      <p><strong>Host:</strong> <%= @show.host %></p>
-      <p><strong>Website:</strong> <%= @show.website %></p>
-      <p><strong>Description:</strong> <%= truncate(@show.description, length: 140) %></p>
+    <div class="col-3">
+      <p>
+        <small class="text-muted">Show Title:</small><br> <%= @show.title %>
+      </p>
+      <p>
+        <small class="text-muted">Subtitle:</small><br> <%= @show.subtitle %>
+      </p>
+      <p>
+        <small class="text-muted">Host:</small><br> <%= @show.host %>
+      </p>
+    </div>
+    <div class="col-3">
+      <p>
+        <small class="text-muted">Website:</small><br> <%= @show.website %>
+      </p>
+      <p>
+        <small class="text-muted">Description:</small><br> <%= truncate(@show.description, length: 140) %>
+      </p>
     </div>
     <div class="col-4">
-      <p><strong>Categories:</strong></p>
-      <span class="badge badge-primary"><%= @show.category_one if @show.category_one %></span><br>
-      <span class="badge badge-primary"><%= @show.category_two if @show.category_two %></span><br>
-      <span class="badge badge-primary"><%= @show.category_three if @show.category_three %></span>
+      <p><small class="text-muted">Categories:</small></p>
+      <span class="badge badge-primary">
+        <%= @show.category_one if @show.category_one %>
+      </span><br>
+      <span class="badge badge-primary">
+        <%= @show.category_two if @show.category_two %>
+      </span><br>
+      <span class="badge badge-primary">
+        <%= @show.category_three if @show.category_three %>
+      </span>
     </div>
   </div>
 
-  <div class="row paddingbottom">
-    <div class="col">
-      <%= link_to "Create an Episode", new_show_episode_path(@show), class: "btn btn-primary btn-block" %>
-    </div>
-    <div class="col">
-      <%= link_to 'Edit Show Details', edit_show_path(@show), class: "btn btn-primary btn-block" %>
-    </div>
-    <div class="col">
-      <%= link_to 'All My Shows', shows_path, class: "btn btn-primary btn-block"  %>
-    </div>
-  </div>
-
-  <div class="row paddingbottom">
-
+  <div class="row py-3">
     <div class="col">
       <h2><span class="badge badge-success"><%= @episodes.count %></span> Episodes</h2>
       <% if @episodes.count > 0 %>
@@ -45,6 +65,6 @@
         <p><%= link_to "Create an Episode", new_show_episode_path(@show), class: "btn btn-success btn-block" %></p>
       <% end %>
     </div>
-
   </div>
+
 </div>
