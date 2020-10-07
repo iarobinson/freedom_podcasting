@@ -26,7 +26,7 @@ class Feed::SaveShowService < ApplicationService
     end
 
     file = open(content.itunes_image)
-    custom_file_name = content.title.downcase.gsub(/[^a-z ]/, '').gsub(" ", "_") + "_show_art"
+    custom_file_name = "show_art_" + content.title.downcase.gsub(/[^a-z ]/, '').gsub(" ", "_")
     @show.show_art.attach(io: file, filename: custom_file_name, content_type: "image/jpg")
     @show.title = content.title
     @show.host = content.itunes_author

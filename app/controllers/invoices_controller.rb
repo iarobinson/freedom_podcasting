@@ -33,7 +33,7 @@ class InvoicesController < ApplicationController
     end
     @amount_due_from_client.round(2)
     @amount_due_to_producer = (@amount_due_from_client * 0.66).round(2)
-    @producer = fetch_producer(@invoice.users).first
+    @producer = fetch_producer(@invoice.users)
   end
 
   def new

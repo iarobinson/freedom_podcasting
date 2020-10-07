@@ -3,7 +3,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.5'
 
-gem 'capybara'
 gem 'whenever', require: false
 gem 'feedjira'
 gem 'httparty'
@@ -64,6 +63,7 @@ group :development, :test do
   gem 'rspec-rails', '~> 4.0.0.beta'
   gem 'pry-rails'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'capybara'
 end
 
 group :development do
