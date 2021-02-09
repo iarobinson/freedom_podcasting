@@ -11,6 +11,11 @@
       <div class="col">
         <%= link_to 'All My Shows', shows_path, class: "btn btn-primary btn-block"  %>
       </div>
+      <% if current_user.role == "administrator" %>
+        <div class="col">
+          <%= link_to 'Admin Dashboard', show_administrator_dashboard_path(@show), class: "btn btn-primary btn-block" %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 

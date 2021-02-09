@@ -9,10 +9,12 @@ Rails.application.routes.draw do
   devise_for :users do
     get '/users/sign_out' => 'devise/sessions#destroy'
   end
+
   resources :users
   resources :shows
   resources :shows, module: "shows" do
     resources :episodes
+    get '/administrator_dashboard', to: "shows#administrator_dashboard"
   end
 
   resources :invoices
