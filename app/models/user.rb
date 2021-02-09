@@ -7,12 +7,14 @@ class User < ApplicationRecord
   # Set roles and assign new people to stranger roles unless specified
   after_initialize :set_default_role, :if => :new_record?
   enum role: [:administrator, :producer, :client, :stranger]
+
+  has_and_belongs_to_many :invoices
+  has_and_belongs_to_many :shows
+  has_one_attached :avatar
+
+
   def set_default_role
     self.role ||= :stranger
   end
 
-  has_and_belongs_to_many :shows
-  has_one_attached :avatar
-
-  has_and_belongs_to_many :invoices
 end
