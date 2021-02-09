@@ -1,42 +1,55 @@
 <!-- Not using this yet, but I coded it up so maybe it'll be useful one day -->
 <div class="row pt-5">
   <% unless @shows == nil %>
-    <div class="col-md-10 offset-md-1">
-      <% @shows.each do |show| %>
-        <div class="card mb-4">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-2">
-                <p>
-                  <% if show.show_art.attached? %>
-                    <%= image_tag show.show_art, width: "100%" %>
-                  <% end %>
-                </p>
-              </div>
-              <div class="col-10">
-                <div class="row">
-                  <div class="col-6">
-                    <p><%= link_to show.title, show %></p>
-                    <p><strong>Host:</strong> <%= show.host %></p>
-                    <%= render 'users/producers/list_producers', producers: show.users.where(role: "producer") if show.users.where(role: "producer").size > 0 %>
-                    <p><%= pluralize show.episodes.count, "Episode" %></p>
-                  </div>
-                  <div class="col-6 text-center">
-                    <%= link_to show.feed_url, target: "_blank", class: "btn btn-primary" do %>
-                      <%= material_icon.rss_feed %>
-                      <br>RSS Feed
+    <div class="col-lg-10 offset-lg-1">
+      <div class="card mb-4">
+        <ul class="list-group list-group-flush">
+          <% @shows.each do |show| %>
+            <div class="list-group-item">
+              <div class="row">
+                <div class="col-2">
+                  <p>
+                    <% if show.show_art.attached? %>
+                      <%= link_to show do %>
+                        <%= image_tag show.show_art, width: "100%" %>
+                      <% end %>
                     <% end %>
-                    <%= link_to show, class: "btn btn-primary" do %>
-                      <%= material_icon.remove_red_eye %>
-                      <br>Show Details
-                    <% end %>
+                  </p>
+                </div>
+                <div class="col-10">
+                  <div class="row">
+                    <div class="col-6">
+                      <p>
+                        <small class="text-muted">Title:</small> <%= link_to show.title, show %>
+                        <%= link_to show.feed_url, target: "_blank" do %>
+                          <i class="material-icons md-18">rss_feed</i>
+                        <% end %>
+                      </p>
+                      <p>
+                        <small class="text-muted">Host:</small> <%= show.host %>
+                      </p>
+                      <div class="row">
+                        <div class="col">
+                          <%= render 'users/producers/list_producers', producers: show.users.where(role: "producer") if current_user.role == "administrator" %>
+                        </div>
+                        <div class="col">
+                          <small class="text-muted">Episode Count:</small> <%= show.episodes.count %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-6 text-center">
+                      <%= link_to show, class: "btn btn-primary" do %>
+                        <%= material_icon.remove_red_eye %>
+                        <br>Show Details
+                      <% end %>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      <% end %>
+          <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 </div>

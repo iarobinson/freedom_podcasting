@@ -4,7 +4,8 @@ class ShowsController < ApplicationController
   include FeedsHelper
 
   def index
-    @shows = current_user.shows
+    @shows = current_user.shows if current_user.role == "producer"
+    @shows = Show.all
   end
 
   def show
@@ -72,6 +73,7 @@ class ShowsController < ApplicationController
     end
 
     def show_params
+      binding.pry
       params.require(:show).permit(
         :feed_url,:title, :host, :website, :description, :subtitle, :show_art,
         :category_one, :category_two, :category_three
