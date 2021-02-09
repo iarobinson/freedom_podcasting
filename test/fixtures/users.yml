@@ -23,12 +23,6 @@ producer_ben:
   encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
   role: producer
 
-producer_mason:
-  name: mason
-  email: mason@testing.com
-  encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
-  role: producer
-
 producer_matt:
   name: matt
   email: matt@testing.com

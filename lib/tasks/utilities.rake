@@ -18,9 +18,6 @@ namespace :utilities do
     User.new(email: "milo@testing.com", password: "testing", role: "producer",
       first_name: "Milo", last_name: ""
     ).save
-    User.new(email: "mason@testing.com", password: "testing", role: "producer",
-      first_name: "Mason", last_name: ""
-    ).save
     User.new(email: "nomes@testing.com", password: "testing", role: "producer",
       first_name: "Nomes", last_name: ""
     ).save
@@ -92,7 +89,7 @@ namespace :utilities do
     @mason = User.where(email: "mason@testing.com").first
     @sylvia = User.where(email: "sylvia@testing.com").first
 
-    add_users_to_show_by_feed("http://voices4ed.libsyn.com/rss", [@mason, @administrators])
+    # add_users_to_show_by_feed("http://voices4ed.libsyn.com/rss", [@mason, @administrators])
     add_users_to_show_by_feed("http://drsteven.libsyn.com/rss", [@milo, @administrators])
     add_users_to_show_by_feed("http://beautybiz.libsyn.com/rss", [@sylvia, @administrators])
     add_users_to_show_by_feed("http://alexshalman.libsyn.com/rss", [@matt, @administrators])
@@ -100,19 +97,19 @@ namespace :utilities do
     add_users_to_show_by_feed("http://karagoldin.libsyn.com/rss", [@sylvia, @administrators])
     add_users_to_show_by_feed("https://nionlife.com/feed/podcast/", [@milo, @administrators])
     add_users_to_show_by_feed("http://baethdavis.libsyn.com/rss", [@sylvia, @administrators])
-    add_users_to_show_by_feed("http://readysetlove.libsyn.com/rss", [@mason, @administrators])
+    # add_users_to_show_by_feed("http://readysetlove.libsyn.com/rss", [@mason, @administrators])
     add_users_to_show_by_feed("http://kongitfarrell.libsyn.com/rss", [@nomes, @administrators])
-    add_users_to_show_by_feed("https://firstbutlast.libsyn.com/rss", [@mason, @administrators])
-    add_users_to_show_by_feed("https://letstalkhemp.libsyn.com/rss", [@mason, @administrators])
+    # add_users_to_show_by_feed("https://firstbutlast.libsyn.com/rss", [@mason, @administrators])
+    # add_users_to_show_by_feed("https://letstalkhemp.libsyn.com/rss", [@mason, @administrators])
     add_users_to_show_by_feed("http://shesgotmoxie.libsyn.com/rss", [@sylvia, @administrators])
-    add_users_to_show_by_feed("http://neuronfire.libsyn.com/neuronfire", [@ben, @administrators])
+    # add_users_to_show_by_feed("http://neuronfire.libsyn.com/neuronfire", [@ben, @administrators])
     add_users_to_show_by_feed("http://businessmiracles.libsyn.com/rss", [@milo, @administrators])
     add_users_to_show_by_feed("http://conversationswith.libsyn.com/rss", [@milo, @administrators])
     add_users_to_show_by_feed("http://leadershipandbusiness.libsyn.com/rss", [@ben, @administrators])
     add_users_to_show_by_feed("http://www.asianefficiency.com/feed/podcast/", [@milo, @administrators])
     add_users_to_show_by_feed("http://www.toptradersunplugged.com/feed/podcast", [@ben, @administrators])
     add_users_to_show_by_feed("https://terricole.libsyn.com/theterricoleshow", [@sylvia, @administrators])
-    add_users_to_show_by_feed("https://ianrobinson.net/category/question-mark/feed", [@matt, @administrators])
+    # add_users_to_show_by_feed("https://ianrobinson.net/category/question-mark/feed", [@matt, @administrators])
     add_users_to_show_by_feed("https://alibrown.com/category/glambition/feed", [@ali, @nomes, @administrators])
     add_users_to_show_by_feed("http://feeds.soundcloud.com/users/soundcloud:users:171934475/sounds.rss", [@matt, @administrators])
     # add_users_to_show_by_feed("https://advancedmanufacturing.org/feed/podcast/", [@ben, @administrators])
@@ -131,10 +128,6 @@ namespace :utilities do
       new_feed = Feed::SaveShowService.new(show)
       new_feed.perform
     end
-  end
-
-  desc "Generate invoices for all producers to be filled out"
-  task generate_new_round_of_monthly_invoices_on_the_15th: :environment do
   end
 
   def calculate_episode_cost(duration_string)
@@ -183,7 +176,7 @@ namespace :utilities do
   def client_podcast_RSS_feeds
     [
       "https://alibrown.com/category/glambition/feed",
-      "https://ianrobinson.net/category/question-mark/feed",
+      # "https://ianrobinson.net/category/question-mark/feed",
       "http://kongitfarrell.libsyn.com/rss",
       "http://feeds.soundcloud.com/users/soundcloud:users:171934475/sounds.rss",
       "http://alexshalman.libsyn.com/rss",
@@ -204,8 +197,8 @@ namespace :utilities do
       "http://www.asianefficiency.com/feed/podcast/",
       # "https://advancedmanufacturing.org/feed/podcast",
       "http://leadershipandbusiness.libsyn.com/rss",
-      "http://neuronfire.libsyn.com/neuronfire",
-      "http://www.toptradersunplugged.com/feed/podcast"
+      # "http://neuronfire.libsyn.com/neuronfire",
+      # "http://www.toptradersunplugged.com/feed/podcast"
     ]
   end
 end

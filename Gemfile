@@ -64,6 +64,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'capybara'
+  gem 'rubocop', require: false
 end
 
 group :development do

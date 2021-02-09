@@ -4,6 +4,9 @@ task :create_new_round_of_invoices_on_the_15th_of_each_month => :environment do
     @producers = User.all.where(role: "producer")
     @producers.each do |producer|
 
+  p 'hi'
+  hello = '123'
+
       @new_invoice = Invoice.new
       @new_invoice.users << producer
       @new_invoice.save
