@@ -18,6 +18,7 @@
                   <div class="col-6">
                     <p><%= link_to show.title, show %></p>
                     <p><strong>Host:</strong> <%= show.host %></p>
+                    <%= render 'users/producers/list_producers', producers: show.users.where(role: "producer") if show.users.where(role: "producer").size > 0 %>
                     <p><%= pluralize show.episodes.count, "Episode" %></p>
                   </div>
                   <div class="col-6 text-center">
@@ -33,23 +34,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="list-group list-group-flush">
-            <div class="list-group-item">
-              <h5>Episodes:</h5>
-            </div>
-            <% show.episodes.limit(10).reverse.each do |episode| %>
-              <div class="list-group-item">
-                <div class="row">
-                  <div class="col">
-                    <%= episode.title %>
-                  </div>
-                  <div class="col">
-                    <%= episode.pub_date %>
-                  </div>
-                </div>
-              </div>
-            <% end %>
           </div>
         </div>
       <% end %>

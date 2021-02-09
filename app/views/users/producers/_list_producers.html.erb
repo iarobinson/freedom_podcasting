@@ -1,0 +1,12 @@
+<div class="row">
+  <div class="col">
+    <small class="text-muted">Producers:</small>
+  </div>
+  <% producers.each do |producer| %>
+    <div class="col">
+      <span class="badge badge-primary">
+        <%= producer.first_name if producer.first_name %>
+      </span>
+    </div>
+  <% end %>
+</div>
