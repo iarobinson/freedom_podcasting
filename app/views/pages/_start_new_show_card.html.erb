@@ -1,11 +1,13 @@
 <div class="row">
-  <div class="col-md-5 text-center">
+  <div class="col-md-6 text-center">
     <div class="card my-3">
       <div class="card-body">
         <h2>Start a New Show</h2>
         <%= link_to "Start a New Podcast", new_show_path, class:"btn btn-primary btn-block my-3" %>
       </div>
     </div>
+  </div>
+  <div class="col-md-6 text-center">
     <div class="card my-3">
       <div class="card-body">
         <h2>Import Existing Show</h2>
@@ -23,7 +25,7 @@
       </div>
     </div>
   </div>
-  <div class="col-md-7">
+  <div class="col">
     <div class="card my-3">
       <div class="card-header">
         <h2>Explore Existing Shows:</h2>
@@ -33,7 +35,7 @@
         <%= link_to show, class: "list-group-item list-group-item-action" do %>
           <div class="row">
             <div class="col-2">
-              <%= image_tag show.show_art, class: "img-fluid"%>
+              <%= image_tag show.show_art, class: "img-fluid" if show.show_art.attached? %>
             </div>
             <div class="col-6">
               <p>

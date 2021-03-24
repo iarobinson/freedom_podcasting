@@ -11,9 +11,8 @@
             <th scope="col">Duration</th>
           </tr>
         </thead>
+
         <tbody>
-
-
           <% @episodes.limit(25).each do |episode| %>
             <%= link_to show_episode_path(episode.show, episode) do %>
 
@@ -27,8 +26,6 @@
               </tr>
             <% end %>
           <% end %>
-
-
         </tbody>
       </table>
 

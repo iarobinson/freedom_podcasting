@@ -24,6 +24,10 @@ class ShowsController < ApplicationController
   def edit
   end
 
+  def sync_all_podcast_feeds
+    system 'bin/rails utilities:sync_with_podcast_feed'
+  end
+
   def create
     @show = Show.new(show_params)
     @show.users << current_user
