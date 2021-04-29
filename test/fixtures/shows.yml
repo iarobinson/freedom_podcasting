@@ -69,3 +69,13 @@
 #
 # top_traders_unplugged:
 #   feed_url: http://www.toptradersunplugged.com/feed/podcast
+
+top_traders_unplugged:
+  feed_url: http://www.toptradersunplugged.com/feed/podcast
+  title: "Just a Test Show Produced by Freedom Podcasating"
+  host: "Freedom Podcasting Team"
+  website: www.freedompodcasting.com
+  description: Just a test show for the Freedom Podcastaing Company LLC
+  subtitle: The subtitle for the test freedom podcasting show
+  feed_url: app.freedompodcasting.com/shows/23/show_file
+  

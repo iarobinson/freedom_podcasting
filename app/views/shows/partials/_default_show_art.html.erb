@@ -1,0 +1,7 @@
+<% if show.show_art.attached? %>
+  <%= link_to show do %>
+    <%= image_tag show.show_art, width: "100%" %>
+  <% end %>
+<% else %>
+  <%= image_tag 'default/show-art.jpg', width: "100%" %>
+<% end %>

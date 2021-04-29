@@ -3,36 +3,37 @@ namespace :utilities do
 
   desc "Add Founding Users"
   task add_founding_users: :environment do
-    User.new(email: "ali@testing.com", password: "testing", role: "client",
+
+    User.create(email: "ali@testing.com", password: "testing", role: "client",
       first_name: "Ali", last_name: ""
-    ).save
-    User.new(email: "v@testing.com", password: "testing", role: "administrator",
+    )
+    User.create(email: "v@testing.com", password: "testing", role: "administrator",
       first_name: "V", last_name: ""
-    ).save
-    User.new(email: "ben@testing.com", password: "testing", role: "producer",
+    )
+    User.create(email: "ben@testing.com", password: "testing", role: "producer",
       first_name: "Ben", last_name: ""
-    ).save
-    User.new(email: "matt@testing.com", password: "testing", role: "producer",
+    )
+    User.create(email: "matt@testing.com", password: "testing", role: "producer",
       first_name: "Matt", last_name: ""
-    ).save
-    User.new(email: "milo@testing.com", password: "testing", role: "producer",
+    )
+    User.create(email: "milo@testing.com", password: "testing", role: "producer",
       first_name: "Milo", last_name: ""
-    ).save
-    User.new(email: "nomes@testing.com", password: "testing", role: "producer",
+    )
+    User.create(email: "nomes@testing.com", password: "testing", role: "producer",
       first_name: "Nomes", last_name: ""
-    ).save
-    User.new(email: "sylvia@testing.com", password: "testing", role: "producer",
+    )
+    User.create(email: "sylvia@testing.com", password: "testing", role: "producer",
       first_name: "Sylvia", last_name: ""
-    ).save
-    User.new(email: "ian@testing.com", password: "testing", role: "administrator",
+    )
+    User.create(email: "ian@testing.com", password: "testing", role: "administrator",
       first_name: "Ian", last_name: ""
-    ).save
+    )
   end
 
   desc "Add Founding Shows"
   task add_founding_shows: :environment do
     client_podcast_RSS_feeds.each do |rss_feed|
-      Show.new(feed_url: rss_feed).save
+      Show.create(feed_url: rss_feed).save
     end
   end
 
@@ -53,7 +54,7 @@ namespace :utilities do
         end
       end
 
-      @new_invoice.save
+      @new_invoice.create
     end
   end
 
@@ -74,38 +75,38 @@ namespace :utilities do
         end
       end
 
-      @new_invoice.save
+      @new_invoice.create
     end
   end
 
   desc "Add Users to Shows"
   task add_users_to_shows: :environment do
-    @administrators = User.where(role: "administrator")
-    @ali = User.where(email: "ali@testing.com").first
-    @ben = User.where(email: "ben@testing.com").first
-    @matt = User.where(email: "matt@testing.com").first
-    @milo = User.where(email: "milo@testing.com").first
-    @nomes = User.where(email: "nomes@testing.com").first
-    @mason = User.where(email: "mason@testing.com").first
-    @sylvia = User.where(email: "sylvia@testing.com").first
-
-    add_users_to_show_by_feed("http://drsteven.libsyn.com/rss", [@milo, @administrators])
-    add_users_to_show_by_feed("http://beautybiz.libsyn.com/rss", [@sylvia, @administrators])
-    add_users_to_show_by_feed("http://alexshalman.libsyn.com/rss", [@matt, @administrators])
-    add_users_to_show_by_feed("http://moneytwist.libsyn.com/rss", [@sylvia, @administrators])
-    add_users_to_show_by_feed("http://karagoldin.libsyn.com/rss", [@sylvia, @administrators])
-    add_users_to_show_by_feed("https://nionlife.com/feed/podcast/", [@milo, @administrators])
-    add_users_to_show_by_feed("http://baethdavis.libsyn.com/rss", [@sylvia, @administrators])
-    add_users_to_show_by_feed("http://kongitfarrell.libsyn.com/rss", [@nomes, @administrators])
-    add_users_to_show_by_feed("http://shesgotmoxie.libsyn.com/rss", [@sylvia, @administrators])
-    add_users_to_show_by_feed("http://businessmiracles.libsyn.com/rss", [@milo, @administrators])
-    add_users_to_show_by_feed("http://conversationswith.libsyn.com/rss", [@milo, @administrators])
-    add_users_to_show_by_feed("http://leadershipandbusiness.libsyn.com/rss", [@ben, @administrators])
-    add_users_to_show_by_feed("http://www.asianefficiency.com/feed/podcast/", [@milo, @administrators])
-    add_users_to_show_by_feed("http://www.toptradersunplugged.com/feed/podcast", [@ben, @administrators])
-    add_users_to_show_by_feed("https://terricole.libsyn.com/theterricoleshow", [@sylvia, @administrators])
-    add_users_to_show_by_feed("https://alibrown.com/category/glambition/feed", [@ali, @nomes, @administrators])
-    add_users_to_show_by_feed("http://feeds.soundcloud.com/users/soundcloud:users:171934475/sounds.rss", [@matt, @administrators])
+    # @administrators = User.where(role: "administrator")
+    # @ali = User.where(email: "ali@testing.com").first
+    # @ben = User.where(email: "ben@testing.com").first
+    # @matt = User.where(email: "matt@testing.com").first
+    # @milo = User.where(email: "milo@testing.com").first
+    # @nomes = User.where(email: "nomes@testing.com").first
+    # @mason = User.where(email: "mason@testing.com").first
+    # @sylvia = User.where(email: "sylvia@testing.com").first
+    #
+    # add_users_to_show_by_feed("http://drsteven.libsyn.com/rss", [@milo, @administrators])
+    # add_users_to_show_by_feed("http://beautybiz.libsyn.com/rss", [@sylvia, @administrators])
+    # add_users_to_show_by_feed("http://alexshalman.libsyn.com/rss", [@matt, @administrators])
+    # add_users_to_show_by_feed("http://moneytwist.libsyn.com/rss", [@sylvia, @administrators])
+    # add_users_to_show_by_feed("http://karagoldin.libsyn.com/rss", [@sylvia, @administrators])
+    # add_users_to_show_by_feed("https://nionlife.com/feed/podcast/", [@milo, @administrators])
+    # add_users_to_show_by_feed("http://baethdavis.libsyn.com/rss", [@sylvia, @administrators])
+    # add_users_to_show_by_feed("http://kongitfarrell.libsyn.com/rss", [@nomes, @administrators])
+    # add_users_to_show_by_feed("http://shesgotmoxie.libsyn.com/rss", [@sylvia, @administrators])
+    # add_users_to_show_by_feed("http://businessmiracles.libsyn.com/rss", [@milo, @administrators])
+    # add_users_to_show_by_feed("http://conversationswith.libsyn.com/rss", [@milo, @administrators])
+    # add_users_to_show_by_feed("http://leadershipandbusiness.libsyn.com/rss", [@ben, @administrators])
+    # add_users_to_show_by_feed("http://www.asianefficiency.com/feed/podcast/", [@milo, @administrators])
+    # add_users_to_show_by_feed("http://www.toptradersunplugged.com/feed/podcast", [@ben, @administrators])
+    # add_users_to_show_by_feed("https://terricole.libsyn.com/theterricoleshow", [@sylvia, @administrators])
+    # add_users_to_show_by_feed("https://alibrown.com/category/glambition/feed", [@ali, @nomes, @administrators])
+    # add_users_to_show_by_feed("http://feeds.soundcloud.com/users/soundcloud:users:171934475/sounds.rss", [@matt, @administrators])
   end
 
   def add_users_to_show_by_feed(feed, user_array)

@@ -77,7 +77,6 @@ class ShowsController < ApplicationController
     end
 
     def show_params
-      binding.pry
       params.require(:show).permit(
         :feed_url,:title, :host, :website, :description, :subtitle, :show_art,
         :category_one, :category_two, :category_three

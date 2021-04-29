@@ -52,3 +52,9 @@ operator_v:
   email: v@testing.com
   encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
   role: administrator
+
+stranger:
+  name: stranger
+  email: stranger@testing.com
+  encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
+  role: stranger

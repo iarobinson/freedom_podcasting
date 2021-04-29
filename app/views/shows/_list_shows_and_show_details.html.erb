@@ -1,6 +1,6 @@
 <!-- Not using this yet, but I coded it up so maybe it'll be useful one day -->
 <div class="row pt-5">
-  <% unless @shows == nil %>
+  <% unless @shows == [] %>
     <div class="col-lg-10 offset-lg-1">
       <div class="card mb-4">
         <ul class="list-group list-group-flush">
@@ -8,19 +8,14 @@
             <div class="list-group-item">
               <div class="row">
                 <div class="col-2">
-                  <p>
-                    <% if show.show_art.attached? %>
-                      <%= link_to show do %>
-                        <%= image_tag show.show_art, width: "100%" %>
-                      <% end %>
-                    <% end %>
-                  </p>
+                  <%= render "shows/partials/default_show_art", show: show %>
                 </div>
                 <div class="col-10">
                   <div class="row">
-                    <div class="col-6">
+                    <div class="col-10">
                       <p>
-                        <small class="text-muted">Title:</small> <%= link_to show.title, show %>
+                        <small class="text-muted">Title: </small>
+                        <%= link_to show.title, show %>
                         <%= link_to show.feed_url, target: "_blank" do %>
                           <i class="material-icons md-18">rss_feed</i>
                         <% end %>
@@ -30,15 +25,17 @@
                       </p>
                       <div class="row">
                         <div class="col">
-                          <%= render 'users/producers/list_producers', producers: show.users.where(role: "producer") if current_user.role == "administrator" %>
+                          <% if current_user.role == "administrator" %>
+                            <%= render 'users/producers/list_producers', producers: show.users.where(role: "producer") %>
+                          <% end %>
                         </div>
                         <div class="col">
                           <small class="text-muted">Episode Count:</small> <%= show.episodes.count %>
                         </div>
                       </div>
                     </div>
-                    <div class="col-6 text-center">
-                      <%= link_to show, class: "btn btn-primary" do %>
+                    <div class="col-2 text-center">
+                      <%= link_to show, class: "btn btn-block btn-primary" do %>
                         <%= material_icon.remove_red_eye %>
                         <br>Show Details
                       <% end %>

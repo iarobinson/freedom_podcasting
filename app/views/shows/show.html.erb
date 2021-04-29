@@ -20,14 +20,14 @@
   <% end %>
 
   <div class="row py-3">
-    <div class="col-2">
+    <div class="col-md-2">
       <% if @show.show_art.attached? %>
         <%= image_tag @show.show_art, class: "img-fluid" %>
       <% else %>
         <%= image_tag "default/show-art.jpg", class: "img-fluid" %>
       <% end %>
     </div>
-    <div class="col-3">
+    <div class="col-md-3">
       <p>
         <small class="text-muted">Show Title:</small><br> <%= @show.title %>
       </p>
@@ -38,7 +38,7 @@
         <small class="text-muted">Host:</small><br> <%= @show.host %>
       </p>
     </div>
-    <div class="col-3">
+    <div class="col-md-3">
       <p>
         <small class="text-muted">Website:</small><br> <%= @show.website %>
       </p>
@@ -46,7 +46,7 @@
         <small class="text-muted">Description:</small><br> <%= truncate(@show.description, length: 140) %>
       </p>
     </div>
-    <div class="col-4">
+    <div class="col-md-4">
       <%= render "users/producers/list_producers", producers: @show.users.where(role: "producer") %>
     </div>
   </div>
