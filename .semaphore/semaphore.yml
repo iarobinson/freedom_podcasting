@@ -27,7 +27,5 @@ blocks:
           commands:
             - bundle exec rake test
         - name: Cucumber Tests
-          parallelism: 5  # Number of jobs to run in parallel
           commands:
-            - gem install semaphore_test_boosters
-            - cucumber_booster --job $SEMAPHORE_JOB_INDEX/$SEMAPHORE_JOB_COUNT
+            - cucumber
