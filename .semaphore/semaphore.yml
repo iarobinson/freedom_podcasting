@@ -32,7 +32,7 @@ blocks:
             - cache store
         - name: Standard Rails Tests
           commands:
-            - rails test
+            - bundle exec rake test
         - name: Cucumber Tests
           parallelism: 5  # Number of jobs to run in parallel
           commands:
