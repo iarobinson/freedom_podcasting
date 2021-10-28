@@ -31,13 +31,13 @@ blocks:
           # to be used in next blocks and future workflows:
           - cache store
         - name: Standard Rails Tests
-         commands:
-           - rails test
+          commands:
+          - rails test
         - name: Cucumber Tests
           parallelism: 5  # Number of jobs to run in parallel
           commands:
-            - gem install semaphore_test_boosters
-            - cucumber_booster --job $SEMAPHORE_JOB_INDEX/$SEMAPHORE_JOB_COUNT
+          - gem install semaphore_test_boosters
+          - cucumber_booster --job $SEMAPHORE_JOB_INDEX/$SEMAPHORE_JOB_COUNT
 
   # # Note that it's possible to define an agent on a per-block level.
   # # For example, if your integration tests need more RAM, you could override
