@@ -4,7 +4,6 @@ agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
-
 blocks:
   - name: Setup
     task:
@@ -28,4 +27,4 @@ blocks:
             - bundle exec rake test
         - name: Cucumber Tests
           commands:
-            - cucumber
+            - bundle exec rake cucumber
