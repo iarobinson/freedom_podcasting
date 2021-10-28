@@ -2,6 +2,7 @@ class PagesController < ApplicationController
 
   def home
     @shows = Show.all
+    @show = Show.new
 
     if current_user.nil?
       # Nothing data...

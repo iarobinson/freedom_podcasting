@@ -1,56 +1,6 @@
-<div class="row">
-  <div class="col-md-6 text-center">
-    <div class="card my-3">
-      <div class="card-body">
-        <h2>Start a New Show</h2>
-        <%= link_to "Start a New Podcast", new_show_path, class:"btn btn-primary btn-block my-3" %>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6 text-center">
-    <div class="card my-3">
-      <div class="card-body">
-        <h2>Import Existing Show</h2>
-        <%= simple_form_for(@show) do |f| %>
-          <%= f.error_notification %>
-          <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-          <div class="form-inputs">
-            <%= f.input :feed_url, required: true %>
-          </div>
-
-          <div class="form-actions">
-            <%= f.button :submit, class: "btn btn-primary btn-block mb-4" %>
-          </div>
-        <% end %>
-      </div>
-    </div>
-  </div>
-  <div class="col">
-    <div class="card my-3">
-      <div class="card-header">
-        <h2>Explore Existing Shows:</h2>
-      </div>
-      <div class="list-group list-group-flush">
-      <% @shows.each do |show| %>
-        <%= link_to show, class: "list-group-item list-group-item-action" do %>
-          <div class="row">
-            <div class="col-2">
-              <%= image_tag show.show_art, class: "img-fluid" if show.show_art.attached? %>
-            </div>
-            <div class="col-6">
-              <p>
-                <small class="text-muted">
-                  Title:
-                </small><br>
-                <%= show.title %>
-              </p>
-            </div>
-            <div class="col-3">
-              Episodes: <%= show.episodes.count %>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
+<div class="card">
+  <div class="card-body">
+    <h2>Start a New Show</h2>
+    <%= link_to "Start a New Podcast", new_show_path, class:"btn btn-primary btn-block my-3" %>
   </div>
 </div>

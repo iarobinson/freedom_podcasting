@@ -26,6 +26,7 @@ class ShowsController < ApplicationController
 
   def sync_all_podcast_feeds
     system 'bin/rails utilities:sync_with_podcast_feed'
+    redirect_to root_path
   end
 
   def create

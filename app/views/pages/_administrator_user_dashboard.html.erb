@@ -1,8 +1,12 @@
-<div class="row p-3 my-5">
-  <div class="col-lg-8">
-    What is useful for the administrator?
+
+<div class="row">
+  <div class="col-8">
+    <%= render "pages/existing_shows_card" %>
   </div>
-  <div class="col-lg-4">
+
+  <div class="col-4">
     <%= link_to "Refresh Podcast RSS feeds", sync_all_podcast_feeds_path, class: "btn btn-block btn-primary" %>
+    <br>
+    <%= render "pages/start_new_show_card" %>
   </div>
 </div>

@@ -7,13 +7,15 @@ class InvoicesController < ApplicationController
     if current_user.role === "administrator"
       @producer_invoices = []
       @client_invoices = []
-      Invoice.all.each do |i|
-        if i.users.first.role == "producer"
-          @producer_invoices << i
-        elsif i.users.first.role == "client"
-          @client_invoices << i
+        Invoice.all.each do |i|
+          unless i.users == []
+            if i.users.first.role == "producer"
+              @producer_invoices << i
+            elsif i.users.first.role == "client"
+              @client_invoices << i
+            end
+          end
         end
-      end
     else
       @invoices = []
       Invoice.all.each do |invoice|

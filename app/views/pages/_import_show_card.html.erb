@@ -1,0 +1,16 @@
+<div class="card my-3">
+  <div class="card-body">
+    <h2>Import Existing Show</h2>
+    <%= simple_form_for(@show) do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+      <div class="form-inputs">
+        <%= f.input :feed_url, required: true %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.button :submit, class: "btn btn-primary btn-block mb-4" %>
+      </div>
+    <% end %>
+  </div>
+</div>

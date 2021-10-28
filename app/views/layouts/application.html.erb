@@ -16,6 +16,8 @@
       <%= render 'layouts/authenticated_navigation_bar' %>
     <% end %>
     <%= render "layouts/alert" %>
-    <%= yield %>
+    <div class="container">
+      <%= yield %>
+    </div>
   </body>
 </html>
