@@ -11,7 +11,6 @@ gem 'sassc-rails' # Required for bootstrap
 gem 'jquery-rails'
 gem 'simple_form'
 gem 'popper_js'
-gem 'tether-rails'
 gem 'devise'
 gem 'material_icons'
 gem "webpacker"
