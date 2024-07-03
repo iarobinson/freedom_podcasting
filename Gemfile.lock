@@ -480,7 +480,7 @@ DEPENDENCIES
   whenever
 
 RUBY VERSION
-   ruby 3.0.3p157
+   ruby 3.3.0p0
 
 BUNDLED WITH
    2.5.4
