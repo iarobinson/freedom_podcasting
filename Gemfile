@@ -7,6 +7,7 @@ gem 'whenever', require: false
 gem 'feedjira'
 gem 'httparty'
 gem 'bootstrap', '~> 5.3', '>= 5.3.2'
+gem 'sassc-rails' # Required for bootstrap
 gem 'jquery-rails'
 gem 'simple_form'
 gem 'popper_js'
@@ -19,7 +20,7 @@ gem "webpacker"
 gem 'rb-readline'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '6.0.0'
+gem 'rails', '7.1.3.4'
 
 # Use postgres as the database for Active Record
 gem 'pg'
@@ -69,7 +70,6 @@ group :development, :test do
   gem "webdrivers"
   gem "selenium-webdriver"
   gem "simplecov"
-  gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'rspec-rails', '~> 4.0.0.beta'
   gem 'pry-rails'
