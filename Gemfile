@@ -3,29 +3,31 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.0'
 
-gem 'whenever', require: false
-gem 'feedjira'
+# gem 'whenever', require: false
+# gem 'feedjira'
 gem 'httparty'
 gem 'bootstrap', '~> 5.3', '>= 5.3.2'
 gem 'sassc-rails' # Required for bootstrap
-gem 'jquery-rails'
+# gem 'jquery-rails'
 gem 'simple_form'
-gem 'popper_js'
+# gem 'popper_js'
 gem 'devise'
-gem 'material_icons'
-gem "webpacker"
+# gem 'material_icons'
+# gem "webpacker"
 
 # Added this gem to fix the error when launching rails c
-gem 'rb-readline'
+# gem 'rb-readline'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '7.1.3.4'
+# gem 'rails', '7.1.3.4'
+gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 
 # Use postgres as the database for Active Record
 gem 'pg'
 
 # Use Puma as the app server
-gem "puma", ">= 3.12.2"
+# gem "puma", ">= 3.12.2"
+gem "puma", ">= 5.0"
 
 # Use Amazon s3 for image, audio and video storage
 gem "aws-sdk-s3", require: false
@@ -36,17 +38,14 @@ gem 'sass-rails', '~> 5.0'
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'mini_racer', platforms: :ruby
-
 # Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails', '~> 5.0.0'
+# gem 'coffee-rails', '~> 5.0.0'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
+gem 'turbo-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 2.9.1'
+gem 'jbuilder'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
@@ -86,5 +85,6 @@ group :development do
   gem 'web-console', '>= 3.3.0'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
+
+gem "importmap-rails", "~> 2.0"

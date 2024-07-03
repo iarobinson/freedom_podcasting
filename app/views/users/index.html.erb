@@ -26,10 +26,10 @@
               <td><%= user.updated_at.to_formatted_s(:short) %></td>
               <td>
                 <%= link_to user_path(user) do %>
-                  <%= material_icon.remove_red_eye %>
+                  View
                 <% end %>
                 <%= link_to edit_user_path(user) do %>
-                  <%= material_icon.edit %>
+                  Edit
                 <% end %>
               </td>
             </tr>
