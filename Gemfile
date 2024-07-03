@@ -1,12 +1,12 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.6.5'
+ruby '3.0.3'
 
 gem 'whenever', require: false
 gem 'feedjira'
 gem 'httparty'
-gem 'bootstrap'
+gem 'bootstrap', '~> 5.3', '>= 5.3.2'
 gem 'jquery-rails'
 gem 'simple_form'
 gem 'popper_js'
@@ -79,7 +79,7 @@ group :development, :test do
 end
 
 group :test do
-  gem 'cucumber-rails', require: false
+  gem 'cucumber-rails', '~> 3.0', require: false
   gem 'database_cleaner'
 end
 
