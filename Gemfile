@@ -8,7 +8,7 @@ ruby '3.3.0'
 gem 'httparty'
 gem 'bootstrap', '~> 5.3', '>= 5.3.2'
 gem 'sassc-rails' # Required for bootstrap
-# gem 'jquery-rails'
+gem 'jquery-rails'
 gem 'simple_form'
 # gem 'popper_js'
 gem 'devise'
