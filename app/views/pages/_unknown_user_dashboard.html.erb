@@ -15,7 +15,7 @@
     </div>
   </section>
 
-  <div class="album py-5 bg-light">
+  <!-- <div class="album py-5 bg-light">
     <div class="container">
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
@@ -69,42 +69,11 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 
 </main>
 
-<%# <footer class="footer bg-light">
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
-        <ul class="list-inline mb-2">
-          <li class="list-inline-item">
-            <a href="http://www.freedompodcasting.com/about" target="_blank">About</a>
-          </li>
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="http://www.freedompodcasting.com/start" target="_blank">Contact</a>
-          </li>
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="/tools">Free Tools</a>
-          </li>
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="/users/sign_in">Sign In</a>
-          </li>
-          <li class="list-inline-item">&sdot;</li>
-          <li class="list-inline-item">
-            <a href="/users/sign_up">Sign Up</a>
-          </li>
-        </ul>
-        <p class="text-muted small mb-4 mb-lg-0">&copy; 2020 Freedom Podcasting Company LLC.<br>All Rights Reserved.</p>
-      </div>
-    </div>
-  </div>
-</footer> %>
-
-<footer class="text-muted py-5">
+<footer class="text-muted py-5 bg-light">
   <div class="container">
     <div class="col-lg-12 h-100 text-center text-lg-left my-auto">
       <ul class="list-inline mb-2">
@@ -128,7 +97,9 @@
           <a href="/users/sign_up">Sign Up</a>
         </li>
       </ul>
-      <p class="text-muted small mb-4 mb-lg-0">&copy; <%= Time.now.year + 1 %> Freedom Podcasting Company LLC.<br>All Rights Reserved.</p>
+      <p class="text-muted small my-4">
+        <%= Time.now.year + 1 %> Freedom Podcasting Company LLC.
+      </p>
     </div>
   </div>
 </footer>
