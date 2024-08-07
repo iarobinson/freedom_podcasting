@@ -31,6 +31,7 @@ gem "puma", ">= 5.0"
 
 # Use Amazon s3 for image, audio and video storage
 gem "aws-sdk-s3", require: false
+gem 'image_processing', '~> 1.2'
 
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0'

@@ -179,6 +179,9 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
+    image_processing (1.12.2)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     importmap-rails (2.0.1)
       actionpack (>= 6.0.0)
       activesupport (>= 6.0.0)
@@ -211,6 +214,7 @@ GEM
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
+    mini_magick (4.13.2)
     mini_mime (1.1.5)
     minitest (5.24.1)
     msgpack (1.7.2)
@@ -334,6 +338,8 @@ GEM
     rubocop-ast (1.31.3)
       parser (>= 3.3.1.0)
     ruby-progressbar (1.13.0)
+    ruby-vips (2.2.1)
+      ffi (~> 1.12)
     rubyzip (2.3.2)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -430,6 +436,7 @@ DEPENDENCIES
   database_cleaner
   devise
   httparty
+  image_processing (~> 1.2)
   importmap-rails (~> 2.0)
   jbuilder
   jquery-rails
