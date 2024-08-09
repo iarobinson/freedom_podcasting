@@ -10,8 +10,9 @@ end
 
 When "{word} publishes an episode" do |client_handle|
   @episode = Episode.new
+  @show.episodes << @episode
 end
 
 When "{word}'s podcast RSS feed should be valid" do |client_handle|
-  pending # Write code here that turns the phrase above into concrete actions
+  @show.podcast_rss_feed_url.valid?
 end
