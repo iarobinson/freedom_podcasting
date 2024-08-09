@@ -3,6 +3,11 @@ class Show < ApplicationRecord
   has_one_attached :show_art, dependent: :destroy
   has_many :episodes, dependent: :destroy
 
+  def podcast_rss_feed_url
+    formatted_title = self.title.underscore.gsub(" ", "-")
+    root_url + formatted_title
+  end
+
   def categories
     [
       "Arts",

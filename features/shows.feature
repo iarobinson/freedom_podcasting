@@ -1,6 +1,6 @@
-Feature: Can shows be created and have episodes
-  Given Cindy is a client
+Feature: Users can make valid, publishable audio podcast RSS feeds
 
-  Scenario: The one where a show can be created
-    When Cindy starts a show
-    Then The show should exist
+  Scenario: A new user creates a show and publishs an episode
+    Given Sally starts a show
+    When Sally publishes an episode
+    Then Sally's podcast RSS feed should be valid

@@ -22,6 +22,8 @@ gem 'devise'
 # gem 'rails', '7.1.3.4'
 gem "rails", "~> 7.1.3", ">= 7.1.3.4"
 
+gem "rss"
+
 # Use postgres as the database for Active Record
 gem 'pg'
 
