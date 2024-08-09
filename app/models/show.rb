@@ -4,7 +4,8 @@ class Show < ApplicationRecord
   has_many :episodes, dependent: :destroy
 
   def podcast_rss_feed_url
-    "itll go here"
+    formatted_title = self.title.underscore.gsub(" ", "-")
+    root_url + formatted_title
   end
 
   def categories
