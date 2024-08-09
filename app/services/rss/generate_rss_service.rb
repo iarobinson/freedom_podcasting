@@ -1,6 +1,8 @@
 require "rss"
 
 class Rss::GenerateRssService < ApplicationService
+  attr_reader :url
+
   def initialize
     @url = "https://podcasts.apple.com/us/podcast/lex-fridman-podcast/id1434243584?i=1000664170388"
   end
