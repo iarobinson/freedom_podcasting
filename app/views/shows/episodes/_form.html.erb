@@ -1,19 +1,19 @@
 <%= form_with(model: @episode, url: url, local: true) do |f| %>
   <div class="form-group">
+    <div>
+      <%= f.label :title, class: "pt-3" %>
+      <%= f.text_field :title, class: 'form-control' %>
+    </div>
 
-    <%= f.label :title, class: "pt-3" %>
-    <%= f.text_field :title, class: 'form-control' %>
-
-    <%= f.label :content_encoded, class: "pt-3" %>
-    <%= f.text_area :content_encoded, class: 'form-control' %>
-
-    <%= f.label :description, class: "pt-3" %>
-    <%= f.text_field :description, class: 'form-control' %>
+    <div>
+      <%= f.label :description, class: "pt-3" %>
+      <%= f.text_area :description, class: 'form-control' %>
+    </div>
 
     <div class="row pt-3">
       <div class="col-6">
         <%= f.label :itunes_explicit %><br>
-        <span class="badge badge-primary">Do you want your show to be listed as explicit?</span><br>
+        Do you want your show to be listed as explicit?<br>
         <div class="custom-control custom-radio custom-control-inline pt-3">
           <input value="false" type="radio" id="itunes_explicit[clean]" name="episode[itunes_explicit]" class="custom-control-input">
           <label class="custom-control-label" for="itunes_explicit[clean]">Clean</label>
@@ -24,9 +24,9 @@
         </div>
       </div>
       <div class="col-6">
-        <%= f.label :enclosure %><br>
-        <span class="badge badge-primary">Please upload an .mp3 file for the episode.</span><br>
-        <%= f.file_field :enclosure, multiple: false, direct_upload: true, class: "pt-3" %>
+        <%= f.label :enclosed_audio %><br>
+        Please upload an .mp3 file for the episode.<br>
+        <%= f.file_field :enclosed_audio, multiple: false, direct_upload: true, class: "pt-3" %>
       </div>
     </div>
 

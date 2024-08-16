@@ -53,7 +53,7 @@
 
   <div class="row py-3">
     <div class="col">
-      <h2><span class="badge badge-success"><%= @episodes.count %></span> Episodes</h2>
+      <h2><%= @episodes.count %> Episodes</h2>
       <% if @episodes.count > 0 %>
         <%= render "show_episode_list_item" %>
       <% else %>
