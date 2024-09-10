@@ -2,32 +2,21 @@
 
   <% if @show.users.include?(current_user) %>
     <div class="row py-3">
-      <div class="col">
-        <%= link_to "Create an Episode", new_show_episode_path(@show), class: "btn btn-primary btn-block" %>
-      </div>
-      <div class="col">
-        <%= link_to 'Edit Show Details', edit_show_path(@show), class: "btn btn-primary btn-block" %>
-      </div>
-      <div class="col">
-        <%= link_to 'All My Shows', shows_path, class: "btn btn-primary btn-block"  %>
-      </div>
       <% if current_user.role == "administrator" %>
         <div class="col">
-          <%= link_to 'Admin Dashboard', show_administrator_dashboard_path(@show), class: "btn btn-primary btn-block" %>
+          <%= link_to 'Admin Dashboard', show_administrator_dashboard_path(@show), class: common_big_bold_button %>
         </div>
       <% end %>
     </div>
   <% end %>
 
   <div class="row py-3">
-    <div class="col-md-2">
+    <div class="col-2">
       <% if @show.show_art.attached? %>
         <%= image_tag @show.show_art, class: "img-fluid" %>
       <% else %>
         <%= image_tag "default/show-art.jpg", class: "img-fluid" %>
       <% end %>
-    </div>
-    <div class="col-md-3">
       <p>
         <small class="text-muted">Show Title:</small><br> <%= @show.title %>
       </p>
@@ -37,28 +26,29 @@
       <p>
         <small class="text-muted">Host:</small><br> <%= @show.host %>
       </p>
-    </div>
-    <div class="col-md-3">
       <p>
         <small class="text-muted">Website:</small><br> <%= @show.website %>
       </p>
       <p>
         <small class="text-muted">Description:</small><br> <%= truncate(@show.description, length: 140) %>
       </p>
+      <%= link_to 'Edit Show Details', edit_show_path(@show), class: common_big_bold_button("warning") %>
     </div>
-    <div class="col-md-4">
-      <%= render "users/producers/list_producers", producers: @show.users.where(role: "producer") %>
-    </div>
-  </div>
-
-  <div class="row py-3">
     <div class="col">
-      <h2><%= @episodes.count %> Episodes</h2>
+      <div class="row">
+        <div class="col">
+          <h3><%= @episodes.count %> Episodes</h3>
+        </div>
+        <div class="col">
+          <%= link_to "Publish a New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
+        </div>
+      </div>
       <% if @episodes.count > 0 %>
         <%= render "show_episode_list_item" %>
+        <%= link_to "Publish a New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
       <% else %>
         <p>You currently have no episodes.</p>
-        <p><%= link_to "Create an Episode", new_show_episode_path(@show), class: "btn btn-success btn-block" %></p>
+        <%= link_to "Publish a New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
       <% end %>
     </div>
   </div>
