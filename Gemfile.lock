@@ -165,6 +165,10 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
     docile (1.4.0)
+    dotenv (3.1.2)
+    dotenv-rails (3.1.2)
+      dotenv (= 3.1.2)
+      railties (>= 6.1)
     drb (2.2.1)
     erubi (1.13.0)
     execjs (2.9.1)
@@ -435,6 +439,7 @@ DEPENDENCIES
   cucumber-rails (~> 3.0)
   database_cleaner
   devise
+  dotenv-rails
   httparty
   image_processing (~> 1.2)
   importmap-rails (~> 2.0)

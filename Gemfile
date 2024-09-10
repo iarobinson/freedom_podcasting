@@ -75,6 +75,7 @@ group :development, :test do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'capybara'
   gem 'rubocop', require: false
+  gem 'dotenv-rails'
 end
 
 group :test do

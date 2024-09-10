@@ -70,7 +70,7 @@
           <div class="card">
             <ul class="list-group list-group-flush text-tiny">
               <li class="list-group-item">
-                <small><strong>Show ID:</strong> <%= @episode.show_id %></small>
+                <small><strong>Show ID!:</strong> <%= @episode.show_id %></small>
               </li>
               <li class="list-group-item">
                 <small><strong>Episode ID:</strong> <%= @episode.id %></small>
@@ -86,6 +86,14 @@
               </li>
               <li class="list-group-item">
                 <small><strong>Date Published:</strong> <%= @episode.pub_date.strftime("%m-%d-%Y") if @episode.pub_date %></small>
+              </li>
+              <li class="list-group-item">
+                <small>
+                  <strong>
+                    MediaURL:
+                  </strong>
+                  <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}" %>
+                </small>  
               </li>
             </ul>
           </div>

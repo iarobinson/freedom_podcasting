@@ -5,6 +5,18 @@
 # files.
 
 require 'cucumber/rails'
+# Capybara settings
+Capybara.default_driver = :selenium_chrome # Or :selenium_firefox
+Capybara.javascript_driver = :selenium_chrome_headless # Or :selenium_chrome
+
+# Ensure DatabaseCleaner starts with Cucumber and cleans between scenarios
+begin
+  DatabaseCleaner.strategy = :transaction
+rescue NameError
+  raise "You need to add database_cleaner-active_record to your Gemfile."
+end
+
+Cucumber::Rails::Database.javascript_strategy = :truncation
 
 # frozen_string_literal: true
 
