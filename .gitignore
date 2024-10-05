@@ -38,3 +38,4 @@
 yarn-debug.log*
 .yarn-integrity
 .idea/
+/demo_files
