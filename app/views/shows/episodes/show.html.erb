@@ -1,69 +1,58 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-
-      <div class="row mb-3">
-        <div class="col-12">
-          <div class="row">
-
-            <div class="col-md-6 offset-md-3 pb-3">
-              <div class="row text-center">
-                <audio controls>
-                  <source src="<%= url_for(@episode.enclosed_audio) %>" type="<%= @episode.enclosed_audio.content_type %>">
-                  Your browser does not support the audio element. Please contact ian@freedompodcasting.com
-                </audio>
-                <p>
-                  <small>
-                    Media URL:
-                    <pre>
-                      <!---
-                      <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}" %>
-                      <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}/#{@episode.enclosed_audio.filename}" %>
-                      <%= url_for(@episode.enclosed_audio) %>
-                      --->
-                      <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{ERB::Util.url_encode(@episode.enclosed_audio.key)}/#{ERB::Util.url_encode(@episode.enclosed_audio.filename.to_s)}" %>
-                    </pre>
-                  </small>
-                </p>
-              </div>
-              <div class="row mb-3">
-                <div class="card">
-                  <ul class="list-group list-group-flush text-tiny">
-                    <li class="list-group-item">
-                      <small><strong>Show ID:</strong> <%= @episode.show_id %></small>
-                    </li>
-                    <li class="list-group-item">
-                      <small><strong>Episode ID:</strong> <%= @episode.id %></small>
-                    </li>
-                    <li class="list-group-item">
-                      <small><strong>Duration:</strong> <%= @episode.itunes_duration %></small>
-                    </li>
-                    <li class="list-group-item">
-                      <small><strong>Updated Date:</strong> <%= @episode.updated_at.strftime("%m-%d-%Y") %></small>
-                    </li>
-                    <li class="list-group-item">
-                      <small><strong>Creation Date:</strong> <%= @episode.created_at.strftime("%m-%d-%Y") %></small>
-                    </li>
-                    <li class="list-group-item">
-                      <small><strong>Date Published:</strong> <%= @episode.pub_date.strftime("%m-%d-%Y") if @episode.pub_date %></small>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="row mb-3">
-                <div class="col">
-                  <%= link_to 'Edit', edit_show_episode_path(@show, @episode), class: common_big_bold_button("warning") %>
-                </div>
-                <div class="col">
-                  <%= link_to 'Back', show_path(@show), class: common_big_bold_button("success") %>
-                </div>
-              </div>
-            </div>
+          <!---
+          <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}" %>
+          <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}/#{@episode.enclosed_audio.filename}" %>
+          <%= url_for(@episode.enclosed_audio) %>
+          --->
+      <div class="text-center">
+        <p><small>Media URL:</small></p>
+        <pre><code><%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{ERB::Util.url_encode(@episode.enclosed_audio.key)}/#{ERB::Util.url_encode(@episode.enclosed_audio.filename.to_s)}" %></code></pre>
+      </div>
+      <div class="col-md-6 offset-md-3 pb-3">
+        <div class="row text-center my-3">
+          <audio controls>
+            <source src="<%= url_for(@episode.enclosed_audio) %>" type="<%= @episode.enclosed_audio.content_type %>">
+            Your browser does not support the audio element. Please contact ian@freedompodcasting.com
+          </audio>
+        </div>
+        <div class="row mb-3">
+          <div class="card">
+            <ul class="list-group list-group-flush text-tiny">
+              <li class="list-group-item">
+                <small><strong>Show ID:</strong> <%= @episode.show_id %></small>
+              </li>
+              <li class="list-group-item">
+                <small><strong>Episode ID:</strong> <%= @episode.id %></small>
+              </li>
+              <li class="list-group-item">
+                <small><strong>Duration:</strong> <%= @episode.itunes_duration %></small>
+              </li>
+              <li class="list-group-item">
+                <small><strong>Updated Date:</strong> <%= @episode.updated_at.strftime("%m-%d-%Y") %></small>
+              </li>
+              <li class="list-group-item">
+                <small><strong>Creation Date:</strong> <%= @episode.created_at.strftime("%m-%d-%Y") %></small>
+              </li>
+              <li class="list-group-item">
+                <small><strong>Date Published:</strong> <%= @episode.pub_date.strftime("%m-%d-%Y") if @episode.pub_date %></small>
+              </li>
+              <li class="list-group-item">
+                <small><strong>Inspect:</strong> <%= @episode.inspect %></small>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <%= link_to 'Edit', edit_show_episode_path(@show, @episode), class: common_big_bold_button("warning") %>
+          </div>
+          <div class="col">
+            <%= link_to 'Back', show_path(@show), class: common_big_bold_button("success") %>
           </div>
         </div>
       </div>
-
-
     </div>
   </div>
 </div>

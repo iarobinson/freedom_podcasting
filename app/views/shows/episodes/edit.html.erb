@@ -5,10 +5,10 @@
       <%= render "form", url: show_episode_path(@show, @episode), method: :patch %>
       <div class="row paddingtop">
         <div class="col">
-          <%= link_to 'Show', show_episodes_path(@show, @episode), class: "btn btn-primary btn-block" %>
+          <%= link_to 'Show', show_episodes_path(@show, @episode), class: common_big_bold_button %>
         </div>
         <div class="col">
-          <%= link_to 'Back', show_episodes_path(@show), class: "btn btn-primary btn-block" %>
+          <%= link_to 'Back', show_episodes_path(@show), class: common_big_bold_button %>
         </div>
       </div>
     </div>

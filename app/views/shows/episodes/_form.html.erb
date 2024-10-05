@@ -1,5 +1,14 @@
 <%= form_with(model: @episode, url: url, local: true) do |f| %>
   <div class="form-group">
+    <div class="col-6">
+      <%= f.label "Upload your MP3", class: "pb-3" %>
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="inputGroupFile01">Upload</label>
+        <%= f.file_field :enclosed_audio, id: "inputGroupFile01", multiple: false, direct_upload: true, class: "form-control" %>
+      </div>
+      <small class="form-text text-muted">Please upload an .mp3 file for the episode.</small>
+    </div>
+
     <div>
       <%= f.label :title, class: "pt-3" %>
       <%= f.text_field :title, class: 'form-control' %>
@@ -10,8 +19,9 @@
       <%= f.text_area :description, class: 'form-control' %>
     </div>
 
+    <!--- 
     <div class="row pt-3">
-      <div class="col-6">
+      <!--- <div class="col-6">
         <%= f.label :itunes_explicit %><br>
         Do you want your show to be listed as explicit?<br>
         <div class="custom-control custom-radio custom-control-inline pt-3">
@@ -22,20 +32,32 @@
           <input value="true" type="radio" id="itunes_explicit[explicit]" name="episode[itunes_explicit]" class="custom-control-input">
           <label class="custom-control-label" for="itunes_explicit[explicit]">Explicit</label>
         </div>
-      </div>
+      </div>-->
+      <!-- 
       <div class="col-6">
         <%= f.label :enclosed_audio %><br>
         Please upload an .mp3 file for the episode.<br>
         <%= f.file_field :enclosed_audio, multiple: false, direct_upload: true, class: "pt-3" %>
+      </div> -->
+      <!--
+      <div class="col-6">
+        <%= f.label "Upload your MP3", class: "pb-3" %>
+        <div class="input-group mb-3">
+          <label class="input-group-text" for="inputGroupFile01">Upload</label>
+          <%= f.file_field :enclosed_audio, id: "inputGroupFile01", multiple: false, direct_upload: true, class: "form-control" %>
+        </div>
+        <small class="form-text text-muted">Please upload an .mp3 file for the episode.</small>
       </div>
     </div>
-
+      --->
+    <!--
     <%= f.label :itunes_keywords, class: "pt-3" %><br>
     <small>Please add your iTunes keywords in separated by commas.</small>
     <%= f.text_area :itunes_keywords, class: 'form-control' %>
+    -->
   </div>
 
   <div class="form-actions">
-    <%= f.submit "Submit", class: "btn btn-success btn-block" %>
+    <%= f.submit "Save Changes", class: common_big_bold_button("success") %>
   </div>
 <% end %>

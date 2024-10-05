@@ -8,7 +8,6 @@ Then "The show should exist" do
 end
 
 When('{word} publishes an episode') do |client_handle|
-  binding.pry
   visit show_path(@show)
 end
 
@@ -41,5 +40,3 @@ def sign_in_or_sign_up(email, password)
   enter_password(password)
   click_sign_in_or_sign_up
 end
-
-# Other helper methods can follow...
