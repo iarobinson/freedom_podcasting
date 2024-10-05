@@ -15,7 +15,14 @@
                 <p>
                   <small>
                     Media URL:
-                    <pre><%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}" %></pre>
+                    <pre>
+                      <!---
+                      <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}" %>
+                      <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}/#{@episode.enclosed_audio.filename}" %>
+                      <%= url_for(@episode.enclosed_audio) %>
+                      --->
+                      <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{ERB::Util.url_encode(@episode.enclosed_audio.key)}/#{ERB::Util.url_encode(@episode.enclosed_audio.filename.to_s)}" %>
+                    </pre>
                   </small>
                 </p>
               </div>

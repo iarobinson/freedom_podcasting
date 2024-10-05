@@ -6,39 +6,24 @@
           <% @shows.each do |show| %>
             <div class="list-group-item">
               <div class="row">
-                <div class="col-2">
+                <div class="col">
                   <%= render "shows/partials/default_show_art", show: show %>
                 </div>
                 <div class="col-10">
-                  <div class="row">
-                    <div class="col-10">
-                      <p>
-                        <small class="text-muted">Title: </small>
-                        <%= link_to show.title, show %>
-                        <%= link_to show.feed_url, target: "_blank" do %>
-                          <i class="material-icons md-18">rss_feed</i>
-                        <% end %>
-                      </p>
-                      <p>
-                        <small class="text-muted">Host:</small> <%= show.host %>
-                      </p>
-                      <div class="row">
-                        <div class="col">
-                          <% if current_user.role == "administrator" %>
-                            <%= render 'users/producers/list_producers', producers: show.users.where(role: "producer") %>
-                          <% end %>
-                        </div>
-                        <div class="col">
-                          <small class="text-muted">Episode Count:</small> <%= show.episodes.count %>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-2 text-center">
-                      <%= link_to show, class: common_big_bold_button do %>
-                        Show Details
-                      <% end %>
-                    </div>
-                  </div>
+                  <p>
+                    <small class="text-muted">Title:</small>
+
+                    <%= link_to show.feed_url, target: "_blank" do %>
+                      <i class="material-icons md-18">rss_feed</i>
+                    <% end %>
+                  </p>
+                  <p>
+                    <small class="text-muted">Host:</small> <%= show.host %>
+                  </p>
+                  <small class="text-muted">Episode Count:</small> <%= show.episodes.count %>
+                  <%= link_to show, class: common_big_bold_button do %>
+                    Show Details
+                  <% end %>
                 </div>
               </div>
             </div>

@@ -23,12 +23,16 @@ require 'rspec/rails'
 # Dir[Rails.root.join('spec', 'support', '**', '*.rb')].each { |f| require f }
 
 require 'capybara/rspec'
+require 'webdrivers/chromedriver'
 
 Capybara.default_driver = :selenium_chrome # Or :selenium_firefox
 
+Webdrivers::Chromedriver.required_version = '128.0.6613.139'  # Replace with the correct version
 # Optional: Set up the headless mode
 Capybara.register_driver :selenium_chrome_headless do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu]))
+  chrome_options = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu])
+  Selenium::WebDriver::Chrome.path = '/opt/homebrew/bin/chromedriver'
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: chrome_options)
 end
 
 Capybara.javascript_driver = :selenium_chrome_headless # Or :selenium_chrome
