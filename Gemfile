@@ -47,7 +47,7 @@ end
 
 group :test do
   gem 'cucumber-rails', '~> 3.0', require: false
-  gem 'database_cleaner'
+  gem 'database_cleaner-active_record'
 end
 
 group :development do

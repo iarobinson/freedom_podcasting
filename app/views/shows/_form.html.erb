@@ -10,7 +10,7 @@
   <div class="form-inputs">
     <%= f.input :host %>
   </div>
-
+  <!--
   <div class="form-inputs">
     <%= f.input :website %>
   </div>
@@ -57,9 +57,11 @@
       </select>
     </div>
   </div>
+  -->
 
-  <div class="form-inputs">
-    <%= f.input :show_art %>
+  <div class="input-group my-3">
+    <label class="input-group-text" for="show_art_upload">Upload</label>
+    <%= f.file_field :show_art, id: "show_art_upload", class: "form-control" %>
   </div>
 
   <div class="form-actions">
