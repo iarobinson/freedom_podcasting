@@ -1,29 +1,31 @@
-When "{word} starts a show" do |client_handle|
-  visit new_show_path
-  show_title_field = find_field("show_title")
+Given "{word} has started a show" do |client_handle|
+  visit new_user_registration_path
+  email = "#{client_handle.downcase}_the_cucumber@testing.com"
+  password = "PASSWORD#{client_handle.downcase}"
+  email_field = find_field('Email')
+  email_field.fill_in(with: email)
+  password_field = find_field('user_password')
+  password_field_confirmation = find_field('user_password_confirmation')
+  password_field.fill_in(with: password)
+  password_field_confirmation.fill_in(with: password)
+  click_button('Sign up')
+  click_on("Start a New Podcast")
+  show_title_field = find_field("show_title", disabled: false)
   show_title_field.fill_in(with: "Cucumber Driven Test Podcast")
-  click_button(start_a_new_show_button)
+  show_host_field = find_field("show_host", disabled: false)
+  show_host_field.fill_in(with: "Cindy the Cucumber Tester")
+  click_button("Create Show")
+  navigate_to_publish_episode_link = find_link("Publish a New Episode")
+  navigate_to_publish_episode_link.click
+  episode_title_field = find_field("episode_title", disabled: false)
+  episode_title_field.fill_in(with: "01 - Cucumber Tester Podcast")
+  episode_description_field = find_field("episode_description", disabled: false)
+  episode_description_field.fill_in(with: "This is the first cucumber episode that has been created in the testing phase")
+  attach_file('new_episode_media_url_input', Rails.root.join('test/fixtures/files/dummy.mp3'))
+  click_button 'Save Changes'
 end
 
 Then "The show should exist" do
-  @show.nil? == false
+  assert Show.count > 0
 end
 
-When('{word} publishes an episode') do |client_handle|
-  binding.pry
-end
-
-Then('a valid podcast RSS feed should be published') do
-  binding.pry
-end
-
-# Method to complete sign-in/sign-up process
-def sign_in_or_sign_up(email, password)
-  email_field = find_field('Email')  # Use the correct field locator (ID, name, etc.)
-  email_field.fill_in(with: email)
-  password_field = find_field('user_password')  # Use the correct field locator
-  password_field_confirmation = find_field('user_password_confirmation')  # Use the correct field locator
-  password_field.fill_in(with: password)
-  password_field_confirmation.fill_in(with: password)
-  click_button('Sign up')  # Adjust the button name depending on the flow
-end

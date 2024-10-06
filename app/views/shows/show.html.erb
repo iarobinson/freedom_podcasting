@@ -40,16 +40,15 @@
           <h3><%= @episodes.count %> Episodes</h3>
         </div>
         <div class="col">
-          <%= link_to "Publish a New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
+          <%= link_to "New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
         </div>
       </div>
       <% if @episodes.count > 0 %>
         <%= render "show_episode_list_item" %>
-        <%= link_to "Publish a New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
       <% else %>
         <p>You currently have no episodes.</p>
-        <%= link_to "Publish a New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
       <% end %>
+      <%= link_to "Publish a New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>
     </div>
   </div>
 
