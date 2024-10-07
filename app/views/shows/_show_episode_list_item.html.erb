@@ -1,29 +1,33 @@
 <ul class="list-group">
-  <% @episodes.sort_by(&:created_at).each do |episode| %>
-    <div class="list-group-item list-group-item-action">
+  <% @episodes.sort_by(&:created_at).reverse.each do |episode| %>
+    <li class="list-group-item">
       <div class="row">
-        <div class="col">
-          <h2><%= link_to episode.title, show_episode_path(@show, episode) %></h2>
-          <p>Duration: <%= (episode.itunes_duration.to_i / 60).to_s %></p>
-          <!--<p><%= episode.description %></p>
-          <p><%= episode.inspect %></p>-->
+        <div class="col-md-12">
+          <p><%= link_to episode.title, show_episode_path(@show, episode) %></p>
         </div>
-        <div class="col-md-6 embed-responsive">
-          <!-- <audio controls class="embed-responsive-item">
-            <source src="<%= episode.enclosure %>" type="audio/mpeg">
-            Your browser does not support the audio tag.
-          </audio> -->
 
-          <% if episode.enclosed_audio.attached? %>
-            <audio controls>
-              <source src="<%= url_for(episode.enclosed_audio) %>" type="<%= episode.enclosed_audio.content_type %>">
-              Your browser does not support the audio element.
-            </audio>
-          <% else %>
-            <p>No audio file uploaded yet.</p>
-          <% end %>
+
+      </div>
+      <div class="row">
+        <div class="col-md-3">
+          <%= link_to "edit", edit_show_episode_path(@show, episode), class: common_small_bold_button("warning") %>
+        </div>
+        <div class="col-md-3">
+          <%= link_to "view", show_episode_path(@show, episode), class: common_small_bold_button %>
+        </div>
+        <div class="col-md-6">
+          <div class="embed-responsive">
+            <% if episode.enclosed_audio.attached? %>
+              <audio controls>
+                <source src="<%= url_for(episode.enclosed_audio) %>" type="<%= episode.enclosed_audio.content_type %>">
+                Your browser does not support the audio element.
+              </audio>
+            <% else %>
+              <p>No audio file uploaded yet.</p>
+            <% end %>
+          </div>
         </div>
       </div>
-    </div>
+    </li>
   <% end %>
 </ul>

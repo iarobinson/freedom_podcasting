@@ -2,10 +2,8 @@
   <div class="row">
     <div class="col-md-8 offset-md-2">
       <h1>New Episode</h1>
-      <%= render "form", url: show_episodes_url %><br>
-      <div class="paddingbottom">
-        <%= link_to 'Back', show_episodes_path, class: "btn btn-primary btn-block" %>
-      </div>
+      <%= render "form", url: show_episodes_url %>
+      <%= link_to 'Back', show_path(@show), class: common_big_bold_button %>
     </div>
   </div>
 </div>

@@ -6,4 +6,8 @@ module ApplicationHelper
   def common_big_bold_button(style='primary')
     "w-100 btn btn-lg btn-#{style} my-2"
   end
+
+  def common_small_bold_button(style='primary')
+    "w-100 btn btn-sm btn-#{style} my-2"
+  end
 end

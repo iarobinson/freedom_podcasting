@@ -1,6 +1,7 @@
 Given "{word} has started a show" do |client_handle|
   visit new_user_registration_path
   email = "#{client_handle.downcase}_the_cucumber@testing.com"
+  @client_email = email
   password = "PASSWORD#{client_handle.downcase}"
   email_field = find_field('Email')
   email_field.fill_in(with: email)
@@ -25,7 +26,11 @@ Given "{word} has started a show" do |client_handle|
   click_button 'Save Changes'
 end
 
-Then "The show should exist" do
+Then "{word}'s show should exist" do |client_handle|
+  user = User.find_by(email: "#{client_handle.downcase}_the_cucumber@testing.com")
+  expect(user).not_to be_nil
   assert Show.count > 0
+  expect(user.shows.count).to be > 0
+  expect(user.shows.first.title).to eq "Cucumber Driven Test Podcast"
 end
 
