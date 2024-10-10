@@ -5,18 +5,13 @@
 
       <%= render 'form', show: @show %>
 
-      <div class="row paddingbottom">
-
+      <div class="row">
         <div class="col">
-          <%= link_to "See Show Profile", @show,
-                      class: "btn btn-primary text-white btn-sm btn-block" %>
+          <%= link_to "View Show", @show, class: common_big_bold_button("success") %>
         </div>
         <div class="col">
-          <%= link_to 'Delete', @show, method: :delete,
-                      data: { confirm: 'Are you sure? This cannot be undone.' },
-                      class: "btn btn-danger text-white btn-sm btn-block" %>
+          <%= link_to 'Delete', @show, method: :delete, data: { confirm: 'Are you sure? This cannot be undone.' }, class: common_big_bold_button %>
         </div>
-
       </div>
     </div>
   </div>

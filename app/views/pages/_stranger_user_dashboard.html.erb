@@ -2,9 +2,7 @@
   <div class="row">
     <div class="col-xl-8 offset-xl-2">
       <% if current_user.shows.size > 0 %>
-        <% current_user.shows.each do |show| %>
-          <%= render "shows/list_shows_and_show_details" %>
-        <% end %>
+        <%= render "shows/list_shows_and_show_details" %>
       <% else %>
         <%= render "pages/start_new_show_card" %>
       <% end %>

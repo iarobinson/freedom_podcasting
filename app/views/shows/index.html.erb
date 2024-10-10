@@ -3,9 +3,4 @@
     <%= render "list_shows_and_show_details" if @shows %>
     <%= render "no_shows_message" if @shows.length == 0 %>
   </div>
-  <div class="row paddingbottom">
-    <div class="col-4 offset-4">
-      <%= link_to 'New Show', new_show_path, class: common_big_bold_button %>
-    </div>
-  </div>
 </div>
