@@ -6,9 +6,10 @@
           <%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{@episode.enclosed_audio.key}/#{@episode.enclosed_audio.filename}" %>
           <%= url_for(@episode.enclosed_audio) %>
           --->
+        <!--- <pre><code><%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{ERB::Util.url_encode(@episode.enclosed_audio.key)}/#{ERB::Util.url_encode(@episode.enclosed_audio.filename.to_s)}" %></code></pre> -->
       <div class="text-center">
         <p><small>Media URL:</small></p>
-        <pre><code><%= "https://#{ENV['AWS_BUCKET_NAME']}.s3.#{ENV['AWS_REGION']}.amazonaws.com/#{ERB::Util.url_encode(@episode.enclosed_audio.key)}/#{ERB::Util.url_encode(@episode.enclosed_audio.filename.to_s)}" %></code></pre>
+        <pre><code><%= rails_blob_url(@episode.enclosed_audio) %></code></pre>
       </div>
       <div class="col-md-6 offset-md-3 pb-3">
         <div class="row text-center my-3">

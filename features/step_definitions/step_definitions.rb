@@ -34,3 +34,18 @@ Then "{word}'s show should exist" do |client_handle|
   expect(user.shows.first.title).to eq "Cucumber Driven Test Podcast"
 end
 
+Given 'Sally has an account' do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When 'Sally tries to edit Cindys show' do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+Then 'Sally should not see controls to edit' do
+  pending # Write code here that turns the phrase above into concrete actions
+end
+
+When 'Sally tries to edit Cindys episode' do
+  pending # Write code here that turns the phrase above into concrete actions
+end

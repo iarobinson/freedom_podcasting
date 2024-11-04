@@ -3,7 +3,7 @@ administrator_ian:
   last_name: Robinson
   city: Reno
   state: Nevada
-  zip: 89521
+  zip: 89502
   email: ian@testing.com
   encrypted_password: <%= User.new.send(:password_digest, 'testing') %>
   role: administrator

@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
 
   def home
-    @shows = current_user.shows.all if current_user
+    @shows = Show.all if current_user
   end
 
   def tools

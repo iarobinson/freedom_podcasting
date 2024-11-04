@@ -1,13 +1,12 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-8 mt-3">
+  <div class="row py-3">
+    <div class="col-md-8">
       <%= render "pages/existing_shows_card" %>
     </div>
 
     <div class="col-md-4">
-      <%= link_to "Refresh Podcast RSS feeds", sync_all_podcast_feeds_path, class: "btn btn-block btn-primary mt-3" %>
+      <%= link_to "Refresh Podcast RSS feeds", sync_all_podcast_feeds_path, class: common_big_bold_button %>
       <br>
-      <%= render "pages/start_new_show_card" %>
     </div>
   </div>
 </div>

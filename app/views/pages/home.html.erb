@@ -1,5 +1,5 @@
 <% if current_user.nil? %>
-  <%= render "unknown_user_dashboard" %>
+  <%# <%= render "unknown_user_dashboard" %> %>
 <% elsif current_user.administrator? %>
   <%= render "administrator_user_dashboard" %>
 <% elsif current_user.producer? %>
