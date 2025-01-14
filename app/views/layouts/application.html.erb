@@ -12,12 +12,10 @@
   </head>
 
   <body>
+    <%= render "layouts/alert" %>
     <% if user_signed_in? %>
       <%= render 'layouts/authenticated_navigation_bar' %>
-    <% else %>
-      <%= render 'pages/unknown_user_dashboard' %>
     <% end %>
-    <%= render "layouts/alert" %>
     <%= yield %>
   </body>
 </html>
