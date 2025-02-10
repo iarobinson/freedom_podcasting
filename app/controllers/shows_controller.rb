@@ -70,6 +70,9 @@ class ShowsController < ApplicationController
     end
   end
 
+  def rss
+  end
+
   private
 
     def set_show
