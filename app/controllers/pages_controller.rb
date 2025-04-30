@@ -16,4 +16,7 @@ class PagesController < ApplicationController
   def random_episode
     @random_episode = Episode.sample;
   end
+
+  def immediate_add
+  end
 end

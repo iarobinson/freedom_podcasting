@@ -24,6 +24,8 @@ gem 'sass-rails', '~> 5.0'
 
 # Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
 gem 'turbo-rails'
+gem 'stimulus-rails'
+gem "importmap-rails"
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
@@ -55,5 +57,3 @@ group :development do
 end
 
 gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
-
-gem "importmap-rails", "~> 2.0"

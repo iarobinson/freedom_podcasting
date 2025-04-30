@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get '/feed_flipper', to: 'pages#feed_flipper'
   get '/random_episode', to: 'pages#random_episode'
   get '/sync_all_podcast_feeds', to: "shows#sync_all_podcast_feeds"
+  get '/immediate_add', to: "pages#immediate_add"
 
   devise_for :users do
     get '/users/sign_out' => 'devise/sessions#destroy'
