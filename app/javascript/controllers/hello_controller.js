@@ -5,10 +5,11 @@ export default class extends Controller {
 
   connect() {
     console.log("button clicked and message from hello_controller.js ran")
-    this.outputTarget.textContent = "Hello, Stimulus!"
+    this.outputTarget.textContent = "Greetings, Stimulus!"
   }
 
   toggle() {
+    console.log("toggle button clicked")
     this.outputTarget.classList.toggle("hidden")
   }
 }
