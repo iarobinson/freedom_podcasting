@@ -9,20 +9,3 @@
 <% elsif current_user.stranger? %>
   <%= render "stranger_user_dashboard" %>
 <% end %>
-
-
-<%# # Testing Stimulus %>
-<div data-controller="hello">
-  <h2 data-hello-target="output">Hello, Stimulus!</h2>
-  <button data-action="click->hello#toggle">Toggle Message</button>
-</div>
-
-<style>
-  .hidden { display: none; }
-</style>
-
-<%# Testing Turbo %>
-<%= turbo_frame_tag "time" do %>
-  <p>The time is: <%= Time.now.strftime("%H:%M:%S") %></p>
-  <%= link_to "Refresh Time", root_path, data: { turbo_frame: "time" } %>
-<% end %>

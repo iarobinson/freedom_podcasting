@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus"
-
+console.log("hello_controller.js loaded")
 export default class extends Controller {
   static targets = ["output"]
 
