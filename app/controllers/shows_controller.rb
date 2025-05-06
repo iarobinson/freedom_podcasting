@@ -4,7 +4,7 @@ class ShowsController < ApplicationController
   include FeedsHelper
 
   def index
-    @shows = current_user.shows
+    @shows = Show.all
   end
 
   def show

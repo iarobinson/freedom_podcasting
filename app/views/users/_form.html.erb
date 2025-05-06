@@ -46,8 +46,6 @@
 
   <div class="form-actions">
     <%= f.button :submit, class: common_big_bold_button %>
-    <%= link_to destroy_user_session_path, method: :delete, class: common_big_bold_button do %>
-      Sign Out
-    <% end %>
+    <%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: common_big_bold_button %>
   </div>
 <% end %>
