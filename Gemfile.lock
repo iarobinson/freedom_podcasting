@@ -458,6 +458,7 @@ DEPENDENCIES
   aws-sdk-s3
   bootsnap (>= 1.1.0)
   bootstrap (~> 5.3, >= 5.3.2)
+  builder
   byebug
   capybara
   cucumber-rails (~> 3.0)
