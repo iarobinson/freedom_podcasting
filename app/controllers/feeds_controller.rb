@@ -1,10 +1,11 @@
 class FeedsController < ApplicationController
   def show
     @show = Show.find(params[:id])
-    @episodes = @show.episodes.order(created_at: :desc)
+    @episodes = @show.episodes.order(published: :desc)
 
     respond_to do |format|
-      format.rss { render layout: false }
+      format.xml
+      # format.html { render xml: @show }
     end
   end
 end

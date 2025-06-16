@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     resources :episodes
 
     member do
-      get 'feed', to: 'feeds#show', defaults: { format: 'xml' }
+      get 'feed', to: '/feeds#show', defaults: { format: 'xml' }
     end
   
     get '/administrator_dashboard', to: "shows#administrator_dashboard"
