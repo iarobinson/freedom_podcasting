@@ -7,7 +7,7 @@ xml.rss version: "2.0",
     xml.link show_url(@show)
     xml.language "en-us"
     xml.description @show.description
-    xml.generator "Freedom Podcasting Company Feed Generator v1.0.0"
+    xml.generator "FreedomPodcasting.com - Feed Generator v1.0.0"
     xml.pubDate @show.created_at.rfc2822
     xml.lastBuildDate @show.created_at.rfc2822
     xml.ttl 60
@@ -19,11 +19,13 @@ xml.rss version: "2.0",
     xml.tag! "xml.author", @show.host
     xml.tag! "itunes:summary", @show.description
     xml.tag! "itunes:explicit", "no" # TODO: Make this dynamic
+    xml.tag! "itunes:author", @show.host
+    xml.tag! "itunes:image", @show.show_art.url
 
     xml.image do
       xml.url "Show image url here"
-      xml.title "Title Here"
-      xml.link @show.website #TODO This needs to link to the show art
+      xml.title @show.title
+      xml.link  url_for(@show.show_art) #TODO This needs to link to the show art
       xml.description @show.description
       xml.height 1400
       xml.width 1400
