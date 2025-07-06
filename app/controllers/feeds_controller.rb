@@ -5,7 +5,7 @@ class FeedsController < ApplicationController
 
     respond_to do |format|
       format.xml
-      # format.html { render xml: @show }
+      format.html { render xml: @show }
     end
   end
 end
