@@ -38,7 +38,7 @@
       <div class="row">
         <div class="col">
           <h3><%= "#{pluralize(@episodes.count, "Episode")}" %></h3>
-          <%= link_to "RSS FEED", feed_show_path(@show) %>
+          <%= link_to "RSS FEED", feed_show_url(@show) %>
         </div>
         <div class="col">
           <%= link_to "New Episode", new_show_episode_path(@show), class: common_big_bold_button("success") %>

@@ -1,5 +1,3 @@
-
-
 xml.instruct! :xml, version: "1.0", encoding: "UTF-8"
 xml.rss version: "2.0",
         "xmlns:itunes" => "http://www.itunes.com/dtds/podcast-1.0.dtd",
@@ -21,6 +19,15 @@ xml.rss version: "2.0",
     if @show.show_art.attached?
       xml.tag! "itunes:image", href: url_for(@show.show_art)
     end
+
+    xml.tag! "itunes:owner" do
+      xml.tag! "itunes:name", @show.title || "Freedom Podcasting"
+      xml.tag! "itunes:email", @show.itunes_contact_email ||"accounts@freedompodcasting.com"
+    end
+
+  xml.tag! "itunes:category", text: @show.category_one do
+    xml.tag! "itunes:category", text: @show.category_two
+  end
 
     @episodes.each do |episode|
       xml.item do
