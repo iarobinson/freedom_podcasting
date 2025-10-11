@@ -8,8 +8,12 @@ Rails.application.routes.draw do
   get '/sync_all_podcast_feeds', to: "shows#sync_all_podcast_feeds"
   get '/immediate_add', to: "pages#immediate_add"
 
-  devise_for :users do
-    get '/users/sign_out' => 'devise/sessions#destroy'
+  devise_for :users, controllers: {
+    sessions: 'users/sessions'
+  }
+
+  namespace :api do
+    get '/current_user', to: 'current_user#show'
   end
 
   resources :users
