@@ -11,6 +11,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "../../frontend/App";
+import axios from "axios";
+import { getCSRFToken } from "../../frontend/csrf";
+
+// Add CSRF token from Rails <meta> tag to all Axios requests
+const token = document.querySelector('meta[name="csrf-token"]')?.content;
+
+if (token) {
+  // axios.defaults.headers.common["X-CSRF-Token"] = token;
+  axios.defaults.withCredentials = true;
+  axios.defaults.headers.common["X-CSRF-Token"] = getCSRFToken();
+}
 
 console.log("application.jsx loaded");
 
