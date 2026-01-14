@@ -1,0 +1,84 @@
+.bear {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  margin: 20px auto;
+  background: #8b5e3c;
+  border-radius: 50%;
+  transition: transform 0.4s ease;
+}
+
+.bear.looking {
+  transform: translateY(-5px) rotate(0deg);
+}
+
+.ears .ear {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: #8b5e3c;
+  border-radius: 50%;
+  top: -20px;
+}
+
+.ear.left {
+  left: -10px;
+}
+
+.ear.right {
+  right: -10px;
+}
+
+.face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.eyes {
+  position: absolute;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.eye {
+  width: 20px;
+  height: 20px;
+  background: black;
+  border-radius: 50%;
+  transition: transform 0.4s ease;
+}
+
+.bear.looking .eye.left {
+  transform: translateX(-5px);
+}
+
+.bear.looking .eye.right {
+  transform: translateX(5px);
+}
+
+.nose {
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 25px;
+  height: 20px;
+  background: #000;
+  border-radius: 50% 50% 60% 60%;
+}
+
+.mouth {
+  position: absolute;
+  top: 105px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 20px;
+  border-bottom: 4px solid black;
+  border-radius: 50%;
+}

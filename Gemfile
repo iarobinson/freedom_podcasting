@@ -3,6 +3,9 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.3.0'
 
+gem 'rack-cors', require: 'rack/cors'
+gem "vite_rails"
+
 # gem 'whenever', require: false
 # gem 'feedjira'
 gem 'httparty'
@@ -60,3 +63,5 @@ group :development do
 end
 
 gem "tzinfo-data", platforms: %i[ mswin mswin64 mingw x64_mingw jruby ]
+
+gem "jsbundling-rails", "~> 1.3"

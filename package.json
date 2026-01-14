@@ -3,8 +3,18 @@
   "private": true,
   "dependencies": {
     "@rails/actiontext": "^6.0.0",
+    "axios": "^1.12.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
     "trix": "^1.0.0"
   },
   "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-import": "^16.1.1",
+    "postcss-preset-env": "^10.4.0",
+    "vite": "^5.4.20",
+    "vite-plugin-ruby": "^5.1.1"
   }
 }
