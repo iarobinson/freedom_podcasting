@@ -11,12 +11,6 @@ import { Badge } from "@/components/ui/Badge";
 import { toast } from "@/lib/toast";
 import type { Podcast, Episode } from "@/types";
 
-function formatDuration(secs?: number) {
-  if (!secs) return null;
-  const h = Math.floor(secs / 3600), m = Math.floor((secs % 3600) / 60), s = secs % 60;
-  return h > 0 ? `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}` : `${m}:${String(s).padStart(2,"0")}`;
-}
-
 export default function PodcastDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
@@ -36,7 +30,7 @@ export default function PodcastDetailPage() {
     enabled:  !!currentOrg,
   });
 
-  const togglePublish = useMutation({
+  const togglePodcastPublish = useMutation({
     mutationFn: () => podcast?.published
       ? podcastsApi.unpublish(currentOrg!.slug, slug)
       : podcastsApi.publish(currentOrg!.slug, slug),
@@ -44,6 +38,20 @@ export default function PodcastDetailPage() {
       qc.invalidateQueries({ queryKey: ["podcast", currentOrg?.slug, slug] });
       qc.invalidateQueries({ queryKey: ["podcasts", currentOrg?.slug] });
       toast.success(podcast?.published ? "Podcast unpublished" : "Podcast is now live!");
+    },
+  });
+
+  const toggleEpisodePublish = useMutation({
+    mutationFn: (ep: Episode) => ep.status === "published"
+      ? episodesApi.unpublish(currentOrg!.slug, slug, ep.id)
+      : episodesApi.publish(currentOrg!.slug, slug, ep.id),
+    onSuccess: (_, ep) => {
+      qc.invalidateQueries({ queryKey: ["episodes", currentOrg?.slug, slug] });
+      toast.success(ep.status === "published" ? "Episode unpublished" : "Episode is now live!");
+    },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      toast.error("Could not publish episode", msg ?? "Make sure audio is uploaded first.");
     },
   });
 
@@ -65,7 +73,7 @@ export default function PodcastDetailPage() {
   const episodes: Episode[] = episodesData?.data ?? [];
 
   if (isLoading) return <div className="p-8"><div className="glass rounded-2xl h-48 shimmer-bg" /></div>;
-  if (!podcast) return <div className="p-8 text-ink-500">Podcast not found.</div>;
+  if (!podcast)  return <div className="p-8 text-ink-500">Podcast not found.</div>;
 
   return (
     <div className="p-8 max-w-5xl mx-auto">
@@ -93,7 +101,8 @@ export default function PodcastDetailPage() {
             <button onClick={copyRss} className="text-ink-600 hover:text-brand-400 transition-colors p-1">
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
             </button>
-            <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer" className="text-ink-600 hover:text-brand-400 transition-colors p-1">
+            <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer"
+              className="text-ink-600 hover:text-brand-400 transition-colors p-1">
               <Rss className="h-3.5 w-3.5" />
             </a>
           </div>
@@ -105,9 +114,11 @@ export default function PodcastDetailPage() {
           <Button
             variant={podcast.published ? "secondary" : "primary"}
             size="sm"
-            loading={togglePublish.isPending}
-            onClick={() => togglePublish.mutate()}>
-            {podcast.published ? <><GlobeLock className="h-3.5 w-3.5" /> Unpublish</> : <><Globe className="h-3.5 w-3.5" /> Publish</>}
+            loading={togglePodcastPublish.isPending}
+            onClick={() => togglePodcastPublish.mutate()}>
+            {podcast.published
+              ? <><GlobeLock className="h-3.5 w-3.5" /> Unpublish</>
+              : <><Globe className="h-3.5 w-3.5" /> Publish</>}
           </Button>
         </div>
       </div>
@@ -115,7 +126,9 @@ export default function PodcastDetailPage() {
       {/* Episodes */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="font-display text-lg text-ink-200">Episodes <span className="text-ink-600 text-base font-sans">({episodes.length})</span></h2>
+          <h2 className="font-display text-lg text-ink-200">
+            Episodes <span className="text-ink-600 text-base font-sans">({episodes.length})</span>
+          </h2>
           <Button size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/new`)}>
             <Plus className="h-3.5 w-3.5" /> New Episode
           </Button>
@@ -144,17 +157,38 @@ export default function PodcastDetailPage() {
                     </Badge>
                   </div>
                   <div className="flex items-center gap-3 text-xs text-ink-600">
-                    {ep.formatted_duration && <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{ep.formatted_duration}</span>}
+                    {ep.formatted_duration && (
+                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{ep.formatted_duration}</span>
+                    )}
                     {ep.published_at && <span>{new Date(ep.published_at).toLocaleDateString()}</span>}
+                    {!ep.audio_url && <span className="text-amber-500">⚠ No audio</span>}
                   </div>
                 </div>
-                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+
+                {/* Actions */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  {/* Publish/unpublish toggle */}
+                  <button
+                    onClick={() => toggleEpisodePublish.mutate(ep)}
+                    disabled={toggleEpisodePublish.isPending}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                      ep.status === "published"
+                        ? "bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400"
+                        : "bg-brand-500/15 text-brand-400 hover:bg-brand-500/25"
+                    }`}>
+                    {ep.status === "published" ? "Unpublish" : "Publish"}
+                  </button>
+
+                  {/* Edit */}
                   <Link href={`/dashboard/podcasts/${slug}/episodes/${ep.id}/edit`}
-                    className="p-1.5 text-ink-600 hover:text-ink-300 hover:bg-white/5 rounded-lg transition-colors">
+                    className="p-1.5 text-ink-600 hover:text-ink-300 hover:bg-white/5 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
                     <Pencil className="h-3.5 w-3.5" />
                   </Link>
-                  <button onClick={() => { if (confirm("Delete this episode?")) deleteEpisode.mutate(ep.id); }}
-                    className="p-1.5 text-ink-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
+
+                  {/* Delete */}
+                  <button
+                    onClick={() => { if (confirm("Delete this episode?")) deleteEpisode.mutate(ep.id); }}
+                    className="p-1.5 text-ink-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
                 </div>
