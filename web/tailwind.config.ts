@@ -1,45 +1,63 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: ["class"],
-  content: ["./src/**/*.{ts,tsx}"],
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       colors: {
-        brand: {
-          50:  "#fdf2f8", 100: "#fce7f3", 200: "#fbcfe8",
-          300: "#f9a8d4", 400: "#f472b6", 500: "#ec4899",
-          600: "#db2777", 700: "#be185d", 800: "#9d174d", 900: "#831843",
-        },
+        // Monochromatic ink palette
         ink: {
-          50:  "#f8f7f4", 100: "#f0ede6", 200: "#e1dbd0",
-          300: "#c8bfae", 400: "#a89880", 500: "#8a7660",
-          600: "#6e5c48", 700: "#564738", 800: "#3d3228", 900: "#241d18",
-          950: "#120e0b",
+          50:  "#f5f5f4",
+          100: "#e8e7e5",
+          200: "#d1cfcc",
+          300: "#b0ada8",
+          400: "#8a8680",
+          500: "#6b6760",
+          600: "#514e49",
+          700: "#3a3834",
+          800: "#252422",
+          900: "#171614",
+          950: "#0d0c0b",
+        },
+        // Single accent — FreedomPodcasting red
+        accent: {
+          DEFAULT: "#bc423a",
+          light:   "#d45047",
+          dark:    "#9e3530",
+          muted:   "#bc423a33",
         },
       },
       fontFamily: {
-        sans:    ["var(--font-dm-sans)", "system-ui", "sans-serif"],
-        display: ["var(--font-playfair)", "Georgia", "serif"],
-        mono:    ["var(--font-dm-mono)", "monospace"],
-      },
-      borderRadius: {
-        lg: "0.75rem", md: "0.5rem", sm: "0.375rem",
+        display: ["Raleway", "Georgia", "sans-serif"],
+        body:    ["PT Sans", "system-ui", "sans-serif"],
+        mono:    ["PT Mono", "monospace"],
       },
       keyframes: {
-        "fade-up":   { from: { opacity: "0", transform: "translateY(12px)" }, to: { opacity: "1", transform: "translateY(0)" } },
-        "fade-in":   { from: { opacity: "0" }, to: { opacity: "1" } },
-        "shimmer":   { from: { backgroundPosition: "-200% 0" }, to: { backgroundPosition: "200% 0" } },
-        "pulse-dot": { "0%,100%": { opacity: "1" }, "50%": { opacity: "0.4" } },
+        "fade-up": {
+          "0%":   { opacity: "0", transform: "translateY(16px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          "0%":   { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
+        shimmer: {
+          "0%":   { backgroundPosition: "-200% 0" },
+          "100%": { backgroundPosition: "200% 0" },
+        },
       },
       animation: {
-        "fade-up":   "fade-up 0.4s ease-out forwards",
-        "fade-in":   "fade-in 0.3s ease-out forwards",
-        "shimmer":   "shimmer 2s linear infinite",
-        "pulse-dot": "pulse-dot 1.5s ease-in-out infinite",
+        "fade-up":   "fade-up 0.5s ease-out forwards",
+        "fade-in":   "fade-in 0.4s ease-out forwards",
+        shimmer:     "shimmer 2s infinite linear",
       },
     },
   },
   plugins: [],
 };
+
 export default config;

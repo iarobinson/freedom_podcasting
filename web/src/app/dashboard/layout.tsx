@@ -1,15 +1,28 @@
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/lib/store";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { Providers } from "@/components/layout/Providers";
+import { Toaster } from "@/components/ui/Toaster";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const { token, fetchMe } = useAuthStore();
+
+  useEffect(() => {
+    if (!token) { router.push("/auth/login"); return; }
+    fetchMe().catch(() => { router.push("/auth/login"); });
+  }, [token, router, fetchMe]);
+
+  if (!token) return null;
+
   return (
-    <Providers>
-      <div className="flex h-screen overflow-hidden">
-        <Sidebar />
-        <main className="flex-1 overflow-y-auto scrollbar-thin">
-          {children}
-        </main>
-      </div>
-    </Providers>
+    <div className="flex min-h-screen bg-ink-950">
+      <Sidebar />
+      <main className="flex-1 overflow-auto">
+        {children}
+      </main>
+      <Toaster />
+    </div>
   );
 }

@@ -2,54 +2,157 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Playfair+Display:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+/* ── Fonts ─────────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@700;800;900&family=PT+Sans:ital,wght@0,400;0,700;1,400&family=PT+Mono&display=swap');
 
-:root {
-  --font-dm-sans: 'DM Sans', system-ui, sans-serif;
-  --font-playfair: 'Playfair Display', Georgia, serif;
-  --font-dm-mono: 'DM Mono', monospace;
-}
-
+/* Lovelo is not on Google Fonts — we use a web-safe fallback stack
+   and simulate the weight/tracking with letter-spacing */
 @layer base {
-  * { @apply border-ink-200; box-sizing: border-box; }
+  :root {
+    --accent:       #bc423a;
+    --accent-light: #d45047;
+    --accent-dark:  #9e3530;
+    --ink-950:      #0d0c0b;
+    --ink-900:      #171614;
+    --ink-800:      #252422;
+    --ink-700:      #3a3834;
+    --ink-600:      #514e49;
+    --ink-500:      #6b6760;
+    --ink-400:      #8a8680;
+    --ink-300:      #b0ada8;
+    --ink-200:      #d1cfcc;
+    --ink-100:      #e8e7e5;
+    --ink-50:       #f5f5f4;
+  }
+
+  * { box-sizing: border-box; }
+
+  html {
+    background-color: var(--ink-950);
+    color: var(--ink-200);
+    font-family: 'PT Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
 
   body {
-    @apply bg-ink-950 text-ink-100 font-sans antialiased;
-    background-image:
-      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(236,72,153,0.07) 0%, transparent 60%),
-      radial-gradient(ellipse 60% 40% at 80% 100%, rgba(236,72,153,0.05) 0%, transparent 60%);
+    background-color: var(--ink-950);
     min-height: 100vh;
+    /* Subtle noise texture for depth */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
   }
 
-  h1,h2,h3 { @apply font-display; }
+  /* Scrollbar */
+  ::-webkit-scrollbar       { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--ink-900); }
+  ::-webkit-scrollbar-thumb { background: var(--ink-700); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-600); }
 }
 
-@layer utilities {
-  .glass {
-    background: rgba(255,255,255,0.04);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255,255,255,0.08);
+/* ── Typography ─────────────────────────────────────────────────────────────── */
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Raleway', Georgia, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-100);
   }
-  .glass-hover {
-    @apply transition-all duration-200;
+}
+
+/* ── Component utilities ────────────────────────────────────────────────────── */
+@layer components {
+  /* Card / Panel */
+  .panel {
+    background: var(--ink-900);
+    border: 1px solid var(--ink-800);
+    border-radius: 2px;
   }
-  .glass-hover:hover {
-    background: rgba(255,255,255,0.07);
-    border-color: rgba(255,255,255,0.12);
+
+  .panel-hover {
+    transition: border-color 0.2s, background 0.2s;
   }
-  .text-gradient {
-    background: linear-gradient(135deg, #f9a8d4 0%, #ec4899 50%, #be185d 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  .panel-hover:hover {
+    background: var(--ink-800);
+    border-color: var(--ink-700);
   }
-  .scrollbar-thin {
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.1) transparent;
+
+  /* Accent rule — thin horizontal line in accent color */
+  .accent-rule {
+    border: none;
+    border-top: 1px solid var(--accent);
+    opacity: 0.6;
   }
+
+  /* Section divider with ancient ornament */
+  .ornament-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--ink-600);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .ornament-divider::before,
+  .ornament-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--ink-800);
+  }
+
+  /* Accent text */
+  .text-accent { color: var(--accent); }
+
+  /* Shimmer loading */
   .shimmer-bg {
-    background: linear-gradient(90deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.03) 100%);
+    background: linear-gradient(
+      90deg,
+      var(--ink-800) 25%,
+      var(--ink-700) 50%,
+      var(--ink-800) 75%
+    );
     background-size: 200% 100%;
-    @apply animate-shimmer;
+    animation: shimmer 2s infinite linear;
   }
+
+  /* Ancient border — double rule effect */
+  .ancient-border {
+    border: 1px solid var(--ink-700);
+    outline: 1px solid var(--ink-800);
+    outline-offset: 3px;
+  }
+
+  /* Engraving watermark — positioned as bg element */
+  .engraving-bg {
+    position: relative;
+    overflow: hidden;
+  }
+  .engraving-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Ccircle cx='200' cy='200' r='160' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3Ccircle cx='200' cy='200' r='120' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3Ccircle cx='200' cy='200' r='80' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3Cline x1='40' y1='200' x2='360' y2='200' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3Cline x1='200' y1='40' x2='200' y2='360' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3Cline x1='87' y1='87' x2='313' y2='313' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3Cline x1='313' y1='87' x2='87' y2='313' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right -60px bottom -60px;
+    background-size: 400px 400px;
+    pointer-events: none;
+  }
+
+  /* Status badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-radius: 1px;
+  }
+  .badge-default  { background: var(--ink-800); color: var(--ink-400); border: 1px solid var(--ink-700); }
+  .badge-live     { background: rgba(188,66,58,0.15); color: var(--accent-light); border: 1px solid rgba(188,66,58,0.3); }
+  .badge-warning  { background: rgba(180,130,50,0.15); color: #c8a44a; border: 1px solid rgba(180,130,50,0.3); }
+  .badge-info     { background: rgba(80,120,180,0.15); color: #7aa0cc; border: 1px solid rgba(80,120,180,0.3); }
 }

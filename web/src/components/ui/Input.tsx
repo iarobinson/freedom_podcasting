@@ -1,7 +1,7 @@
+import { InputHTMLAttributes, forwardRef } from "react";
 import { clsx } from "clsx";
-import { forwardRef } from "react";
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
   hint?: string;
@@ -9,20 +9,28 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, hint, className, ...props }, ref) => (
-    <div className="space-y-1.5">
-      {label && <label className="block text-sm font-medium text-ink-300">{label}</label>}
+    <div className="space-y-1">
+      {label && (
+        <label className="block text-[10px] font-bold uppercase tracking-widest text-ink-500">
+          {label}
+        </label>
+      )}
       <input
         ref={ref}
         className={clsx(
-          "w-full rounded-lg px-3.5 py-2.5 text-sm bg-white/5 border text-ink-100 placeholder:text-ink-600",
-          "focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500/60 transition-all",
-          error ? "border-red-500/50 bg-red-500/5" : "border-white/10 hover:border-white/20",
+          "w-full px-3 py-2.5 text-sm font-body",
+          "bg-ink-900 border text-ink-100",
+          "placeholder-ink-600",
+          "focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent/30",
+          "transition-colors duration-150",
+          "rounded-none", // Sharp corners match the aesthetic
+          error ? "border-red-700" : "border-ink-700",
           className
         )}
         {...props}
       />
-      {error && <p className="text-xs text-red-400">{error}</p>}
-      {hint && !error && <p className="text-xs text-ink-500">{hint}</p>}
+      {error && <p className="text-[10px] text-red-400 uppercase tracking-wide">{error}</p>}
+      {hint && !error && <p className="text-[10px] text-ink-600">{hint}</p>}
     </div>
   )
 );
