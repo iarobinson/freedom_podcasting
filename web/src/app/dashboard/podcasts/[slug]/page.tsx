@@ -103,7 +103,13 @@ export default function PodcastDetailPage() {
             </button>
             <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer"
               className="text-ink-600 hover:text-brand-400 transition-colors p-1">
-              <Rss className="h-3.5 w-3.5" />
+            {podcast.published && (
+              <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="text-ink-700 hover:text-accent transition-colors">
+                <Rss className="h-3.5 w-3.5" />
+              </a>
+            )}
             </a>
           </div>
         </div>

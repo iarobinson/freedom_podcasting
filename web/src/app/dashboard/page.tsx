@@ -94,7 +94,13 @@ export default function DashboardPage() {
                 <a href={p.rss_url} target="_blank" rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
                   className="text-ink-700 hover:text-accent transition-colors">
-                  <Rss className="h-3.5 w-3.5" />
+                  {p.published && (
+                    <a href={p.rss_url} target="_blank" rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-ink-700 hover:text-accent transition-colors">
+                      <Rss className="h-3.5 w-3.5" />
+                    </a>
+                  )}
                 </a>
                 <ArrowRight className="h-3.5 w-3.5 text-ink-700 group-hover:text-accent transition-colors" />
               </div>

@@ -23,8 +23,9 @@ export default function RegisterPage() {
       await authApi.register(form);
       await login(form.email, form.password);
       router.push("/dashboard");
-    } catch {
-      setError("Registration failed. Please try again.");
+    } catch (err) {
+      console.error("Register/login error:", err);
+      setError("Registration failed: " + String(err));
     } finally {
       setLoading(false);
     }
