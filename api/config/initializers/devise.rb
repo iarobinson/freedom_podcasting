@@ -12,10 +12,10 @@ Devise.setup do |config|
   config.email_regexp           = /\A[^@\s]+@[^@\s]+\z/
   config.reset_password_within  = 6.hours
   config.sign_out_via           = :delete
-  config.navigational_formats   = []  # API-only: no HTML redirects
+  config.navigational_formats   = []
 
   config.jwt do |jwt|
-    jwt.secret = ENV.fetch("DEVISE_JWT_SECRET_KEY", "fallback-dev-secret-at-least-64-chars-long-please-change-me")
+    jwt.secret = ENV.fetch("DEVISE_JWT_SECRET_KEY", "dev-secret-please-change-in-production-make-it-long")
     jwt.dispatch_requests = [
       ["POST", %r{^/api/v1/auth/login$}]
     ]
