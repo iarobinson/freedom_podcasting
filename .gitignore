@@ -39,3 +39,14 @@ yarn-debug.log*
 .yarn-integrity
 .idea/
 /demo_files
+# Rails generated runtime files
+api/log/
+api/tmp/
+api/db/schema.rb
+
+# Rails generated runtime files
+api/log/
+api/tmp/
+
+# One-off fix scripts
+*.sh
