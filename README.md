@@ -1,4 +1,4 @@
-# FreedomPods
+# FreedomPodcasting
 
 Podcast hosting and AI-powered production platform.
 
@@ -11,7 +11,7 @@ Podcast hosting and AI-powered production platform.
 
 ## Project Structure
 ```
-freedompods/
+freedom_podcasting/
 ├── api/          # Rails API backend
 ├── web/          # Next.js frontend
 ├── mobile/       # Expo React Native (Phase 4)
@@ -31,7 +31,7 @@ freedompods/
 ### 1. Clone and configure
 ```bash
 git clone <repo>
-cd freedompods
+cd freedom_podcasting
 cp api/.env.example api/.env
 # Edit api/.env with your R2 credentials
 ```
@@ -89,7 +89,7 @@ See `api/.env.example` for all required variables.
 ## Cloudflare R2 Setup
 
 1. Create a Cloudflare account at cloudflare.com
-2. Go to R2 → Create bucket → name it `freedompods-media`
+2. Go to R2 → Create bucket → name it `freedom-podcasting-media`
 3. Create an API token with R2 read/write permissions
 4. Enable public access on the bucket (or set up a custom domain)
 5. Copy credentials to your `.env`
@@ -102,7 +102,7 @@ curl -L https://fly.io/install.sh | sh
 
 # Login and create apps
 fly auth login
-fly launch --name freedompods-api --region sjc
+fly launch --name freedom-podcasting-api --region sjc
 
 # Set secrets
 fly secrets set DEVISE_JWT_SECRET_KEY=$(openssl rand -hex 64)
@@ -112,7 +112,7 @@ fly secrets set REDIS_URL=<your-redis-url>
 fly secrets set R2_ACCESS_KEY_ID=<value>
 fly secrets set R2_SECRET_ACCESS_KEY=<value>
 fly secrets set R2_ENDPOINT=<value>
-fly secrets set R2_BUCKET=freedompods-media
+fly secrets set R2_BUCKET=freedom-podcasting-media
 fly secrets set R2_PUBLIC_URL=<value>
 
 # Deploy
@@ -123,7 +123,7 @@ fly deploy
 
 Your podcast RSS feed is available at:
 ```
-https://api.freedompods.com/feeds/{podcast-slug}
+https://api.freedompodcasting.com/feeds/{podcast-slug}
 ```
 
 This URL is compatible with Apple Podcasts, Spotify, Google Podcasts, and all major directories.

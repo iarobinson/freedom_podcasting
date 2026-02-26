@@ -1,4 +1,4 @@
-# FreedomPods — Master Project Plan
+# FreedomPodcasting — Master Project Plan
 
 ## Vision
 A SaaS podcast production platform for FreedomPodcasting.com that allows anyone to
@@ -37,7 +37,7 @@ host their show, with AI-powered production tools built in over time.
 - `Podcast` belongs to Organization
 - `Episode` belongs to Podcast
 - All queries scoped to current_organization — never leak data across tenants
-- Subdomain routing: `{slug}.freedompods.com` for public podcast pages
+- Subdomain routing: `{slug}.freedompodcasting.com` for public podcast pages
 - Custom domain support (Phase 3)
 
 ---
