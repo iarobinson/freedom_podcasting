@@ -51,3 +51,8 @@ api/tmp/
 # One-off fix scripts
 *.sh
 web/.next/
+
+# Web deployment
+web/node_modules/
+web/fly.toml
+web/.env.local
