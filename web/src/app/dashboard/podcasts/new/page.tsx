@@ -30,7 +30,7 @@ export default function NewPodcastPage() {
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
-    setForm((f) => ({ ...f, title, slug: f.slug || autoSlug(title) }));
+    setForm((f) => ({ ...f, title, slug: autoSlug(title) }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -93,7 +93,13 @@ export default function NewPodcastPage() {
               </select>
             </div>
           </div>
-          <Input label="Website URL" type="url" placeholder="https://mypodcast.com" value={form.website_url} onChange={set("website_url")} />
+          <Input label="Website URL" type="text" placeholder="https://mypodcast.com" value={form.website_url} onChange={set("website_url")} onBlur={(e) => {
+              const val = e.target.value.trim();
+              if (val && !val.match(/^https?:\/\//)) {
+                setForm((f) => ({ ...f, website_url: `https://${val}` }));
+              }
+            }}
+          />
           <label className="flex items-center gap-2.5 cursor-pointer group">
             <input type="checkbox" checked={form.explicit} onChange={(e) => setForm((f) => ({ ...f, explicit: e.target.checked }))}
               className="w-4 h-4 rounded bg-white/5 border border-white/10 accent-brand-500" />

@@ -50,3 +50,4 @@ api/tmp/
 
 # One-off fix scripts
 *.sh
+web/.next/
