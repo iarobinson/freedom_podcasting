@@ -90,7 +90,7 @@ export default function EditPodcastPage() {
               </select>
             </div>
           </div>
-          <Input label="Website URL" type="text" placeholder="https://mypodcast.com" value={form.website_url} onChange={set("website_url")} onBlur={(e) => {
+          <Input label="Website URL" type="text" placeholder="https://mypodcast.com" value={form.website_url as string ?? ""} onChange={set("website_url")} onBlur={(e) => {
               const val = e.target.value.trim();
               if (val && !val.match(/^https?:\/\//)) {
                 setForm((f) => ({ ...f, website_url: `https://${val}` }));
