@@ -3,13 +3,14 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/store";
+import { authApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Radio } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { register, login } = useAuthStore();
+  const { login } = useAuthStore();
   const [form, setForm] = useState({ first_name: "", last_name: "", email: "", password: "", password_confirmation: "" });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -19,7 +20,7 @@ export default function RegisterPage() {
     if (form.password !== form.password_confirmation) { setError("Passwords do not match."); return; }
     setError(""); setLoading(true);
     try {
-      await register(form);
+      await authApi.register(form);
       await login(form.email, form.password);
       router.push("/dashboard");
     } catch {
