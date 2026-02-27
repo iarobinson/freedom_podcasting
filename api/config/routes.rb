@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :auth do
-        get "me", to: "me#show"
+        get  "me",       to: "me#show"
+        post "password", to: "passwords#create"
+        put  "password", to: "passwords#update"
       end
 
       resources :organizations, param: :slug do

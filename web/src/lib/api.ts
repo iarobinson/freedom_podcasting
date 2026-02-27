@@ -33,6 +33,10 @@ export const authApi = {
     apiClient.post("/api/v1/auth/register", { user: data }),
   logout: () => apiClient.delete("/api/v1/auth/logout"),
   me:     () => apiClient.get("/api/v1/auth/me"),
+  forgotPassword: (email: string) =>
+    apiClient.post("/api/v1/auth/password", { email }),
+  resetPassword: (reset_password_token: string, password: string, password_confirmation: string) =>
+    apiClient.put("/api/v1/auth/password", { reset_password_token, password, password_confirmation }),
 };
 
 export const podcastsApi = {

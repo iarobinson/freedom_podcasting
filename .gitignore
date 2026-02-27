@@ -44,9 +44,12 @@ api/log/
 api/tmp/
 api/db/schema.rb
 
-# Rails generated runtime files
-api/log/
-api/tmp/
+# Local bundler vendor path (bundle install --path)
+api/gems/
+api/cache/
+api/extensions/
+api/plugins/
+api/specifications/
 
 # One-off fix scripts
 *.sh
@@ -56,3 +59,6 @@ web/.next/
 web/node_modules/
 web/fly.toml
 web/.env.local
+
+# Claude Code
+.claude/

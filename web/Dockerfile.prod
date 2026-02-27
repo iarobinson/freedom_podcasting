@@ -8,8 +8,8 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
-ENV NEXT_PUBLIC_API_URL=https://freedom-podcasting-api.fly.dev
-ENV NEXT_PUBLIC_APP_URL=https://freedom-podcasting-web.fly.dev
+ENV NEXT_PUBLIC_API_URL=https://api.freedompodcasting.com
+ENV NEXT_PUBLIC_APP_URL=https://app.freedompodcasting.com
 RUN npm run build
 
 FROM node:22-alpine AS runner

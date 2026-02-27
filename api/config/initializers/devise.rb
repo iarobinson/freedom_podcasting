@@ -1,5 +1,6 @@
 Devise.setup do |config|
   config.mailer_sender = ENV.fetch("MAILER_FROM", "noreply@freedompodcasting.com")
+  config.mailer = "CustomDeviseMailer"
 
   require "devise/orm/active_record"
 
