@@ -9,7 +9,10 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
   config.log_level = :info
   config.log_tags = [:request_id]
+  config.logger = ActiveSupport::Logger.new($stdout)
+  config.logger.formatter = ::Logger::Formatter.new
   config.force_ssl = true
+  config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/health" } } }
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address:              "smtp.resend.com",
