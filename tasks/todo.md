@@ -112,8 +112,8 @@ Goal: A working podcast host where you can upload an episode and get a valid RSS
 ### Infrastructure
 - [x] 1.21 Dockerfile for Rails API
 - [x] 1.22 fly.toml config (API + worker processes)
-- [ ] 1.23 Cloudflare R2 bucket setup + CORS config (requires your accounts)
-- [ ] 1.24 Environment variable management (fly secrets) (requires your accounts)
+- [ ] 1.23 Cloudflare R2 bucket CORS policy (allow PUT from freedompodcasting.com + fly.dev origins)
+- [x] 1.24 Environment variable management (fly secrets)
 - [ ] 1.25 CI/CD with GitHub Actions → Fly.io deploy
 
 ---
