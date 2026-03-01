@@ -24,6 +24,9 @@ gem "sidekiq", "~> 7.2.0"
 # Storage — Cloudflare R2 is S3-compatible
 gem "aws-sdk-s3", "~> 1.148"
 
+# Image processing
+gem "ruby-vips", "~> 2.2"
+
 # RSS / XML
 gem "builder"
 

@@ -19,4 +19,8 @@ class StorageService
 
   def public_url(key) = "#{@public_base}/#{key}"
   def delete(key)     = @client.delete_object(bucket: @bucket, key: key)
+
+  def upload_data(key:, data:, content_type:)
+    @client.put_object(bucket: @bucket, key: key, body: data, content_type: content_type)
+  end
 end

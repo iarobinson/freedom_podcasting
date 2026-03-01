@@ -21,8 +21,21 @@ module Api::V1
 
     def complete
       mf = current_organization.media_files.find(params.require(:media_file_id))
-      mf.update!(processing_status: "processing", file_size: params[:file_size], episode_id: params[:episode_id])
-      ProcessAudioJob.perform_later(mf.id) if mf.audio?
+
+      podcast_id = if mf.image?
+        current_organization.podcasts.find_by(slug: params[:podcast_slug])&.id
+      end
+
+      mf.update!(
+        processing_status: "processing",
+        file_size:  params[:file_size],
+        episode_id: params[:episode_id],
+        podcast_id: podcast_id
+      )
+
+      ProcessAudioJob.perform_later(mf.id)   if mf.audio?
+      ProcessArtworkJob.perform_later(mf.id) if mf.image?
+
       render json: { data: { media_file_id: mf.id, public_url: mf.public_url, processing_status: mf.processing_status } }
     end
   end

@@ -6,6 +6,7 @@ RUN apt-get update -qq && \
       build-essential \
       libpq-dev \
       curl \
+      libvips-dev \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /rails
