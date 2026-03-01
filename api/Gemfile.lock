@@ -80,6 +80,8 @@ GEM
       mutex_m
       securerandom (>= 0.3)
       tzinfo (~> 2.0)
+    addressable (2.8.9)
+      public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.3)
     aws-eventstream (1.4.0)
     aws-partitions (1.1220.0)
@@ -108,6 +110,8 @@ GEM
       msgpack (~> 1.2)
     builder (3.3.0)
     cgi (0.5.1)
+    childprocess (5.1.0)
+      logger (~> 1.5)
     concurrent-ruby (1.3.6)
     connection_pool (2.5.5)
     crass (1.0.6)
@@ -177,6 +181,12 @@ GEM
     jwt (3.1.2)
       base64
     language_server-protocol (3.17.0.5)
+    launchy (3.1.1)
+      addressable (~> 2.8)
+      childprocess (~> 5.0)
+      logger (~> 1.6)
+    letter_opener (1.10.0)
+      launchy (>= 2.2, < 4)
     lint_roller (1.1.0)
     listen (3.10.0)
       logger
@@ -233,6 +243,7 @@ GEM
     psych (5.3.1)
       date
       stringio
+    public_suffix (7.0.2)
     puma (6.6.1)
       nio4r (~> 2.0)
     pundit (2.5.2)
@@ -393,6 +404,7 @@ DEPENDENCIES
   faraday
   faraday-retry
   jsonapi-serializer
+  letter_opener
   listen
   pagy
   pg (~> 1.5)

@@ -11,6 +11,6 @@ Rails.application.configure do
   config.active_record.verbose_query_logs = true
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.perform_caching = false
-  config.action_mailer.delivery_method = :test
+  config.action_mailer.delivery_method = :letter_opener
   config.action_mailer.default_url_options = { host: ENV.fetch("FRONTEND_URL", "http://localhost:3001") }
 end
