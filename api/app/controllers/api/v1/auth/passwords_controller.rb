@@ -18,7 +18,7 @@ module Api
         def update
           user = User.with_reset_password_token(params[:reset_password_token].to_s)
 
-          if user.nil?
+          if user.nil? || !user.reset_password_period_valid?
             render json: { error: "Invalid or expired reset token." }, status: :unprocessable_entity
             return
           end
