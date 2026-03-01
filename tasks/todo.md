@@ -106,8 +106,8 @@ Goal: A working podcast host where you can upload an episode and get a valid RSS
 - [x] 1.16 Episode management: create, edit, audio upload (direct to R2)
 - [x] 1.17 Audio upload with progress bar
 - [x] 1.18 RSS feed URL display + copy button
-- [ ] 1.19 Public podcast page: `/{slug}` with episode list + player
-- [ ] 1.20 Embedded audio player component
+- [x] 1.19 Public podcast page: `/{slug}` with episode list + player
+- [x] 1.20 Embedded audio player component
 
 ### Infrastructure
 - [x] 1.21 Dockerfile for Rails API

@@ -1,5 +1,6 @@
 import { Mic2, Rss, ExternalLink, Clock } from "lucide-react";
 import type { Metadata } from "next";
+import { AudioPlayer } from "@/components/ui/AudioPlayer";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -115,9 +116,11 @@ export default async function PublicPodcastPage({ params }: { params: { slug: st
                   {ep.summary && <p className="text-xs text-ink-500 mb-3 line-clamp-2">{ep.summary}</p>}
 
                   {ep.audio_url && (
-                    <audio controls className="w-full h-8" style={{ accentColor: "#ec4899" }}>
-                      <source src={ep.audio_url} type={ep.audio_content_type ?? "audio/mpeg"} />
-                    </audio>
+                    <AudioPlayer
+                      src={ep.audio_url}
+                      type={ep.audio_content_type ?? "audio/mpeg"}
+                      durationSecs={ep.audio_duration_seconds}
+                    />
                   )}
                 </div>
               ))}
