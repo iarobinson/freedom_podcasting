@@ -18,7 +18,8 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (r) => r,
   (error: AxiosError) => {
-    if (error.response?.status === 401 && typeof window !== "undefined") {
+    const isAuthRoute = error.config?.url?.includes("/auth/login") || error.config?.url?.includes("/auth/register");
+    if (error.response?.status === 401 && !isAuthRoute && typeof window !== "undefined") {
       localStorage.removeItem("fp_token");
       window.location.href = "/auth/login";
     }

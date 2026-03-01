@@ -100,7 +100,7 @@ Goal: A working podcast host where you can upload an episode and get a valid RSS
 
 ### Frontend (Next.js)
 - [x] 1.12 Next.js 14 app with TypeScript, Tailwind CSS
-- [ ] 1.13 Auth pages: login, register, forgot password
+- [x] 1.13 Auth pages: login, register, forgot password
 - [x] 1.14 Dashboard layout (sidebar nav, org switcher)
 - [ ] 1.15 Podcast management: create, edit, artwork upload
 - [ ] 1.16 Episode management: create, edit, audio upload (direct to R2)
