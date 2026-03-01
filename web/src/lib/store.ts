@@ -37,10 +37,9 @@ export const useAuthStore = create<AuthState>()(
       fetchMe: async () => {
         const res = await authApi.me();
         const user: User = res.data.data;
-        set({ user });
-        if (!get().currentOrg && user.organizations.length > 0) {
-          set({ currentOrg: user.organizations[0] });
-        }
+        const persisted = get().currentOrg;
+        const orgIsValid = persisted && user.organizations.some(o => o.slug === persisted.slug);
+        set({ user, currentOrg: orgIsValid ? persisted : (user.organizations[0] ?? null) });
       },
 
       setCurrentOrg: (org) => set({ currentOrg: org }),
