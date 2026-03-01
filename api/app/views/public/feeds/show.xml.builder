@@ -3,7 +3,8 @@ xml.rss version: "2.0",
   "xmlns:itunes"  => "http://www.itunes.com/dtds/podcast-1.0.dtd",
   "xmlns:atom"    => "http://www.w3.org/2005/Atom",
   "xmlns:content" => "http://purl.org/rss/1.0/modules/content/",
-  "xmlns:media"   => "http://www.rssboard.org/media-rss" do
+  "xmlns:media"   => "http://www.rssboard.org/media-rss",
+  "xmlns:podcast" => "https://podcastindex.org/namespace/1.0" do
 
   xml.channel do
     feed_url = "#{request.protocol}#{request.host_with_port}/feeds/#{podcast.slug}"
@@ -40,6 +41,8 @@ xml.rss version: "2.0",
       xml.tag! "itunes:email", podcast.email
     end
 
+    xml.tag! "podcast:locked", "no"
+
     episodes.each do |episode|
       xml.item do
         xml.title       episode.title
@@ -67,9 +70,7 @@ xml.rss version: "2.0",
           )
         end
 
-        if episode.summary.present?
-          xml.tag!("content:encoded") { xml.cdata! episode.description }
-        end
+        xml.tag!("content:encoded") { xml.cdata! episode.description }
       end
     end
   end

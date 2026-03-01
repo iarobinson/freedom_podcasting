@@ -39,6 +39,10 @@ export default function PodcastDetailPage() {
       qc.invalidateQueries({ queryKey: ["podcasts", currentOrg?.slug] });
       toast.success(podcast?.published ? "Podcast unpublished" : "Podcast is now live!");
     },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      toast.error("Cannot publish", msg ?? "Something went wrong.");
+    },
   });
 
   const toggleEpisodePublish = useMutation({
@@ -86,9 +90,13 @@ export default function PodcastDetailPage() {
         {podcast.artwork_url ? (
           <img src={podcast.artwork_url} alt={podcast.title} className="h-20 w-20 rounded-xl object-cover shrink-0" />
         ) : (
-          <div className="h-20 w-20 rounded-xl bg-brand-500/15 flex items-center justify-center shrink-0">
-            <Mic2 className="h-10 w-10 text-brand-400" />
-          </div>
+          <button
+            onClick={() => router.push(`/dashboard/podcasts/${slug}/edit`)}
+            title="Add artwork"
+            className="h-20 w-20 rounded-xl bg-white/5 border-2 border-dashed border-white/15 hover:border-amber-500/40 hover:bg-amber-500/5 flex flex-col items-center justify-center gap-1 shrink-0 transition-colors group">
+            <Mic2 className="h-7 w-7 text-ink-600 group-hover:text-amber-500/70 transition-colors" />
+            <span className="text-[9px] text-ink-700 group-hover:text-amber-500/70 transition-colors leading-none">Add art</span>
+          </button>
         )}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">

@@ -21,6 +21,9 @@ module Api::V1
 
     def publish
       require_editor!
+      if @podcast.artwork_url.blank?
+        return render json: { error: "Artwork is required to publish. Add cover art in Edit." }, status: :unprocessable_entity
+      end
       @podcast.update!(published: true, published_at: @podcast.published_at || Time.current)
       render json: { data: podcast_json(@podcast) }
     end
