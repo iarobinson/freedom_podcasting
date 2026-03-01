@@ -27,6 +27,9 @@ gem "aws-sdk-s3", "~> 1.148"
 # Image processing
 gem "ruby-vips", "~> 2.2"
 
+# Audio processing
+gem "streamio-ffmpeg", "~> 3.0"
+
 # RSS / XML
 gem "builder"
 

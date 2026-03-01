@@ -7,6 +7,7 @@ RUN apt-get update -qq && \
       libpq-dev \
       curl \
       libvips-dev \
+      ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /rails

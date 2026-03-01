@@ -6,10 +6,14 @@ class ProcessAudioJob < ApplicationJob
     media_file = MediaFile.find(media_file_id)
     return if media_file.processing_status == "ready"
 
-    # Check if ffmpeg is available (not installed in dev Docker image)
+    # Check if ffmpeg is available
     unless system("which ffmpeg > /dev/null 2>&1")
       Rails.logger.info "ffmpeg not available — marking media file ready without metadata"
       media_file.update!(processing_status: "ready")
+      # Still sync the known file size to the episode so the RSS enclosure length is correct
+      if media_file.file_size.to_i > 0
+        media_file.episode&.update!(audio_file_size: media_file.file_size)
+      end
       return
     end
 
