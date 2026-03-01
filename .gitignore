@@ -62,7 +62,6 @@ web/.next/
 
 # Web deployment
 web/node_modules/
-web/fly.toml
 web/.env.local
 
 # Claude Code
