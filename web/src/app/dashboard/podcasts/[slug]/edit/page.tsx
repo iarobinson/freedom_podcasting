@@ -8,6 +8,7 @@ import { podcastsApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
+import { ArtworkUploader } from "@/components/upload/ArtworkUploader";
 import { toast } from "@/lib/toast";
 import type { Podcast } from "@/types";
 
@@ -33,6 +34,7 @@ export default function EditPodcastPage() {
       language: podcast.language, category: podcast.category ?? "",
       explicit: podcast.explicit, podcast_type: podcast.podcast_type,
       website_url: podcast.website_url ?? "",
+      artwork_url: podcast.artwork_url ?? "",
     });
   }, [podcast]);
 
@@ -60,6 +62,17 @@ export default function EditPodcastPage() {
       <p className="text-sm text-ink-500 mb-8">{podcast.title}</p>
 
       <form onSubmit={(e) => { e.preventDefault(); update.mutate(); }} className="space-y-6">
+        <div className="glass rounded-2xl p-6 space-y-4">
+          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Artwork</h2>
+          <ArtworkUploader
+            orgSlug={currentOrg!.slug}
+            podcastSlug={slug}
+            currentUrl={form.artwork_url as string | null}
+            onUploadComplete={(url) => setForm((f) => ({ ...f, artwork_url: url }))}
+            onError={(msg) => toast.error(msg)}
+          />
+        </div>
+
         <div className="glass rounded-2xl p-6 space-y-4">
           <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Basic Info</h2>
           <Input label="Title *" value={form.title as string ?? ""} onChange={set("title")} required />

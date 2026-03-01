@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Mic2 } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
-import { episodesApi, uploadsApi } from "@/lib/api";
+import { episodesApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
