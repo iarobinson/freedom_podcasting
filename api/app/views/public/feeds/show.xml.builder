@@ -23,13 +23,14 @@ xml.rss version: "2.0",
     xml.tag! "itunes:explicit", podcast.explicit ? "true" : "false"
     xml.tag! "itunes:type",     podcast.podcast_type
 
-    if podcast.artwork_url.present?
+    artwork_url = podcast.artwork_url.presence || ENV["PLATFORM_DEFAULT_ARTWORK_URL"]
+    if artwork_url.present?
       xml.image do
-        xml.url   podcast.artwork_url
+        xml.url   artwork_url
         xml.title podcast.title
         xml.link  podcast.website_url.presence || feed_url
       end
-      xml.tag! "itunes:image", href: podcast.artwork_url
+      xml.tag! "itunes:image", href: artwork_url
     end
 
     if podcast.category.present?
