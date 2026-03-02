@@ -7,7 +7,7 @@ import { useRole } from "@/lib/useRole";
 import { membersApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import { toast } from "@/components/ui/Toaster";
+import { toast } from "@/lib/toast";
 import type { Member, Role } from "@/types";
 
 const ROLE_OPTIONS: { value: Exclude<Role, "owner">; label: string }[] = [

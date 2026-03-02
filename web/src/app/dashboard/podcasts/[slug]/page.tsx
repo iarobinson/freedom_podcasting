@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2 } from "lucide-react";
+import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { podcastsApi, episodesApi } from "@/lib/api";
@@ -12,13 +12,22 @@ import { Badge } from "@/components/ui/Badge";
 import { toast } from "@/lib/toast";
 import type { Podcast, Episode } from "@/types";
 
+function episodeBadgeVariant(status: Episode["status"]) {
+  if (status === "published") return "success" as const;
+  if (status === "review")    return "warning" as const;
+  if (status === "approved")  return "info" as const;
+  return "default" as const;
+}
+
 export default function PodcastDetailPage() {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
   const qc = useQueryClient();
   const { currentOrg } = useAuthStore();
-  const { canEdit } = useRole();
+  const { canEdit, canManage } = useRole();
   const [copied, setCopied] = useState(false);
+  const [rejectingEpisodeId, setRejectingEpisodeId] = useState<number | null>(null);
+  const [rejectNotes, setRejectNotes] = useState("");
 
   const { data: podcast, isLoading } = useQuery<Podcast>({
     queryKey: ["podcast", currentOrg?.slug, slug],
@@ -31,6 +40,8 @@ export default function PodcastDetailPage() {
     queryFn:  () => episodesApi.list(currentOrg!.slug, slug).then((r) => r.data),
     enabled:  !!currentOrg,
   });
+
+  const invalidateEpisodes = () => qc.invalidateQueries({ queryKey: ["episodes", currentOrg?.slug, slug] });
 
   const togglePodcastPublish = useMutation({
     mutationFn: () => podcast?.published
@@ -47,26 +58,56 @@ export default function PodcastDetailPage() {
     },
   });
 
-  const toggleEpisodePublish = useMutation({
-    mutationFn: (ep: Episode) => ep.status === "published"
-      ? episodesApi.unpublish(currentOrg!.slug, slug, ep.id)
-      : episodesApi.publish(currentOrg!.slug, slug, ep.id),
-    onSuccess: (_, ep) => {
-      qc.invalidateQueries({ queryKey: ["episodes", currentOrg?.slug, slug] });
-      toast.success(ep.status === "published" ? "Episode unpublished" : "Episode is now live!");
-    },
+  const publishEpisode = useMutation({
+    mutationFn: (ep: Episode) => episodesApi.publish(currentOrg!.slug, slug, ep.id),
+    onSuccess: () => { invalidateEpisodes(); toast.success("Episode is now live!"); },
     onError: (err: unknown) => {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
       toast.error("Could not publish episode", msg ?? "Make sure audio is uploaded first.");
     },
   });
 
+  const unpublishEpisode = useMutation({
+    mutationFn: (ep: Episode) => episodesApi.unpublish(currentOrg!.slug, slug, ep.id),
+    onSuccess: () => { invalidateEpisodes(); toast.success("Episode unpublished"); },
+  });
+
+  const submitForReview = useMutation({
+    mutationFn: (ep: Episode) => episodesApi.submitForReview(currentOrg!.slug, slug, ep.id),
+    onSuccess: () => { invalidateEpisodes(); toast.success("Submitted for review"); },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      toast.error("Could not submit for review", msg ?? "Something went wrong.");
+    },
+  });
+
+  const approveEpisode = useMutation({
+    mutationFn: (ep: Episode) => episodesApi.approve(currentOrg!.slug, slug, ep.id),
+    onSuccess: () => { invalidateEpisodes(); toast.success("Episode approved"); },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      toast.error("Could not approve", msg ?? "Something went wrong.");
+    },
+  });
+
+  const rejectEpisode = useMutation({
+    mutationFn: ({ ep, notes }: { ep: Episode; notes: string }) =>
+      episodesApi.reject(currentOrg!.slug, slug, ep.id, notes),
+    onSuccess: () => {
+      invalidateEpisodes();
+      setRejectingEpisodeId(null);
+      setRejectNotes("");
+      toast.success("Changes requested");
+    },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      toast.error("Could not request changes", msg ?? "Something went wrong.");
+    },
+  });
+
   const deleteEpisode = useMutation({
     mutationFn: (id: number) => episodesApi.delete(currentOrg!.slug, slug, id),
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: ["episodes", currentOrg?.slug, slug] });
-      toast.success("Episode deleted");
-    },
+    onSuccess: () => { invalidateEpisodes(); toast.success("Episode deleted"); },
   });
 
   const copyRss = async () => {
@@ -111,16 +152,12 @@ export default function PodcastDetailPage() {
             <button onClick={copyRss} className="text-ink-600 hover:text-brand-400 transition-colors p-1">
               {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
             </button>
-            <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer"
-              className="text-ink-600 hover:text-brand-400 transition-colors p-1">
             {podcast.published && (
               <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="text-ink-700 hover:text-accent transition-colors">
+                className="text-ink-700 hover:text-accent transition-colors p-1">
                 <Rss className="h-3.5 w-3.5" />
               </a>
             )}
-            </a>
           </div>
         </div>
         {canEdit && (
@@ -167,53 +204,129 @@ export default function PodcastDetailPage() {
         ) : (
           <div className="space-y-2">
             {episodes.map((ep) => (
-              <div key={ep.id} className="glass glass-hover rounded-xl px-4 py-3.5 flex items-center gap-3 group">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-                    <span className="text-[11px] font-mono text-ink-600">
-                      {ep.season_number ? `S${ep.season_number}·` : ""}E{ep.episode_number ?? "—"}
-                    </span>
-                    <p className="text-sm font-medium text-ink-200 truncate">{ep.title}</p>
-                    <Badge variant={ep.status === "published" ? "success" : ep.status === "scheduled" ? "warning" : "default"}>
-                      {ep.status}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-ink-600">
-                    {ep.formatted_duration && (
-                      <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{ep.formatted_duration}</span>
+              <div key={ep.id}>
+                <div className="glass glass-hover rounded-xl px-4 py-3.5 flex items-center gap-3 group">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                      <span className="text-[11px] font-mono text-ink-600">
+                        {ep.season_number ? `S${ep.season_number}·` : ""}E{ep.episode_number ?? "—"}
+                      </span>
+                      <p className="text-sm font-medium text-ink-200 truncate">{ep.title}</p>
+                      <Badge variant={episodeBadgeVariant(ep.status)}>
+                        {ep.status === "review" ? "In Review" : ep.status}
+                      </Badge>
+                    </div>
+                    {/* Feedback note from reviewer */}
+                    {ep.status === "draft" && ep.review_notes && (
+                      <div className="flex items-start gap-1.5 mt-1 mb-0.5">
+                        <MessageSquare className="h-3 w-3 text-amber-500 shrink-0 mt-0.5" />
+                        <p className="text-[11px] text-amber-500/80 leading-snug">{ep.review_notes}</p>
+                      </div>
                     )}
-                    {ep.published_at && <span>{new Date(ep.published_at).toLocaleDateString()}</span>}
-                    {!ep.audio_url && <span className="text-amber-500">⚠ No audio</span>}
+                    <div className="flex items-center gap-3 text-xs text-ink-600">
+                      {ep.formatted_duration && (
+                        <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{ep.formatted_duration}</span>
+                      )}
+                      {ep.published_at && <span>{new Date(ep.published_at).toLocaleDateString()}</span>}
+                      {!ep.audio_url && <span className="text-amber-500">⚠ No audio</span>}
+                    </div>
                   </div>
+
+                  {/* Actions — context-sensitive by status + role */}
+                  {canEdit && (
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {ep.status === "draft" && (
+                        <>
+                          <button
+                            onClick={() => submitForReview.mutate(ep)}
+                            disabled={submitForReview.isPending}
+                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors">
+                            Submit for Review
+                          </button>
+                          <button
+                            onClick={() => publishEpisode.mutate(ep)}
+                            disabled={publishEpisode.isPending}
+                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-brand-500/15 text-brand-400 hover:bg-brand-500/25 transition-colors">
+                            Publish
+                          </button>
+                        </>
+                      )}
+
+                      {ep.status === "review" && canManage && (
+                        <>
+                          <button
+                            onClick={() => approveEpisode.mutate(ep)}
+                            disabled={approveEpisode.isPending}
+                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-colors">
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => { setRejectingEpisodeId(ep.id); setRejectNotes(""); }}
+                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors">
+                            Request Changes
+                          </button>
+                        </>
+                      )}
+
+                      {ep.status === "approved" && (
+                        <button
+                          onClick={() => publishEpisode.mutate(ep)}
+                          disabled={publishEpisode.isPending}
+                          className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">
+                          Publish
+                        </button>
+                      )}
+
+                      {ep.status === "published" && (
+                        <button
+                          onClick={() => unpublishEpisode.mutate(ep)}
+                          disabled={unpublishEpisode.isPending}
+                          className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
+                          Unpublish
+                        </button>
+                      )}
+
+                      {/* Edit */}
+                      <Link href={`/dashboard/podcasts/${slug}/episodes/${ep.id}/edit`}
+                        className="p-1.5 text-ink-600 hover:text-ink-300 hover:bg-white/5 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                        <Pencil className="h-3.5 w-3.5" />
+                      </Link>
+
+                      {/* Delete */}
+                      <button
+                        onClick={() => { if (confirm("Delete this episode?")) deleteEpisode.mutate(ep.id); }}
+                        className="p-1.5 text-ink-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+                  )}
                 </div>
 
-                {/* Actions */}
-                {canEdit && (
-                  <div className="flex items-center gap-1.5 shrink-0">
-                    {/* Publish/unpublish toggle */}
-                    <button
-                      onClick={() => toggleEpisodePublish.mutate(ep)}
-                      disabled={toggleEpisodePublish.isPending}
-                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
-                        ep.status === "published"
-                          ? "bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400"
-                          : "bg-brand-500/15 text-brand-400 hover:bg-brand-500/25"
-                      }`}>
-                      {ep.status === "published" ? "Unpublish" : "Publish"}
-                    </button>
-
-                    {/* Edit */}
-                    <Link href={`/dashboard/podcasts/${slug}/episodes/${ep.id}/edit`}
-                      className="p-1.5 text-ink-600 hover:text-ink-300 hover:bg-white/5 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
-                      <Pencil className="h-3.5 w-3.5" />
-                    </Link>
-
-                    {/* Delete */}
-                    <button
-                      onClick={() => { if (confirm("Delete this episode?")) deleteEpisode.mutate(ep.id); }}
-                      className="p-1.5 text-ink-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </button>
+                {/* Inline rejection form */}
+                {rejectingEpisodeId === ep.id && (
+                  <div className="glass rounded-xl px-4 py-3 mt-1 ml-4 border border-amber-500/20">
+                    <p className="text-[11px] text-ink-500 uppercase tracking-widest mb-2">Feedback for the producer</p>
+                    <textarea
+                      value={rejectNotes}
+                      onChange={(e) => setRejectNotes(e.target.value)}
+                      placeholder="Describe what needs to change..."
+                      className="w-full bg-ink-900 border border-ink-700 rounded-lg px-3 py-2 text-sm text-ink-200 placeholder:text-ink-600 focus:outline-none focus:border-accent resize-none"
+                      rows={3}
+                      autoFocus
+                    />
+                    <div className="flex items-center gap-2 mt-2">
+                      <Button
+                        size="sm"
+                        loading={rejectEpisode.isPending}
+                        onClick={() => rejectEpisode.mutate({ ep, notes: rejectNotes })}>
+                        Send Feedback
+                      </Button>
+                      <button
+                        onClick={() => { setRejectingEpisodeId(null); setRejectNotes(""); }}
+                        className="text-xs text-ink-600 hover:text-ink-400 transition-colors">
+                        Cancel
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>

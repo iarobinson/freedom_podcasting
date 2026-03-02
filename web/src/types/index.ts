@@ -41,7 +41,7 @@ export interface Podcast {
   updated_at: string;
 }
 
-export type EpisodeStatus = "draft" | "scheduled" | "published";
+export type EpisodeStatus = "draft" | "review" | "approved" | "scheduled" | "published";
 export type EpisodeType   = "full" | "trailer" | "bonus";
 
 export interface Episode {
@@ -62,6 +62,8 @@ export interface Episode {
   keywords?: string;
   status: EpisodeStatus;
   published_at?: string;
+  review_notes?: string;
+  reviewed_at?: string;
   guid: string;
   download_count: number;
   created_at: string;
