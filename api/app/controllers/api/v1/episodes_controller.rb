@@ -3,7 +3,7 @@ module Api::V1
     before_action :current_organization
     before_action :require_organization_membership!
     before_action :set_podcast
-    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish]
+    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject]
 
     def index
       episodes = @podcast.episodes.order(created_at: :desc)
@@ -37,6 +37,27 @@ module Api::V1
       render json: { data: episode_json(@episode) }
     end
 
+    def submit_for_review
+      require_editor!
+      return render(json: { error: "Only draft episodes can be submitted for review." }, status: :unprocessable_entity) unless @episode.status == "draft"
+      @episode.update!(status: "review", review_notes: nil)
+      render json: { data: episode_json(@episode) }
+    end
+
+    def approve
+      require_manager!
+      return render(json: { error: "Only episodes in review can be approved." }, status: :unprocessable_entity) unless @episode.in_review?
+      @episode.update!(status: "approved", reviewed_by: current_user, reviewed_at: Time.current, review_notes: nil)
+      render json: { data: episode_json(@episode) }
+    end
+
+    def reject
+      require_manager!
+      return render(json: { error: "Only episodes in review can be rejected." }, status: :unprocessable_entity) unless @episode.in_review?
+      @episode.update!(status: "draft", review_notes: params[:notes], reviewed_by: current_user, reviewed_at: Time.current)
+      render json: { data: episode_json(@episode) }
+    end
+
     private
 
     def set_podcast = (@podcast = current_organization.podcasts.find_by!(slug: params[:podcast_slug]))
@@ -55,6 +76,7 @@ module Api::V1
         audio_content_type: e.audio_content_type, episode_type: e.episode_type,
         episode_number: e.episode_number, season_number: e.season_number, explicit: e.explicit,
         keywords: e.keywords, status: e.status, published_at: e.published_at,
+        review_notes: e.review_notes, reviewed_at: e.reviewed_at,
         guid: e.guid, download_count: e.download_count, created_at: e.created_at, updated_at: e.updated_at }
     end
   end

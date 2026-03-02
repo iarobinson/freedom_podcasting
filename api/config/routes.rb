@@ -39,6 +39,9 @@ Rails.application.routes.draw do
             member do
               post :publish
               post :unpublish
+              post :submit_for_review
+              post :approve
+              post :reject
             end
           end
 

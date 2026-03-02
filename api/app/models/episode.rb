@@ -1,9 +1,10 @@
 class Episode < ApplicationRecord
   belongs_to :podcast
+  belongs_to :reviewed_by, class_name: "User", optional: true
   has_many :media_files, dependent: :nullify
 
   EPISODE_TYPES = %w[full trailer bonus].freeze
-  STATUSES      = %w[draft scheduled published].freeze
+  STATUSES      = %w[draft review approved scheduled published].freeze
 
   validates :title,        presence: true
   validates :description,  presence: true
@@ -15,11 +16,15 @@ class Episode < ApplicationRecord
   before_validation :assign_guid
   before_create     :set_episode_number
 
-  scope :published, -> { where(status: "published").where("published_at <= ?", Time.current) }
-  scope :draft,     -> { where(status: "draft") }
-  scope :by_date,   -> { order(published_at: :desc) }
+  scope :published,  -> { where(status: "published").where("published_at <= ?", Time.current) }
+  scope :draft,      -> { where(status: "draft") }
+  scope :in_review,  -> { where(status: "review") }
+  scope :approved,   -> { where(status: "approved") }
+  scope :by_date,    -> { order(published_at: :desc) }
 
   def published? = status == "published"
+  def in_review? = status == "review"
+  def approved?  = status == "approved"
 
   def formatted_duration
     return nil unless audio_duration_seconds

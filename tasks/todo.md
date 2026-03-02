@@ -121,8 +121,8 @@ Goal: A working podcast host where you can upload an episode and get a valid RSS
 ## Phase 2 — Client Platform [ ]
 Goal: Paying clients can log in, manage their show, and collaborate with your team.
 
-- [ ] 2.1 Invitation system (invite clients to their org)
-- [ ] 2.2 Role-based access control (Pundit policies)
+- [x] 2.1 Invitation system (invite clients to their org)
+- [x] 2.2 Role-based access control (useRole hook + backend require_manager!/require_editor! helpers)
 - [ ] 2.3 Episode workflow: draft → review → approved → published
 - [ ] 2.4 Comments/feedback on episodes (for producer ↔ client communication)
 - [ ] 2.5 Analytics: download counts, geographic distribution
