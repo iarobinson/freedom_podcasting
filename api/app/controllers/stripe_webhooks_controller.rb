@@ -1,4 +1,6 @@
 class StripeWebhooksController < ActionController::Base
+  protect_from_forgery with: :null_session
+
   PRICE_TO_PLAN = {
     ENV["STRIPE_STARTER_PRICE_ID"] => "starter",
     ENV["STRIPE_PRO_PRICE_ID"]     => "pro",
