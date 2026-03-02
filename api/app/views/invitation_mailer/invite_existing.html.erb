@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #0a0a0a; color: #d4d4d4; margin: 0; padding: 0; }
+    .container { max-width: 560px; margin: 40px auto; padding: 0 20px; }
+    .header { border-bottom: 1px solid #262626; padding-bottom: 24px; margin-bottom: 32px; }
+    .logo-mark { display: inline-block; width: 36px; height: 36px; border: 1px solid #bc423a; text-align: center; line-height: 36px; font-size: 14px; color: #bc423a; font-weight: bold; margin-bottom: 8px; }
+    .brand { font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.3em; color: #bc423a; }
+    h1 { font-size: 20px; font-weight: bold; color: #f5f5f5; margin: 24px 0 8px; }
+    p { font-size: 14px; line-height: 1.6; color: #a3a3a3; margin: 0 0 16px; }
+    .btn { display: inline-block; background: #bc423a; color: #fff; text-decoration: none; padding: 12px 28px; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.15em; margin: 8px 0 24px; }
+    .org-badge { display: inline-block; background: #1a1a1a; border: 1px solid #262626; padding: 8px 16px; font-size: 13px; color: #f5f5f5; margin-bottom: 24px; }
+    .footer { border-top: 1px solid #262626; padding-top: 20px; font-size: 11px; color: #525252; }
+    .footer a { color: #737373; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo-mark">&#9673;</div>
+      <div class="brand">Freedom Podcasting</div>
+    </div>
+
+    <h1>You've been invited</h1>
+    <p><strong style="color: #f5f5f5;"><%= @inviter.full_name %></strong> has invited you to join their podcast workspace.</p>
+
+    <div class="org-badge"><%= @org.name %></div>
+
+    <p>Your role: <strong style="color: #f5f5f5; text-transform: capitalize;"><%= @membership.role %></strong></p>
+
+    <p>Click the button below to accept this invitation and access the workspace.</p>
+
+    <a href="<%= @accept_url %>" class="btn">Accept Invitation</a>
+
+    <p style="font-size: 12px; color: #525252;">This invitation expires in 7 days. If you didn't expect this email, you can safely ignore it.</p>
+
+    <p style="font-size: 12px; color: #525252;">Or copy this link:<br><a href="<%= @accept_url %>" style="color: #737373; word-break: break-all;"><%= @accept_url %></a></p>
+
+    <div class="footer">
+      &copy; <%= Time.current.year %> Freedom Podcasting &mdash; <a href="https://freedompodcasting.com">freedompodcasting.com</a>
+    </div>
+  </div>
+</body>
+</html>

@@ -7,6 +7,8 @@ module Api::V1::Auth
     def respond_with(resource, _opts = {})
       if resource.persisted?
         org = create_personal_org(resource)
+        # Auto-accept invitation if a token was passed during registration
+        accept_invitation(resource, params.dig(:user, :invitation_token))
         render json: { message: "Account created.", data: {
           id: resource.id, email: resource.email,
           first_name: resource.first_name, last_name: resource.last_name,
@@ -19,7 +21,7 @@ module Api::V1::Auth
     end
 
     def sign_up_params
-      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name)
+      params.require(:user).permit(:email, :password, :password_confirmation, :first_name, :last_name, :invitation_token)
     end
 
     def create_personal_org(user)
@@ -29,6 +31,16 @@ module Api::V1::Auth
       org = Organization.create!(name: "#{user.first_name}'s Podcasts", slug: slug, plan: "free")
       Membership.create!(user: user, organization: org, role: "owner", accepted_at: Time.current)
       org
+    end
+
+    def accept_invitation(user, token)
+      return if token.blank?
+      payload = JWT.decode(token, Rails.application.secret_key_base, true, algorithms: ["HS256"]).first
+      org = Organization.find(payload["org_id"])
+      m   = org.memberships.find_or_initialize_by(user: user)
+      m.update!(role: payload["role"], accepted_at: Time.current, invitation_token: nil)
+    rescue JWT::DecodeError, JWT::ExpiredSignature, ActiveRecord::RecordNotFound, ActiveRecord::RecordInvalid
+      # Silently ignore — user still gets their personal org
     end
   end
 end

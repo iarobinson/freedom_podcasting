@@ -23,9 +23,10 @@ Rails.application.routes.draw do
 
       resources :organizations, param: :slug do
         member do
-          get  :members
-          post :invite
-          delete "members/:user_id", to: "organizations#remove_member"
+          get    :members
+          post   :invite
+          delete "members/:user_id",      to: "organizations#remove_member"
+          patch  "members/:user_id/role", to: "organizations#update_member_role"
         end
 
         resources :podcasts, param: :slug do
@@ -48,6 +49,10 @@ Rails.application.routes.draw do
             end
           end
         end
+      end
+
+      resources :invitations, only: [] do
+        collection { post :accept }
       end
 
       resources :memberships, only: [:index, :destroy]
