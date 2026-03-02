@@ -30,7 +30,7 @@ apiClient.interceptors.response.use(
 export const authApi = {
   login:    (email: string, password: string) =>
     apiClient.post("/api/v1/auth/login", { user: { email, password } }),
-  register: (data: { email: string; password: string; password_confirmation: string; first_name: string; last_name: string }) =>
+  register: (data: { email: string; password: string; password_confirmation: string; first_name: string; last_name: string; invitation_token?: string }) =>
     apiClient.post("/api/v1/auth/register", { user: data }),
   logout: () => apiClient.delete("/api/v1/auth/logout"),
   me:     () => apiClient.get("/api/v1/auth/me"),
@@ -58,6 +58,19 @@ export const episodesApi = {
   delete:    (orgSlug: string, podcastSlug: string, id: number) => apiClient.delete(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}`),
   publish:   (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/publish`),
   unpublish: (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/unpublish`),
+};
+
+export const membersApi = {
+  list:       (orgSlug: string) =>
+                apiClient.get(`/api/v1/organizations/${orgSlug}/members`),
+  invite:     (orgSlug: string, email: string, role: string) =>
+                apiClient.post(`/api/v1/organizations/${orgSlug}/invite`, { email, role }),
+  remove:     (orgSlug: string, userId: number) =>
+                apiClient.delete(`/api/v1/organizations/${orgSlug}/members/${userId}`),
+  updateRole: (orgSlug: string, userId: number, role: string) =>
+                apiClient.patch(`/api/v1/organizations/${orgSlug}/members/${userId}/role`, { role }),
+  accept:     (token: string) =>
+                apiClient.post(`/api/v1/invitations/accept`, { token }),
 };
 
 export const uploadsApi = {

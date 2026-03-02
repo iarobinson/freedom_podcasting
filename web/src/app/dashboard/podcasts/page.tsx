@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Plus, Mic2, ArrowRight, Rss, Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { useAuthStore } from "@/lib/store";
+import { useRole } from "@/lib/useRole";
 import { podcastsApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -13,6 +14,7 @@ import type { Podcast } from "@/types";
 export default function PodcastsPage() {
   const router = useRouter();
   const { currentOrg } = useAuthStore();
+  const { canEdit } = useRole();
   const [copiedId, setCopiedId] = useState<number | null>(null);
 
   const { data, isLoading } = useQuery({
@@ -34,9 +36,11 @@ export default function PodcastsPage() {
           <h1 className="font-display text-2xl text-ink-100 mb-1">Podcasts</h1>
           <p className="text-sm text-ink-500">Manage your shows and RSS feeds</p>
         </div>
-        <Button onClick={() => router.push("/dashboard/podcasts/new")}>
-          <Plus className="h-4 w-4" /> New Podcast
-        </Button>
+        {canEdit && (
+          <Button onClick={() => router.push("/dashboard/podcasts/new")}>
+            <Plus className="h-4 w-4" /> New Podcast
+          </Button>
+        )}
       </div>
 
       {isLoading ? (
@@ -48,7 +52,7 @@ export default function PodcastsPage() {
           <Mic2 className="h-10 w-10 text-ink-700 mx-auto mb-4" />
           <h3 className="font-display text-xl text-ink-300 mb-2">No podcasts yet</h3>
           <p className="text-sm text-ink-600 mb-6">Create your first podcast to get started.</p>
-          <Button onClick={() => router.push("/dashboard/podcasts/new")}><Plus className="h-4 w-4" /> Create Podcast</Button>
+          {canEdit && <Button onClick={() => router.push("/dashboard/podcasts/new")}><Plus className="h-4 w-4" /> Create Podcast</Button>}
         </div>
       ) : (
         <div className="space-y-2">

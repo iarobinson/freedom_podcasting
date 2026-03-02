@@ -68,6 +68,15 @@ export interface Episode {
   updated_at: string;
 }
 
+export interface Member {
+  user_id: number;
+  email: string;
+  full_name: string;
+  role: Role;
+  invited_at: string | null;
+  accepted_at: string | null;
+}
+
 export interface PresignedUploadResponse {
   media_file_id: number;
   presigned_url: string;

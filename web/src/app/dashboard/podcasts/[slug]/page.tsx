@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2 } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
+import { useRole } from "@/lib/useRole";
 import { podcastsApi, episodesApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -16,6 +17,7 @@ export default function PodcastDetailPage() {
   const router = useRouter();
   const qc = useQueryClient();
   const { currentOrg } = useAuthStore();
+  const { canEdit } = useRole();
   const [copied, setCopied] = useState(false);
 
   const { data: podcast, isLoading } = useQuery<Podcast>({
@@ -121,20 +123,22 @@ export default function PodcastDetailPage() {
             </a>
           </div>
         </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <Button variant="secondary" size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/edit`)}>
-            <Pencil className="h-3.5 w-3.5" /> Edit
-          </Button>
-          <Button
-            variant={podcast.published ? "secondary" : "primary"}
-            size="sm"
-            loading={togglePodcastPublish.isPending}
-            onClick={() => togglePodcastPublish.mutate()}>
-            {podcast.published
-              ? <><GlobeLock className="h-3.5 w-3.5" /> Unpublish</>
-              : <><Globe className="h-3.5 w-3.5" /> Publish</>}
-          </Button>
-        </div>
+        {canEdit && (
+          <div className="flex items-center gap-2 shrink-0">
+            <Button variant="secondary" size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/edit`)}>
+              <Pencil className="h-3.5 w-3.5" /> Edit
+            </Button>
+            <Button
+              variant={podcast.published ? "secondary" : "primary"}
+              size="sm"
+              loading={togglePodcastPublish.isPending}
+              onClick={() => togglePodcastPublish.mutate()}>
+              {podcast.published
+                ? <><GlobeLock className="h-3.5 w-3.5" /> Unpublish</>
+                : <><Globe className="h-3.5 w-3.5" /> Publish</>}
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Episodes */}
@@ -143,18 +147,22 @@ export default function PodcastDetailPage() {
           <h2 className="font-display text-lg text-ink-200">
             Episodes <span className="text-ink-600 text-base font-sans">({episodes.length})</span>
           </h2>
-          <Button size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/new`)}>
-            <Plus className="h-3.5 w-3.5" /> New Episode
-          </Button>
+          {canEdit && (
+            <Button size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/new`)}>
+              <Plus className="h-3.5 w-3.5" /> New Episode
+            </Button>
+          )}
         </div>
 
         {episodes.length === 0 ? (
           <div className="glass rounded-2xl p-10 text-center">
             <Mic2 className="h-8 w-8 text-ink-700 mx-auto mb-3" />
             <p className="text-ink-400 text-sm mb-4">No episodes yet. Add your first one!</p>
-            <Button size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/new`)}>
-              <Plus className="h-3.5 w-3.5" /> Add Episode
-            </Button>
+            {canEdit && (
+              <Button size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/new`)}>
+                <Plus className="h-3.5 w-3.5" /> Add Episode
+              </Button>
+            )}
           </div>
         ) : (
           <div className="space-y-2">
@@ -180,32 +188,34 @@ export default function PodcastDetailPage() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex items-center gap-1.5 shrink-0">
-                  {/* Publish/unpublish toggle */}
-                  <button
-                    onClick={() => toggleEpisodePublish.mutate(ep)}
-                    disabled={toggleEpisodePublish.isPending}
-                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
-                      ep.status === "published"
-                        ? "bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400"
-                        : "bg-brand-500/15 text-brand-400 hover:bg-brand-500/25"
-                    }`}>
-                    {ep.status === "published" ? "Unpublish" : "Publish"}
-                  </button>
+                {canEdit && (
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {/* Publish/unpublish toggle */}
+                    <button
+                      onClick={() => toggleEpisodePublish.mutate(ep)}
+                      disabled={toggleEpisodePublish.isPending}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                        ep.status === "published"
+                          ? "bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400"
+                          : "bg-brand-500/15 text-brand-400 hover:bg-brand-500/25"
+                      }`}>
+                      {ep.status === "published" ? "Unpublish" : "Publish"}
+                    </button>
 
-                  {/* Edit */}
-                  <Link href={`/dashboard/podcasts/${slug}/episodes/${ep.id}/edit`}
-                    className="p-1.5 text-ink-600 hover:text-ink-300 hover:bg-white/5 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
-                    <Pencil className="h-3.5 w-3.5" />
-                  </Link>
+                    {/* Edit */}
+                    <Link href={`/dashboard/podcasts/${slug}/episodes/${ep.id}/edit`}
+                      className="p-1.5 text-ink-600 hover:text-ink-300 hover:bg-white/5 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Link>
 
-                  {/* Delete */}
-                  <button
-                    onClick={() => { if (confirm("Delete this episode?")) deleteEpisode.mutate(ep.id); }}
-                    className="p-1.5 text-ink-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                </div>
+                    {/* Delete */}
+                    <button
+                      onClick={() => { if (confirm("Delete this episode?")) deleteEpisode.mutate(ep.id); }}
+                      className="p-1.5 text-ink-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
           </div>

@@ -1,23 +1,26 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Radio } from "lucide-react";
+import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Radio, Users } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
+import { useRole } from "@/lib/useRole";
 import { clsx } from "clsx";
-
-const nav = [
-  { href: "/dashboard",          label: "Dashboard", icon: LayoutDashboard },
-  { href: "/dashboard/podcasts", label: "Podcasts",  icon: Mic2 },
-  { href: "/dashboard/upload",   label: "Upload",    icon: Upload },
-  { href: "/dashboard/settings", label: "Settings",  icon: Settings },
-];
 
 export function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
   const { user, currentOrg, logout } = useAuthStore();
+  const { canEdit, canManage } = useRole();
 
   const handleLogout = () => { logout(); router.push("/auth/login"); };
+
+  const nav = [
+    { href: "/dashboard",                  label: "Dashboard", icon: LayoutDashboard, show: true,      exact: true  },
+    { href: "/dashboard/podcasts",         label: "Podcasts",  icon: Mic2,            show: true,      exact: false },
+    { href: "/dashboard/upload",           label: "Upload",    icon: Upload,          show: canEdit,   exact: false },
+    { href: "/dashboard/settings",         label: "Settings",  icon: Settings,        show: true,      exact: true  },
+    { href: "/dashboard/settings/members", label: "Members",   icon: Users,           show: canManage, exact: false },
+  ];
 
   return (
     <aside className="w-56 shrink-0 bg-ink-950 border-r border-ink-800 flex flex-col min-h-screen">
@@ -41,8 +44,8 @@ export function Sidebar() {
       )}
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">
-        {nav.map(({ href, label, icon: Icon }) => {
-          const active = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
+        {nav.filter(n => n.show).map(({ href, label, icon: Icon, exact }) => {
+          const active = pathname === href || (!exact && pathname.startsWith(href + "/"));
           return (
             <Link key={href} href={href} className={clsx(
               "flex items-center gap-2.5 px-2 py-2 text-[11px] font-bold uppercase tracking-widest transition-colors border-l-2 pl-[6px]",
