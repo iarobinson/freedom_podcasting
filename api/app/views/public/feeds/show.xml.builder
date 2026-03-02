@@ -65,7 +65,7 @@ xml.rss version: "2.0",
 
         if episode.audio_url.present?
           xml.enclosure(
-            url:    episode.audio_url,
+            url:    "#{request.protocol}#{request.host_with_port}/feeds/#{podcast.slug}/episodes/#{episode.guid}",
             length: episode.audio_file_size.to_i,
             type:   episode.audio_content_type.presence || "audio/mpeg"
           )

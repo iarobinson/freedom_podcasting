@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare } from "lucide-react";
+import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare, Download } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { podcastsApi, episodesApi } from "@/lib/api";
@@ -228,6 +228,9 @@ export default function PodcastDetailPage() {
                         <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{ep.formatted_duration}</span>
                       )}
                       {ep.published_at && <span>{new Date(ep.published_at).toLocaleDateString()}</span>}
+                      {ep.download_count > 0 && (
+                        <span className="flex items-center gap-1"><Download className="h-3 w-3" />{ep.download_count.toLocaleString()}</span>
+                      )}
                       {!ep.audio_url && <span className="text-amber-500">⚠ No audio</span>}
                     </div>
                   </div>
