@@ -12,6 +12,7 @@ module Api::V1
     # POST /api/v1/organizations/:slug/invite
     def invite
       require_manager!
+      return if enforce_member_limit!
       email = params.require(:email).strip.downcase
       role  = params.require(:role)
 

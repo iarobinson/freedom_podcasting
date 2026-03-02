@@ -30,6 +30,9 @@ gem "ruby-vips", "~> 2.2"
 # Audio processing
 gem "streamio-ffmpeg", "~> 3.0"
 
+# Payments
+gem "stripe", "~> 12.0"
+
 # RSS / XML
 gem "builder"
 

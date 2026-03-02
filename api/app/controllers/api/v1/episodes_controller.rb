@@ -26,6 +26,7 @@ module Api::V1
 
     def publish
       require_editor!
+      return if enforce_monthly_publish_limit!
       return render(json: { error: "Audio required to publish." }, status: :unprocessable_entity) if @episode.audio_url.blank?
       @episode.update!(status: "published", published_at: @episode.published_at || Time.current)
       render json: { data: episode_json(@episode) }

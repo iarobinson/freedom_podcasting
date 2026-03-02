@@ -6,10 +6,10 @@ class Organization < ApplicationRecord
 
   PLANS = %w[free starter pro agency].freeze
   PLAN_LIMITS = {
-    "free"    => { podcasts: 1,  episodes_per_month: 10,  storage_gb: 1 },
-    "starter" => { podcasts: 3,  episodes_per_month: 50,  storage_gb: 10 },
-    "pro"     => { podcasts: 10, episodes_per_month: 200, storage_gb: 50 },
-    "agency"  => { podcasts: -1, episodes_per_month: -1,  storage_gb: 200 },
+    "free"    => { podcasts: 1,  episodes_per_month: 1,  members: 1,  storage_gb: 3   },
+    "starter" => { podcasts: 3,  episodes_per_month: -1, members: 3,  storage_gb: 15  },
+    "pro"     => { podcasts: 10, episodes_per_month: -1, members: 10, storage_gb: 50  },
+    "agency"  => { podcasts: -1, episodes_per_month: -1, members: -1, storage_gb: 200 },
   }.freeze
 
   validates :name, presence: true, length: { minimum: 2, maximum: 100 }
@@ -21,6 +21,26 @@ class Organization < ApplicationRecord
 
   def owner = memberships.where(role: "owner").first&.user
   def plan_limits = PLAN_LIMITS[plan]
+
+  def at_podcast_limit?
+    limit = plan_limits[:podcasts]
+    limit != -1 && podcasts.count >= limit
+  end
+
+  def at_member_limit?
+    limit = plan_limits[:members]
+    limit != -1 && memberships.count >= limit
+  end
+
+  def at_monthly_publish_limit?
+    limit = plan_limits[:episodes_per_month]
+    return false if limit == -1
+    Episode.joins(:podcast)
+           .where(podcasts: { organization_id: id })
+           .where(status: "published")
+           .where(published_at: Time.current.beginning_of_month..)
+           .count >= limit
+  end
 
   private
   def normalize_slug

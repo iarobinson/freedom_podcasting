@@ -10,6 +10,7 @@ module Api::V1
 
     def create
       require_editor!
+      return if enforce_podcast_limit!
       p = current_organization.podcasts.build(podcast_params)
       p.save ? render(json: { data: podcast_json(p) }, status: :created) : render(json: { errors: p.errors.full_messages }, status: :unprocessable_entity)
     end

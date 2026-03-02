@@ -32,4 +32,22 @@ class ApplicationController < ActionController::API
     require_organization_membership!
     render_forbidden unless @current_membership&.can_manage?
   end
+
+  def enforce_podcast_limit!
+    if current_organization.at_podcast_limit?
+      render json: { error: "Podcast limit reached for your plan. Upgrade to add more." }, status: :unprocessable_entity
+    end
+  end
+
+  def enforce_member_limit!
+    if current_organization.at_member_limit?
+      render json: { error: "Member limit reached for your plan. Upgrade to add more members." }, status: :unprocessable_entity
+    end
+  end
+
+  def enforce_monthly_publish_limit!
+    if current_organization.at_monthly_publish_limit?
+      render json: { error: "Monthly publish limit reached. Upgrade to publish more episodes." }, status: :unprocessable_entity
+    end
+  end
 end

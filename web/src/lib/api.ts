@@ -76,6 +76,13 @@ export const membersApi = {
                 apiClient.post(`/api/v1/invitations/accept`, { token }),
 };
 
+export const billingApi = {
+  checkout: (orgSlug: string, plan: string) =>
+    apiClient.post(`/api/v1/organizations/${orgSlug}/billing/checkout`, { plan }),
+  portal: (orgSlug: string) =>
+    apiClient.post(`/api/v1/organizations/${orgSlug}/billing/portal`),
+};
+
 export const uploadsApi = {
   presign:    (orgSlug: string, podcastSlug: string, data: { filename: string; content_type: string; upload_type: "audio" | "artwork" }) =>
     apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/uploads/presign`, data),

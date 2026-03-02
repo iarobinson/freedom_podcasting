@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Radio, Users } from "lucide-react";
+import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Radio, Users, CreditCard } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { clsx } from "clsx";
@@ -18,8 +18,9 @@ export function Sidebar() {
     { href: "/dashboard",                  label: "Dashboard", icon: LayoutDashboard, show: true,      exact: true  },
     { href: "/dashboard/podcasts",         label: "Podcasts",  icon: Mic2,            show: true,      exact: false },
     { href: "/dashboard/upload",           label: "Upload",    icon: Upload,          show: canEdit,   exact: false },
-    { href: "/dashboard/settings",         label: "Settings",  icon: Settings,        show: true,      exact: true  },
-    { href: "/dashboard/settings/members", label: "Members",   icon: Users,           show: canManage, exact: false },
+    { href: "/dashboard/settings",         label: "Settings",  icon: Settings,        show: true,                            exact: true  },
+    { href: "/dashboard/settings/members", label: "Members",   icon: Users,           show: canManage,                        exact: false },
+    { href: "/dashboard/settings/billing", label: "Billing",   icon: CreditCard,      show: currentOrg?.role === "owner",     exact: false },
   ];
 
   return (

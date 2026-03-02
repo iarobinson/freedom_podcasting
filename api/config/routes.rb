@@ -27,6 +27,8 @@ Rails.application.routes.draw do
           post   :invite
           delete "members/:user_id",      to: "organizations#remove_member"
           patch  "members/:user_id/role", to: "organizations#update_member_role"
+          post   "billing/checkout",      to: "billing#checkout"
+          post   "billing/portal",        to: "billing#portal"
         end
 
         resources :podcasts, param: :slug do
@@ -61,6 +63,8 @@ Rails.application.routes.draw do
       resources :memberships, only: [:index, :destroy]
     end
   end
+
+  post "/stripe/webhooks", to: "stripe_webhooks#receive"
 
   get  "/feeds/:podcast_slug",              to: "public/feeds#show",    format: :xml, as: :public_rss_feed
   get  "/feeds/:podcast_slug/episodes/:guid", to: "public/episodes#show", as: :public_episode
