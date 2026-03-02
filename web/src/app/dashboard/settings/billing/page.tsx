@@ -50,7 +50,14 @@ export default function BillingPage() {
     setLoadingPlan(plan);
     try {
       const res = await billingApi.checkout(currentOrg.slug, plan);
-      window.location.href = res.data.url;
+      if (res.data.url) {
+        window.location.href = res.data.url;
+      } else {
+        // Existing subscription updated directly — refresh org data
+        await fetchMe();
+        toast.success("Plan updated!", "Your new plan is now active.");
+        setLoadingPlan(null);
+      }
     } catch {
       toast.error("Could not start checkout", "Please try again.");
       setLoadingPlan(null);
