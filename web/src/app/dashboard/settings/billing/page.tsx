@@ -144,9 +144,14 @@ export default function BillingPage() {
                   <Zap className="h-3 w-3" /> Upgrade
                 </Button>
               ) : (
-                <div className="text-center text-[10px] text-ink-700 uppercase tracking-widest py-1">
-                  Downgrade via portal
-                </div>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  loading={portalLoading}
+                  onClick={handlePortal}
+                  className="w-full">
+                  Downgrade
+                </Button>
               )}
             </div>
           );
