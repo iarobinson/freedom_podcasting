@@ -63,7 +63,12 @@ export default function PodcastDetailPage() {
     onSuccess: () => { invalidateEpisodes(); toast.success("Episode is now live!"); },
     onError: (err: unknown) => {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
-      toast.error("Could not publish episode", msg ?? "Make sure audio is uploaded first.");
+      if (msg?.toLowerCase().includes("limit reached")) {
+        toast.error("Plan limit reached", msg);
+        router.push("/dashboard/settings/billing");
+      } else {
+        toast.error("Could not publish episode", msg ?? "Make sure audio is uploaded first.");
+      }
     },
   });
 

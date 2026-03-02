@@ -43,9 +43,15 @@ export default function NewPodcastPage() {
       toast.success("Podcast created!", "Your RSS feed is ready.");
       router.push(`/dashboard/podcasts/${res.data.data.slug}`);
     } catch (err: unknown) {
-      const errs = (err as { response?: { data?: { errors?: string[] } } })?.response?.data?.errors;
-      if (errs) setErrors({ _base: errs.join(", ") });
-      else toast.error("Failed to create podcast");
+      const data = (err as { response?: { data?: { errors?: string[]; error?: string } } })?.response?.data;
+      if (data?.errors) {
+        setErrors({ _base: data.errors.join(", ") });
+      } else if (data?.error) {
+        toast.error("Plan limit reached", data.error);
+        router.push("/dashboard/settings/billing");
+      } else {
+        toast.error("Failed to create podcast");
+      }
     } finally {
       setLoading(false);
     }
