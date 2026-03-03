@@ -31,6 +31,7 @@ export default function EditEpisodePage() {
       title:          episode.title,
       description:    episode.description,
       summary:        episode.summary ?? "",
+      slug:           (episode as Episode & { slug?: string }).slug ?? "",
       episode_type:   episode.episode_type,
       episode_number: episode.episode_number ?? "",
       season_number:  episode.season_number ?? "",
@@ -41,7 +42,10 @@ export default function EditEpisodePage() {
   }, [episode]);
 
   const update = useMutation({
-    mutationFn: () => episodesApi.update(currentOrg!.slug, slug, parseInt(id), form),
+    mutationFn: () => episodesApi.update(currentOrg!.slug, slug, parseInt(id), {
+      ...form,
+      slug: (form.slug as string)?.trim() || null,
+    }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["episodes", currentOrg?.slug, slug] });
       toast.success("Episode updated!");
@@ -53,7 +57,7 @@ export default function EditEpisodePage() {
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
 
-  if (!episode) return <div className="p-8"><div className="glass rounded-2xl h-48 shimmer-bg" /></div>;
+  if (!episode) return <div className="p-8"><div className="panel rounded-sm h-48 shimmer-bg" /></div>;
 
   const hasAudio = !!(form.audio_url as string);
   const showUploader = !hasAudio || replaceAudio;
@@ -67,13 +71,13 @@ export default function EditEpisodePage() {
       <p className="text-sm text-ink-500 mb-8">{episode.title}</p>
 
       <form onSubmit={(e) => { e.preventDefault(); update.mutate(); }} className="space-y-6">
-        <div className="glass rounded-2xl p-6 space-y-4">
+        <div className="panel rounded-sm p-6 space-y-4">
           <div className="flex items-center gap-2">
-            <Mic2 className="h-4 w-4 text-brand-400" />
+            <Mic2 className="h-4 w-4 text-accent" />
             <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Audio File</h2>
           </div>
           {hasAudio && !replaceAudio && (
-            <div className="rounded-xl border border-emerald-500/25 bg-emerald-500/8 p-4 flex items-center gap-3">
+            <div className="rounded-sm border border-emerald-500/25 bg-emerald-500/8 p-4 flex items-center gap-3">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-emerald-300">Audio attached</p>
                 <div className="flex items-center gap-3 mt-0.5">
@@ -110,16 +114,26 @@ export default function EditEpisodePage() {
           )}
         </div>
 
-        <div className="glass rounded-2xl p-6 space-y-4">
+        <div className="panel rounded-sm p-6 space-y-4">
           <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Episode Details</h2>
           <Input label="Title *" value={form.title as string ?? ""} onChange={set("title")} required />
+          <div className="space-y-1.5">
+            <Input
+              label="Custom URL slug"
+              placeholder="my-episode-title (leave blank to use ID)"
+              value={form.slug as string ?? ""}
+              onChange={set("slug")}
+              onBlur={() => setForm((f) => ({ ...f, slug: (f.slug as string).trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/[^a-z0-9-]/g, "") }))}
+            />
+            <p className="text-xs text-ink-600">Lowercase letters, numbers, and hyphens only. Leave blank to use the episode ID.</p>
+          </div>
           <Textarea label="Description *" value={form.description as string ?? ""} onChange={set("description")} rows={5} required />
           <Textarea label="Summary" value={form.summary as string ?? ""} onChange={set("summary")} rows={2} />
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="block text-sm font-medium text-ink-300">Type</label>
               <select value={form.episode_type as string ?? "full"} onChange={set("episode_type")}
-                className="w-full rounded-lg px-3.5 py-2.5 text-sm bg-white/5 border border-white/10 text-ink-100 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                className="w-full rounded-sm px-3.5 py-2.5 text-sm bg-ink-800 border border-ink-700 text-ink-100 focus:outline-none focus:ring-2 focus:ring-accent/40">
                 <option value="full">Full</option>
                 <option value="trailer">Trailer</option>
                 <option value="bonus">Bonus</option>
@@ -132,7 +146,7 @@ export default function EditEpisodePage() {
           <label className="flex items-center gap-2.5 cursor-pointer">
             <input type="checkbox" checked={form.explicit as boolean ?? false}
               onChange={(e) => setForm((f) => ({ ...f, explicit: e.target.checked }))}
-              className="w-4 h-4 rounded accent-brand-500" />
+              className="w-4 h-4 rounded bg-ink-800 border border-ink-700" style={{ accentColor: "var(--accent)" }} />
             <span className="text-sm text-ink-400">Explicit content</span>
           </label>
         </div>

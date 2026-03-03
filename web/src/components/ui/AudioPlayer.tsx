@@ -61,10 +61,10 @@ export function AudioPlayer({ src, type = "audio/mpeg", durationSecs }: Props) {
         className="shrink-0 h-9 w-9 rounded-full flex items-center justify-center transition-colors"
         style={{ background: "rgba(188,66,58,0.15)" }}>
         {loading
-          ? <Loader2 className="h-4 w-4 animate-spin" style={{ color: "#bc423a" }} />
+          ? <Loader2 className="h-4 w-4 animate-spin" style={{ color: "var(--accent)" }} />
           : playing
-            ? <Pause className="h-4 w-4" style={{ color: "#bc423a" }} />
-            : <Play  className="h-4 w-4 ml-0.5" style={{ color: "#bc423a" }} />}
+            ? <Pause className="h-4 w-4" style={{ color: "var(--accent)" }} />
+            : <Play  className="h-4 w-4 ml-0.5" style={{ color: "var(--accent)" }} />}
       </button>
 
       {/* Scrubber + times */}
@@ -77,7 +77,7 @@ export function AudioPlayer({ src, type = "audio/mpeg", durationSecs }: Props) {
           {/* Filled portion */}
           <div
             className="absolute inset-y-0 left-0 rounded-full transition-[width] duration-100"
-            style={{ width: `${pct}%`, background: "#bc423a" }}
+            style={{ width: `${pct}%`, background: "var(--accent)" }}
           />
           {/* Invisible range input for interaction */}
           <input

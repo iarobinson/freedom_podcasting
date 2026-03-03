@@ -126,7 +126,7 @@ Goal: Paying clients can log in, manage their show, and collaborate with your te
 - [x] 2.3 Episode workflow: draft → review → approved → published
 - [ ] 2.4 Comments/feedback on episodes (for producer ↔ client communication)
 - [x] 2.5 Analytics: download counts, geographic distribution
-- [ ] 2.6 Stripe subscription billing (free/starter/pro/agency tiers)
+- [x] 2.6 Stripe subscription billing (free/starter/pro/agency tiers)
 - [ ] 2.7 Podcast website (public-facing, SEO optimized)
 - [ ] 2.8 Custom domain support (CNAME → Cloudflare)
 

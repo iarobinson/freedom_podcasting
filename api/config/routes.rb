@@ -71,7 +71,8 @@ Rails.application.routes.draw do
   get  "/feeds/:podcast_slug/episodes/:guid", to: "public/episodes#show", as: :public_episode
 
   namespace :public do
-    get "/podcasts/:slug",          to: "podcasts#show"
-    get "/podcasts/:slug/episodes", to: "podcasts#episodes"
+    get "/podcasts/:slug",                         to: "podcasts#show"
+    get "/podcasts/:slug/episodes",                to: "podcasts#episodes"
+    get "/podcasts/:slug/episodes/:episode_id",    to: "podcasts#episode"
   end
 end

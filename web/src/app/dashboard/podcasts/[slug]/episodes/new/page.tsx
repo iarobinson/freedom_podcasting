@@ -17,7 +17,7 @@ export default function NewEpisodePage() {
   const [loading, setLoading] = useState(false);
   const [audioData, setAudioData] = useState<{ mediaFileId: number; publicUrl: string } | null>(null);
   const [form, setForm] = useState({
-    title: "", description: "", summary: "",
+    title: "", description: "", summary: "", slug: "",
     episode_type: "full", explicit: false, keywords: "",
     episode_number: "", season_number: "",
   });
@@ -32,6 +32,7 @@ export default function NewEpisodePage() {
     try {
       const payload = {
         ...form,
+        slug: form.slug.trim() || null,
         audio_url: audioData?.publicUrl ?? null,
         episode_number: form.episode_number ? parseInt(form.episode_number) : null,
         season_number:  form.season_number  ? parseInt(form.season_number)  : null,
@@ -57,9 +58,9 @@ export default function NewEpisodePage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Audio upload */}
-        <div className="glass rounded-2xl p-6 space-y-4">
+        <div className="panel rounded-sm p-6 space-y-4">
           <div className="flex items-center gap-2 mb-2">
-            <Mic2 className="h-4 w-4 text-brand-400" />
+            <Mic2 className="h-4 w-4 text-accent" />
             <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Audio File</h2>
           </div>
           {currentOrg && (
@@ -76,16 +77,26 @@ export default function NewEpisodePage() {
         </div>
 
         {/* Episode details */}
-        <div className="glass rounded-2xl p-6 space-y-4">
+        <div className="panel rounded-sm p-6 space-y-4">
           <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Episode Details</h2>
           <Input label="Title *" placeholder="Episode title" value={form.title} onChange={set("title")} required />
+          <div className="space-y-1.5">
+            <Input
+              label="Custom URL slug"
+              placeholder="my-episode-title (leave blank to use ID)"
+              value={form.slug}
+              onChange={set("slug")}
+              onBlur={() => setForm((f) => ({ ...f, slug: f.slug.trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/[^a-z0-9-]/g, "") }))}
+            />
+            <p className="text-xs text-ink-600">Lowercase letters, numbers, and hyphens only. Leave blank to use the episode ID.</p>
+          </div>
           <Textarea label="Description / Show Notes *" placeholder="What's this episode about? Markdown supported." value={form.description} onChange={set("description")} rows={5} required />
           <Textarea label="Summary" placeholder="Short plain-text summary (shown in podcast apps)" value={form.summary} onChange={set("summary")} rows={2} />
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-1.5">
               <label className="block text-sm font-medium text-ink-300">Type</label>
               <select value={form.episode_type} onChange={set("episode_type")}
-                className="w-full rounded-lg px-3.5 py-2.5 text-sm bg-white/5 border border-white/10 text-ink-100 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                className="w-full rounded-sm px-3.5 py-2.5 text-sm bg-ink-800 border border-ink-700 text-ink-100 focus:outline-none focus:ring-2 focus:ring-accent/40">
                 <option value="full">Full</option>
                 <option value="trailer">Trailer</option>
                 <option value="bonus">Bonus</option>
@@ -97,7 +108,7 @@ export default function NewEpisodePage() {
           <Input label="Keywords" placeholder="tech, business, startup (comma-separated)" value={form.keywords} onChange={set("keywords")} />
           <label className="flex items-center gap-2.5 cursor-pointer group">
             <input type="checkbox" checked={form.explicit} onChange={(e) => setForm((f) => ({ ...f, explicit: e.target.checked }))}
-              className="w-4 h-4 rounded bg-white/5 border border-white/10 accent-brand-500" />
+              className="w-4 h-4 rounded bg-ink-800 border border-ink-700" style={{ accentColor: "var(--accent)" }} />
             <span className="text-sm text-ink-400 group-hover:text-ink-300 transition-colors">Explicit content</span>
           </label>
         </div>

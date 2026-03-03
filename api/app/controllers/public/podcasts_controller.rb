@@ -13,6 +13,14 @@ module Public
       render json: { data: episodes.map { |e| episode_json(e) } }
     end
 
+    # GET /public/podcasts/:slug/episodes/:episode_id
+    def episode
+      podcast = Podcast.published.find_by!(slug: params[:slug])
+      ep = podcast.published_episodes.find_by(slug: params[:episode_id]) ||
+           podcast.published_episodes.find(params[:episode_id])
+      render json: { data: episode_json(ep) }
+    end
+
     private
 
     def podcast_json(p)
@@ -23,7 +31,7 @@ module Public
     end
 
     def episode_json(e)
-      { id: e.id, title: e.title, description: e.description, summary: e.summary,
+      { id: e.id, slug: e.slug, title: e.title, description: e.description, summary: e.summary,
         audio_url: e.audio_url, audio_content_type: e.audio_content_type,
         audio_file_size: e.audio_file_size, audio_duration_seconds: e.audio_duration_seconds,
         formatted_duration: e.formatted_duration, episode_number: e.episode_number,

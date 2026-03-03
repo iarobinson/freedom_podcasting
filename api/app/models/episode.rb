@@ -12,8 +12,10 @@ class Episode < ApplicationRecord
   validates :status,       inclusion: { in: STATUSES }
   validates :audio_url,    presence: true, if: :published?
   validates :published_at, presence: true, if: :published?
+  validates :slug, format: { with: /\A[a-z0-9\-]+\z/, message: "only lowercase letters, numbers, and hyphens" }, allow_nil: true
+  validates :slug, uniqueness: { scope: :podcast_id }, allow_nil: true
 
-  before_validation :assign_guid
+  before_validation :assign_guid, :normalize_slug
   before_create     :set_episode_number
 
   scope :published,  -> { where(status: "published").where("published_at <= ?", Time.current) }
@@ -36,7 +38,13 @@ class Episode < ApplicationRecord
   def itunes_duration = audio_duration_seconds&.to_i
 
   private
-  def assign_guid     = self.guid ||= SecureRandom.uuid
+  def assign_guid = self.guid ||= SecureRandom.uuid
+
+  def normalize_slug
+    return if slug.blank?
+    self.slug = slug.strip.downcase.gsub(/[\s_]+/, "-").gsub(/[^a-z0-9\-]/, "")
+    self.slug = nil if self.slug.blank?
+  end
   def set_episode_number
     return if episode_number.present?
     self.episode_number = (podcast.episodes.maximum(:episode_number) || 0) + 1
