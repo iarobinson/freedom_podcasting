@@ -59,7 +59,7 @@ module Api::V1
 
       session = Stripe::BillingPortal::Session.create(
         customer:   current_organization.stripe_customer_id,
-        return_url: "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing"
+        return_url: "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing?portal_return=true"
       )
       render json: { url: session.url }
     end
