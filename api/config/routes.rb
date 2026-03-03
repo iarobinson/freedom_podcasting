@@ -29,6 +29,7 @@ Rails.application.routes.draw do
           patch  "members/:user_id/role", to: "organizations#update_member_role"
           post   "billing/checkout",      to: "billing#checkout"
           post   "billing/portal",        to: "billing#portal"
+          post   "billing/cancel",        to: "billing#cancel"
         end
 
         resources :podcasts, param: :slug do

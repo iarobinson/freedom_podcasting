@@ -81,6 +81,8 @@ export const billingApi = {
     apiClient.post(`/api/v1/organizations/${orgSlug}/billing/checkout`, { plan }),
   portal: (orgSlug: string) =>
     apiClient.post(`/api/v1/organizations/${orgSlug}/billing/portal`),
+  cancel: (orgSlug: string) =>
+    apiClient.post(`/api/v1/organizations/${orgSlug}/billing/cancel`),
 };
 
 export const uploadsApi = {

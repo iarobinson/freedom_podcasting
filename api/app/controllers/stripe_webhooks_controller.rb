@@ -40,8 +40,12 @@ class StripeWebhooksController < ActionController::Base
   end
 
   def handle_subscription_updated(subscription)
-    org = Organization.find_by(stripe_subscription_id: subscription.id)
+    org = Organization.find_by(stripe_subscription_id: subscription.id) ||
+          Organization.find_by(stripe_customer_id: subscription.customer)
     return unless org
+
+    # Keep DB in sync with whichever sub ID Stripe is reporting
+    org.update_column(:stripe_subscription_id, subscription.id) if org.stripe_subscription_id != subscription.id
 
     # Subscription scheduled for cancellation — revert to free immediately
     if subscription.cancel_at_period_end
@@ -55,7 +59,8 @@ class StripeWebhooksController < ActionController::Base
   end
 
   def handle_subscription_deleted(subscription)
-    org = Organization.find_by(stripe_subscription_id: subscription.id)
+    org = Organization.find_by(stripe_subscription_id: subscription.id) ||
+          Organization.find_by(stripe_customer_id: subscription.customer)
     return unless org
     org.update!(plan: "free", stripe_subscription_id: nil)
   end

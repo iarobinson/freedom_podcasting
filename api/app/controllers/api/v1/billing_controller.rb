@@ -64,6 +64,15 @@ module Api::V1
       render json: { url: session.url }
     end
 
+    def cancel
+      sub_id = current_organization.stripe_subscription_id
+      return render json: { error: "No active subscription." }, status: :unprocessable_entity unless sub_id
+
+      Stripe::Subscription.cancel(sub_id)
+      current_organization.update!(plan: "free", stripe_subscription_id: nil)
+      render json: { cancelled: true }
+    end
+
     private
 
     def current_organization

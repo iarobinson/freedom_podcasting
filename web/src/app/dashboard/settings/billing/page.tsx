@@ -34,6 +34,7 @@ export default function BillingPage() {
   const router = useRouter();
   const [loadingPlan, setLoadingPlan] = useState<Plan | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [cancelLoading, setCancelLoading] = useState(false);
 
   // Handle return from Stripe Checkout or Customer Portal
   useEffect(() => {
@@ -83,6 +84,21 @@ export default function BillingPage() {
     } catch {
       toast.error("Could not open billing portal", "Please try again.");
       setPortalLoading(false);
+    }
+  };
+
+  const handleCancel = async () => {
+    if (!currentOrg) return;
+    if (!confirm("Cancel your subscription and revert to the Free plan?")) return;
+    setCancelLoading(true);
+    try {
+      await billingApi.cancel(currentOrg.slug);
+      await fetchMe();
+      toast.success("Subscription cancelled", "You've been moved to the Free plan.");
+    } catch {
+      toast.error("Could not cancel subscription", "Please try again.");
+    } finally {
+      setCancelLoading(false);
     }
   };
 
@@ -160,12 +176,21 @@ export default function BillingPage() {
                   className="w-full">
                   <Zap className="h-3 w-3" /> Upgrade
                 </Button>
+              ) : tier.key === "free" ? (
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  loading={cancelLoading}
+                  onClick={handleCancel}
+                  className="w-full text-ink-500">
+                  Cancel plan
+                </Button>
               ) : (
                 <Button
                   size="sm"
                   variant="secondary"
-                  loading={portalLoading}
-                  onClick={handlePortal}
+                  loading={loadingPlan === tier.key}
+                  onClick={() => handleUpgrade(tier.key)}
                   className="w-full">
                   Downgrade
                 </Button>
