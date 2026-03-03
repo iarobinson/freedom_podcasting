@@ -42,6 +42,13 @@ class StripeWebhooksController < ActionController::Base
   def handle_subscription_updated(subscription)
     org = Organization.find_by(stripe_subscription_id: subscription.id)
     return unless org
+
+    # Subscription scheduled for cancellation — revert to free immediately
+    if subscription.cancel_at_period_end
+      org.update!(plan: "free", stripe_subscription_id: nil)
+      return
+    end
+
     price_id = subscription.items.data.first&.price&.id
     plan     = PRICE_TO_PLAN[price_id]
     org.update!(plan: plan) if plan
