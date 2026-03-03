@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuthStore } from "@/lib/store";
@@ -10,14 +10,19 @@ const queryClient = new QueryClient();
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { token, fetchMe } = useAuthStore();
+  const { fetchMe } = useAuthStore();
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
+    // Read token from localStorage directly to avoid Zustand hydration race
+    const token = localStorage.getItem("fp_token");
     if (!token) { router.push("/auth/login"); return; }
-    fetchMe().catch(() => { router.push("/auth/login"); });
-  }, [token, router, fetchMe]);
+    fetchMe()
+      .then(() => setReady(true))
+      .catch(() => { router.push("/auth/login"); });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (!token) return null;
+  if (!ready) return null;
 
   return (
     <QueryClientProvider client={queryClient}>
