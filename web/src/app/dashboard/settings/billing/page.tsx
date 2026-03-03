@@ -35,14 +35,24 @@ export default function BillingPage() {
   const [loadingPlan, setLoadingPlan] = useState<Plan | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
 
-  // Handle return from Stripe Checkout
+  // Handle return from Stripe Checkout or Customer Portal
   useEffect(() => {
-    if (searchParams.get("success") === "true") {
-      toast.success("Plan upgraded!", "Your new plan is now active.");
-      fetchMe().catch(() => {});
-      // Remove ?success param without re-render
-      router.replace("/dashboard/settings/billing");
-    }
+    const isCheckout = searchParams.get("success") === "true";
+    const isPortal   = searchParams.get("portal_return") === "true";
+    if (!isCheckout && !isPortal) return;
+
+    router.replace("/dashboard/settings/billing");
+    if (isCheckout) toast.success("Plan upgraded!", "Your new plan is now active.");
+
+    // Poll fetchMe until plan stabilises (webhook may not have fired yet)
+    let attempts = 0;
+    const poll = () => {
+      fetchMe().catch(() => {}).finally(() => {
+        attempts++;
+        if (attempts < 6) setTimeout(poll, 1500);
+      });
+    };
+    setTimeout(poll, 500);
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleUpgrade = async (plan: Plan) => {

@@ -9,9 +9,9 @@
    and simulate the weight/tracking with letter-spacing */
 @layer base {
   :root {
-    --accent:       #bc423a;
-    --accent-light: #d45047;
-    --accent-dark:  #9e3530;
+    --accent:       #cc0000;
+    --accent-light: #e01a1a;
+    --accent-dark:  #aa0000;
     --ink-950:      #0d0c0b;
     --ink-900:      #171614;
     --ink-800:      #252422;
@@ -29,7 +29,7 @@
 
   html {
     background-color: var(--ink-950);
-    color: var(--ink-200);
+    color: var(--ink-100);
     font-family: 'PT Sans', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -56,7 +56,7 @@
     font-weight: 700;
     letter-spacing: 0.04em;
     text-transform: uppercase;
-    color: var(--ink-100);
+    color: var(--ink-50);
   }
 }
 
@@ -152,7 +152,7 @@
     border-radius: 1px;
   }
   .badge-default  { background: var(--ink-800); color: var(--ink-400); border: 1px solid var(--ink-700); }
-  .badge-live     { background: rgba(188,66,58,0.15); color: var(--accent-light); border: 1px solid rgba(188,66,58,0.3); }
+  .badge-live     { background: rgba(204,0,0,0.15); color: var(--accent-light); border: 1px solid rgba(204,0,0,0.3); }
   .badge-warning  { background: rgba(180,130,50,0.15); color: #c8a44a; border: 1px solid rgba(180,130,50,0.3); }
   .badge-info     { background: rgba(80,120,180,0.15); color: #7aa0cc; border: 1px solid rgba(80,120,180,0.3); }
 }

@@ -25,10 +25,10 @@ const config: Config = {
         },
         // Single accent — FreedomPodcasting red
         accent: {
-          DEFAULT: "#bc423a",
-          light:   "#d45047",
-          dark:    "#9e3530",
-          muted:   "#bc423a33",
+          DEFAULT: "#cc0000",
+          light:   "#e01a1a",
+          dark:    "#aa0000",
+          muted:   "#cc000033",
         },
       },
       fontFamily: {
