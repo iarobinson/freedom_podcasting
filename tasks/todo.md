@@ -127,7 +127,7 @@ Goal: Paying clients can log in, manage their show, and collaborate with your te
 - [ ] 2.4 Comments/feedback on episodes (for producer ↔ client communication)
 - [x] 2.5 Analytics: download counts, geographic distribution
 - [x] 2.6 Stripe subscription billing (free/starter/pro/agency tiers)
-- [ ] 2.7 Podcast website (public-facing, SEO optimized)
+- [x] 2.7 Podcast website (public-facing, SEO optimized)
 - [ ] 2.8 Custom domain support (CNAME → Cloudflare)
 
 ---
@@ -143,6 +143,7 @@ Goal: AI makes production faster and better.
 - [ ] 3.6 Claude: social media clip suggestions
 - [ ] 3.7 Transcript editor (correct errors, search within transcript)
 - [ ] 3.8 Audio waveform visualization with chapter markers
+- [ ] 3.9 Drop in audio advertisement injection to add to mp3s.
 
 ---
 

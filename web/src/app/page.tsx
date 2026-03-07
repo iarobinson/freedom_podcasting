@@ -106,7 +106,7 @@ export default function HomePage() {
             Sign In
           </Link>
         </div>
-        <p className="text-xs text-ink-600 mt-4">No credit card required. Free plan forever.</p>
+        <p className="text-xs text-ink-600 mt-4">No credit card required. Free plan avaliable now.</p>
       </section>
 
       <hr className="accent-rule max-w-5xl mx-auto" />
