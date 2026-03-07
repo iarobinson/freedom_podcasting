@@ -68,6 +68,8 @@ export interface Episode {
   download_count: number;
   created_at: string;
   updated_at: string;
+  transcript?: string;
+  transcription_status?: "pending" | "processing" | "done" | "failed";
 }
 
 export interface Member {

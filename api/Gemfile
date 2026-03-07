@@ -40,6 +40,9 @@ gem "builder"
 gem "faraday"
 gem "faraday-retry"
 
+# AI — Whisper transcription
+gem "ruby-openai", "~> 7.0"
+
 # Pagination
 gem "pagy"
 

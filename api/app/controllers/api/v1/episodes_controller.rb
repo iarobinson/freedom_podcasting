@@ -3,7 +3,7 @@ module Api::V1
     before_action :current_organization
     before_action :require_organization_membership!
     before_action :set_podcast
-    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject]
+    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject, :transcribe]
 
     def index
       episodes = @podcast.episodes.order(created_at: :desc)
@@ -59,6 +59,17 @@ module Api::V1
       render json: { data: episode_json(@episode) }
     end
 
+    def transcribe
+      require_editor!
+      return render(json: { error: "No audio file." }, status: :unprocessable_entity) unless @episode.audio_url.present?
+      if %w[pending processing].include?(@episode.transcription_status)
+        return render(json: { error: "Transcription already in progress." }, status: :unprocessable_entity)
+      end
+      @episode.update!(transcription_status: "pending")
+      TranscribeEpisodeJob.perform_later(@episode.id)
+      render json: { transcription_status: "pending" }
+    end
+
     private
 
     def set_podcast = (@podcast = current_organization.podcasts.find_by!(slug: params[:podcast_slug]))
@@ -79,7 +90,8 @@ module Api::V1
         episode_number: e.episode_number, season_number: e.season_number, explicit: e.explicit,
         keywords: e.keywords, status: e.status, published_at: e.published_at,
         review_notes: e.review_notes, reviewed_at: e.reviewed_at,
-        guid: e.guid, download_count: e.download_count, created_at: e.created_at, updated_at: e.updated_at }
+        guid: e.guid, download_count: e.download_count, created_at: e.created_at, updated_at: e.updated_at,
+        transcript: e.transcript, transcription_status: e.transcription_status }
     end
   end
 end

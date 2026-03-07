@@ -1,9 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare, Download } from "lucide-react";
+import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare, Download, Wand2 } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { podcastsApi, episodesApi } from "@/lib/api";
@@ -115,6 +115,15 @@ export default function PodcastDetailPage() {
     onSuccess: () => { invalidateEpisodes(); toast.success("Episode deleted"); },
   });
 
+  const transcribeEpisode = useMutation({
+    mutationFn: (ep: Episode) => episodesApi.transcribe(currentOrg!.slug, slug, ep.id),
+    onSuccess: () => { invalidateEpisodes(); },
+    onError: (err: unknown) => {
+      const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
+      toast.error("Could not start transcription", msg ?? "Something went wrong.");
+    },
+  });
+
   const copyRss = async () => {
     if (!podcast) return;
     await navigator.clipboard.writeText(podcast.rss_url);
@@ -123,6 +132,18 @@ export default function PodcastDetailPage() {
   };
 
   const episodes: Episode[] = episodesData?.data ?? [];
+
+  // Poll every 5s while any episode is being transcribed
+  const anyTranscribing = episodes.some(
+    (ep) => ep.transcription_status === "pending" || ep.transcription_status === "processing"
+  );
+  useEffect(() => {
+    if (!anyTranscribing) return;
+    const interval = setInterval(() => {
+      qc.invalidateQueries({ queryKey: ["episodes", currentOrg?.slug, slug] });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [anyTranscribing, qc, currentOrg?.slug, slug]);
 
   if (isLoading) return <div className="p-8"><div className="glass rounded-2xl h-48 shimmer-bg" /></div>;
   if (!podcast)  return <div className="p-8 text-ink-500">Podcast not found.</div>;
@@ -292,6 +313,27 @@ export default function PodcastDetailPage() {
                           className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
                           Unpublish
                         </button>
+                      )}
+
+                      {/* Transcribe */}
+                      {ep.audio_url && (
+                        <>
+                          {(ep.transcription_status === "pending" || ep.transcription_status === "processing") && (
+                            <span className="text-[10px] uppercase tracking-widest text-amber-500 px-1">Transcribing…</span>
+                          )}
+                          {ep.transcription_status === "done" && (
+                            <span className="text-[10px] uppercase tracking-widest text-emerald-500 px-1">Transcribed</span>
+                          )}
+                          {(ep.transcription_status === "failed" || !ep.transcription_status) && (
+                            <button
+                              onClick={() => transcribeEpisode.mutate(ep)}
+                              disabled={transcribeEpisode.isPending}
+                              title={ep.transcription_status === "failed" ? "Retry transcription" : "Transcribe with AI"}
+                              className="p-1.5 text-ink-600 hover:text-accent transition-colors opacity-0 group-hover:opacity-100">
+                              <Wand2 className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                        </>
                       )}
 
                       {/* Edit */}

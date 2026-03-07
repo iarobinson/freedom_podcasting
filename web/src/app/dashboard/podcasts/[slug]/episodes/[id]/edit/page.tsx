@@ -156,6 +156,22 @@ export default function EditEpisodePage() {
           <Button type="submit" loading={update.isPending}>Save Changes</Button>
         </div>
       </form>
+
+      {episode.transcript && (
+        <div className="panel rounded-sm p-6 space-y-3 mt-6">
+          <div className="ornament-divider">
+            <span>Transcript</span>
+          </div>
+          <p className="text-[10px] uppercase tracking-widest text-ink-600">AI-generated · Whisper-1</p>
+          <textarea
+            readOnly
+            value={episode.transcript}
+            rows={12}
+            className="w-full bg-ink-900 border border-ink-800 rounded-sm px-4 py-3 text-sm text-ink-300 leading-relaxed resize-y focus:outline-none"
+          />
+          <p className="text-[10px] text-ink-600 uppercase tracking-widest">Transcript editing available in a future update.</p>
+        </div>
+      )}
     </div>
   );
 }

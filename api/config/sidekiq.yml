@@ -3,5 +3,6 @@
   - [critical, 3]
   - [default, 2]
   - [audio_processing, 2]
+  - [ai_processing, 2]
   - [mailers, 1]
   - [low, 1]
