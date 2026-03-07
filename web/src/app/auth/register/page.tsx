@@ -6,7 +6,7 @@ import { useAuthStore } from "@/lib/store";
 import { authApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
-import { Radio } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 
 function RegisterForm() {
   const router  = useRouter();
@@ -49,8 +49,8 @@ function RegisterForm() {
   return (
     <div className="w-full max-w-sm relative">
       <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center h-12 w-12 border border-accent mb-4">
-          <Radio className="h-5 w-5 text-accent" />
+        <div className="inline-flex items-center justify-center h-12 w-12 mb-4 overflow-hidden">
+          <Logo size={48} />
         </div>
         <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-accent">Freedom Podcasting</p>
         <h1 className="text-xl font-bold uppercase tracking-widest text-ink-100 mt-1">

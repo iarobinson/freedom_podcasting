@@ -6,6 +6,10 @@ export const metadata: Metadata = {
   title: { template: "%s | FreedomPodcasting", default: "FreedomPodcasting — Production Studio" },
   description: "Professional podcast hosting and AI-powered production tools.",
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? "https://app.freedompodcasting.com"),
+  icons: {
+    icon: "/freedom-podcasting-square-logo.png",
+    apple: "/freedom-podcasting-square-logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

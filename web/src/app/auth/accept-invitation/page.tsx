@@ -2,7 +2,8 @@
 import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Radio, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 import { useAuthStore } from "@/lib/store";
 import { membersApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
@@ -63,8 +64,8 @@ function AcceptInvitationContent() {
     return (
       <div className="w-full max-w-sm relative">
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center h-12 w-12 border border-accent mb-4">
-            <Radio className="h-5 w-5 text-accent" />
+          <div className="inline-flex items-center justify-center h-12 w-12 mb-4 overflow-hidden">
+            <Logo size={48} />
           </div>
           <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-accent">Freedom Podcasting</p>
           <h1 className="text-xl font-bold uppercase tracking-widest text-ink-100 mt-1">Accept Invitation</h1>
@@ -88,8 +89,8 @@ function AcceptInvitationContent() {
   return (
     <div className="w-full max-w-sm relative">
       <div className="text-center mb-10">
-        <div className="inline-flex items-center justify-center h-12 w-12 border border-accent mb-4">
-          <Radio className="h-5 w-5 text-accent" />
+        <div className="inline-flex items-center justify-center h-12 w-12 border border-accent mb-4 overflow-hidden">
+          <Logo size={48} />
         </div>
         <p className="text-[9px] font-bold uppercase tracking-[0.3em] text-accent">Freedom Podcasting</p>
         <h1 className="text-xl font-bold uppercase tracking-widest text-ink-100 mt-1">You&apos;re Invited</h1>

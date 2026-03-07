@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Radio, Users, CreditCard } from "lucide-react";
+import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Users, CreditCard } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { clsx } from "clsx";
@@ -27,8 +28,8 @@ export function Sidebar() {
     <aside className="w-56 shrink-0 bg-ink-950 border-r border-ink-800 flex flex-col min-h-screen">
       <div className="px-5 py-6 border-b border-ink-800 engraving-bg">
         <div className="flex items-center gap-2.5">
-          <div className="h-7 w-7 border border-accent flex items-center justify-center">
-            <Radio className="h-3.5 w-3.5 text-accent" />
+          <div className="h-7 w-7 flex items-center justify-center overflow-hidden">
+            <Logo size={28} />
           </div>
           <div>
             <p className="text-[9px] font-bold uppercase tracking-[0.2em] text-accent">Freedom</p>

@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { Plus, Mic2, Radio, Rss, ArrowRight } from "lucide-react";
+import { Plus, Mic2, Rss, ArrowRight } from "lucide-react";
+import { Logo } from "@/components/ui/Logo";
 import { useAuthStore } from "@/lib/store";
 import { podcastsApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
@@ -63,7 +64,7 @@ export default function DashboardPage() {
         </div>
       ) : podcasts.length === 0 ? (
         <div className="panel p-12 text-center engraving-bg">
-          <Radio className="h-8 w-8 text-ink-700 mx-auto mb-4" />
+          <Logo size={32} className="mx-auto mb-4 opacity-30" />
           <p className="text-xs uppercase tracking-widest text-ink-500 mb-6">No podcasts yet</p>
           <Button onClick={() => router.push("/dashboard/podcasts/new")}>
             <Plus className="h-3.5 w-3.5" /> Create Your First Podcast
