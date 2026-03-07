@@ -13,12 +13,17 @@ console_command = "/rails/bin/rails console"
   RAILS_LOG_TO_STDOUT = "true"
   RAILS_SERVE_STATIC_FILES = "true"
 
+[processes]
+  web    = "bundle exec puma -C config/puma.rb"
+  worker = "bundle exec sidekiq -C config/sidekiq.yml"
+
 [http_service]
   internal_port = 3000
   force_https = true
   auto_stop_machines = false
   auto_start_machines = true
   min_machines_running = 1
+  processes = ["web"]
 
   [http_service.concurrency]
     type = "connections"
@@ -29,6 +34,13 @@ console_command = "/rails/bin/rails console"
   memory = "1gb"
   cpu_kind = "shared"
   cpus = 1
+  processes = ["web"]
+
+[[vm]]
+  memory = "1gb"
+  cpu_kind = "shared"
+  cpus = 1
+  processes = ["worker"]
 
 [checks]
   [checks.health]

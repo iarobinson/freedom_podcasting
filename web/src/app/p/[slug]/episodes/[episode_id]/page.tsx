@@ -154,6 +154,18 @@ export default async function EpisodePage({ params }: { params: { slug: string; 
           </div>
         )}
 
+        {/* Transcript */}
+        {episode.transcript && (
+          <div className="mt-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px flex-1 bg-ink-800" />
+              <span className="text-[10px] uppercase tracking-widest text-ink-600">Transcript</span>
+              <div className="h-px flex-1 bg-ink-800" />
+            </div>
+            <p className="text-sm text-ink-400 leading-relaxed whitespace-pre-line">{episode.transcript}</p>
+          </div>
+        )}
+
         {/* Footer */}
         <div className="mt-16 pt-8 border-t border-ink-800 text-center">
           <p className="text-xs text-ink-700">

@@ -36,7 +36,8 @@ module Public
         audio_file_size: e.audio_file_size, audio_duration_seconds: e.audio_duration_seconds,
         formatted_duration: e.formatted_duration, episode_number: e.episode_number,
         season_number: e.season_number, episode_type: e.episode_type,
-        explicit: e.explicit, published_at: e.published_at, guid: e.guid }
+        explicit: e.explicit, published_at: e.published_at, guid: e.guid,
+        transcript: e.transcript }
     end
   end
 end
