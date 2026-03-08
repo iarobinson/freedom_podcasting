@@ -234,7 +234,7 @@ export default function PodcastDetailPage() {
             {episodes.map((ep) => (
               <div key={ep.id}>
                 <div className="glass glass-hover rounded-xl px-4 py-3.5 flex items-center gap-3 group">
-                  <Link href={`/p/${slug}/episodes/${ep.id}`} className="flex-1 min-w-0 cursor-pointer">
+                  <Link href={`/dashboard/podcasts/${slug}/episodes/${ep.id}/edit`} className="flex-1 min-w-0 cursor-pointer">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <span className="text-[11px] font-mono text-ink-600">
                         {ep.season_number ? `S${ep.season_number}·` : ""}E{ep.episode_number ?? "—"}
@@ -342,6 +342,15 @@ export default function PodcastDetailPage() {
                             </button>
                           )}
                         </>
+                      )}
+
+                      {/* View public page (published only) */}
+                      {ep.status === "published" && (
+                        <Link href={`/p/${slug}/episodes/${ep.id}`}
+                          className="p-1.5 text-ink-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
+                          title="View public page">
+                          <Globe className="h-3.5 w-3.5" />
+                        </Link>
                       )}
 
                       {/* Edit */}
