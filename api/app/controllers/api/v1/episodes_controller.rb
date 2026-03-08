@@ -103,7 +103,8 @@ module Api::V1
         review_notes: e.review_notes, reviewed_at: e.reviewed_at,
         guid: e.guid, download_count: e.download_count, created_at: e.created_at, updated_at: e.updated_at,
         transcript: e.transcript, transcription_status: e.transcription_status,
-        show_notes_ai: e.show_notes_ai, show_notes_ai_status: e.show_notes_ai_status }
+        show_notes_ai: e.show_notes_ai, show_notes_ai_status: e.show_notes_ai_status,
+        ai_metadata_status: e.ai_metadata_status }
     end
   end
 end

@@ -6,8 +6,8 @@ class Episode < ApplicationRecord
   EPISODE_TYPES = %w[full trailer bonus].freeze
   STATUSES      = %w[draft review approved scheduled published].freeze
 
-  validates :title,        presence: true
-  validates :description,  presence: true
+  AI_PLACEHOLDER_TITLE = "Untitled Episode"
+
   validates :episode_type, inclusion: { in: EPISODE_TYPES }
   validates :status,       inclusion: { in: STATUSES }
   validates :audio_url,    presence: true, if: :published?
@@ -16,7 +16,7 @@ class Episode < ApplicationRecord
   validates :slug, uniqueness: { scope: :podcast_id }, allow_nil: true
 
   before_validation :assign_guid, :normalize_slug
-  before_create     :set_episode_number
+  before_create     :set_episode_number, :set_defaults
 
   scope :published,  -> { where(status: "published").where("published_at <= ?", Time.current) }
   scope :draft,      -> { where(status: "draft") }
@@ -38,6 +38,12 @@ class Episode < ApplicationRecord
   def itunes_duration = audio_duration_seconds&.to_i
 
   private
+
+  def set_defaults
+    self.title       = AI_PLACEHOLDER_TITLE if title.blank?
+    self.description = ""                   if description.blank?
+  end
+
   def assign_guid = self.guid ||= SecureRandom.uuid
 
   def normalize_slug

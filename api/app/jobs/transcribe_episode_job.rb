@@ -43,6 +43,11 @@ class TranscribeEpisodeJob < ApplicationJob
 
       # 4. Persist transcript
       episode.update!(transcript: response, transcription_status: "done")
+
+      # 5. Chain to metadata generation for audio-first episodes
+      if episode.title == Episode::AI_PLACEHOLDER_TITLE
+        GenerateEpisodeMetadataJob.perform_later(episode.id)
+      end
     end
   rescue => e
     Episode.find_by(id: episode_id)&.update_column(:transcription_status, "failed")

@@ -36,6 +36,14 @@ module Api::V1
       ProcessAudioJob.perform_later(mf.id)   if mf.audio?
       ProcessArtworkJob.perform_later(mf.id) if mf.image?
 
+      if mf.audio? && mf.episode_id.present?
+        episode = Episode.find_by(id: mf.episode_id)
+        if episode && !episode.transcript.present?
+          episode.update!(transcription_status: "pending", ai_metadata_status: "pending")
+          TranscribeEpisodeJob.perform_later(episode.id)
+        end
+      end
+
       render json: { data: { media_file_id: mf.id, public_url: mf.public_url, processing_status: mf.processing_status } }
     end
   end

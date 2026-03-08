@@ -72,6 +72,7 @@ export interface Episode {
   transcription_status?: "pending" | "processing" | "done" | "failed";
   show_notes_ai?: string;
   show_notes_ai_status?: "pending" | "processing" | "done" | "failed";
+  ai_metadata_status?: "pending" | "processing" | "done" | "failed";
 }
 
 export interface Member {

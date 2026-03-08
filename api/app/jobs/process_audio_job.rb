@@ -28,7 +28,7 @@ class ProcessAudioJob < ApplicationJob
         duration_seconds: duration,
         file_size:        tmp.size,
         processing_status: "ready",
-        metadata: { bitrate: movie.bitrate, audio_codec: movie.audio_codec }
+        metadata: { bitrate: movie.bitrate, audio_codec: safe_utf8(movie.audio_codec) }
       )
 
       media_file.episode&.update!(
@@ -42,6 +42,10 @@ class ProcessAudioJob < ApplicationJob
   end
 
   private
+
+  def safe_utf8(str)
+    str.to_s.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+  end
 
   def download_file(url, tmp)
     uri = URI.parse(url)

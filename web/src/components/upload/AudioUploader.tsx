@@ -9,6 +9,7 @@ interface Props {
   orgSlug: string;
   podcastSlug: string;
   episodeId?: number;
+  onFileSelected?: () => Promise<number | undefined>;
   onUploadComplete: (data: { mediaFileId: number; publicUrl: string }) => void;
   onError?: (error: string) => void;
 }
@@ -18,7 +19,7 @@ type State = "idle" | "uploading" | "processing" | "complete" | "error";
 const ACCEPTED = ["audio/mpeg","audio/mp4","audio/ogg","audio/wav","audio/x-wav","audio/flac"];
 const MAX_BYTES = 500 * 1024 * 1024;
 
-export function AudioUploader({ orgSlug, podcastSlug, episodeId, onUploadComplete, onError }: Props) {
+export function AudioUploader({ orgSlug, podcastSlug, episodeId, onFileSelected, onUploadComplete, onError }: Props) {
   const [state,    setState]    = useState<State>("idle");
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
@@ -36,18 +37,19 @@ export function AudioUploader({ orgSlug, podcastSlug, episodeId, onUploadComplet
     }
     setFileName(file.name); setState("uploading"); setProgress(0);
     try {
+      const resolvedEpisodeId = onFileSelected ? await onFileSelected() : episodeId;
       const presignRes = await uploadsApi.presign(orgSlug, podcastSlug, { filename: file.name, content_type: file.type, upload_type: "audio" });
       const presign: PresignedUploadResponse = presignRes.data.data;
       await uploadsApi.uploadToR2(presign.presigned_url, file, setProgress);
       setState("processing");
-      const completeRes = await uploadsApi.complete(orgSlug, podcastSlug, { media_file_id: presign.media_file_id, episode_id: episodeId, file_size: file.size });
+      const completeRes = await uploadsApi.complete(orgSlug, podcastSlug, { media_file_id: presign.media_file_id, episode_id: resolvedEpisodeId, file_size: file.size });
       setState("complete");
       onUploadComplete({ mediaFileId: completeRes.data.data.media_file_id, publicUrl: completeRes.data.data.public_url });
     } catch {
       const msg = "Upload failed — please try again";
       setErrMsg(msg); setState("error"); onError?.(msg);
     }
-  }, [orgSlug, podcastSlug, episodeId, onUploadComplete, onError]);
+  }, [orgSlug, podcastSlug, episodeId, onFileSelected, onUploadComplete, onError]);
 
   const reset = () => { setState("idle"); setProgress(0); setFileName(""); setErrMsg(""); };
 

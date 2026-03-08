@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare, Download, Wand2 } from "lucide-react";
+import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare, Download, Wand2, Sparkles } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { podcastsApi, episodesApi } from "@/lib/api";
@@ -133,17 +133,19 @@ export default function PodcastDetailPage() {
 
   const episodes: Episode[] = episodesData?.data ?? [];
 
-  // Poll every 5s while any episode is being transcribed
-  const anyTranscribing = episodes.some(
-    (ep) => ep.transcription_status === "pending" || ep.transcription_status === "processing"
+  // Poll every 5s while any episode is being transcribed or AI-processed
+  const anyProcessing = episodes.some(
+    (ep) =>
+      ep.transcription_status === "pending" || ep.transcription_status === "processing" ||
+      ep.ai_metadata_status === "pending"   || ep.ai_metadata_status === "processing"
   );
   useEffect(() => {
-    if (!anyTranscribing) return;
+    if (!anyProcessing) return;
     const interval = setInterval(() => {
       qc.invalidateQueries({ queryKey: ["episodes", currentOrg?.slug, slug] });
     }, 5000);
     return () => clearInterval(interval);
-  }, [anyTranscribing, qc, currentOrg?.slug, slug]);
+  }, [anyProcessing, qc, currentOrg?.slug, slug]);
 
   if (isLoading) return <div className="p-8"><div className="glass rounded-2xl h-48 shimmer-bg" /></div>;
   if (!podcast)  return <div className="p-8 text-ink-500">Podcast not found.</div>;
@@ -238,9 +240,15 @@ export default function PodcastDetailPage() {
                         {ep.season_number ? `S${ep.season_number}·` : ""}E{ep.episode_number ?? "—"}
                       </span>
                       <p className="text-sm font-medium text-ink-200 truncate">{ep.title}</p>
-                      <Badge variant={episodeBadgeVariant(ep.status)}>
-                        {ep.status === "review" ? "In Review" : ep.status}
-                      </Badge>
+                      {(ep.ai_metadata_status === "pending" || ep.ai_metadata_status === "processing") ? (
+                        <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest font-semibold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full">
+                          <Sparkles className="h-2.5 w-2.5" /> AI Preparing…
+                        </span>
+                      ) : (
+                        <Badge variant={episodeBadgeVariant(ep.status)}>
+                          {ep.status === "review" ? "In Review" : ep.status}
+                        </Badge>
+                      )}
                     </div>
                     {/* Feedback note from reviewer */}
                     {ep.status === "draft" && ep.review_notes && (

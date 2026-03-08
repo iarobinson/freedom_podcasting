@@ -1,12 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Mic2 } from "lucide-react";
+import { ArrowLeft, Sparkles } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
-import { Input } from "@/components/ui/Input";
-import { Textarea } from "@/components/ui/Textarea";
-import { Button } from "@/components/ui/Button";
 import { AudioUploader } from "@/components/upload/AudioUploader";
 import { toast } from "@/lib/toast";
 
@@ -14,38 +11,24 @@ export default function NewEpisodePage() {
   const { slug } = useParams<{ slug: string }>();
   const router = useRouter();
   const { currentOrg } = useAuthStore();
-  const [loading, setLoading] = useState(false);
-  const [audioData, setAudioData] = useState<{ mediaFileId: number; publicUrl: string } | null>(null);
-  const [form, setForm] = useState({
-    title: "", description: "", summary: "", slug: "",
-    episode_type: "full", explicit: false, keywords: "",
-    episode_number: "", season_number: "",
-  });
+  const [episodeId, setEpisodeId] = useState<number | null>(null);
 
-  const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-    setForm((f) => ({ ...f, [k]: e.target.value }));
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!currentOrg) return;
-    setLoading(true);
+  const handleFileSelected = useCallback(async () => {
+    if (!currentOrg) return undefined;
     try {
-      const payload = {
-        ...form,
-        slug: form.slug.trim() || null,
-        audio_url: audioData?.publicUrl ?? null,
-        episode_number: form.episode_number ? parseInt(form.episode_number) : null,
-        season_number:  form.season_number  ? parseInt(form.season_number)  : null,
-      };
-      await episodesApi.create(currentOrg.slug, slug, payload);
-      toast.success("Episode created!", audioData ? "Audio attached successfully." : "Add audio when ready.");
-      router.push(`/dashboard/podcasts/${slug}`);
+      const res = await episodesApi.create(currentOrg.slug, slug, { episode_type: "full" });
+      const id: number = res.data.data.id;
+      setEpisodeId(id);
+      return id;
     } catch {
-      toast.error("Failed to create episode");
-    } finally {
-      setLoading(false);
+      toast.error("Could not create episode", "Please try again.");
+      return undefined;
     }
-  };
+  }, [currentOrg, slug]);
+
+  const handleUploadComplete = useCallback(() => {
+    router.push(`/dashboard/podcasts/${slug}`);
+  }, [router, slug]);
 
   return (
     <div className="p-8 max-w-2xl mx-auto">
@@ -54,70 +37,26 @@ export default function NewEpisodePage() {
       </button>
 
       <h1 className="font-display text-2xl text-ink-100 mb-1">New Episode</h1>
-      <p className="text-sm text-ink-500 mb-8">Upload your audio and fill in the details</p>
+      <p className="text-sm text-ink-500 mb-8">Upload your audio file to get started</p>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Audio upload */}
-        <div className="panel rounded-sm p-6 space-y-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Mic2 className="h-4 w-4 text-accent" />
-            <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Audio File</h2>
-          </div>
-          {currentOrg && (
-            <AudioUploader
-              orgSlug={currentOrg.slug}
-              podcastSlug={slug}
-              onUploadComplete={(data) => {
-                setAudioData(data);
-                toast.success("Audio uploaded!", "Metadata will be extracted in the background.");
-              }}
-              onError={(err) => toast.error("Upload failed", err)}
-            />
-          )}
+      <div className="panel rounded-sm p-6 space-y-4">
+        <div className="flex items-center gap-2 mb-1">
+          <Sparkles className="h-4 w-4 text-accent" />
+          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Audio File</h2>
         </div>
-
-        {/* Episode details */}
-        <div className="panel rounded-sm p-6 space-y-4">
-          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Episode Details</h2>
-          <Input label="Title *" placeholder="Episode title" value={form.title} onChange={set("title")} required />
-          <div className="space-y-1.5">
-            <Input
-              label="Custom URL slug"
-              placeholder="my-episode-title (leave blank to use ID)"
-              value={form.slug}
-              onChange={set("slug")}
-              onBlur={() => setForm((f) => ({ ...f, slug: f.slug.trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/[^a-z0-9-]/g, "") }))}
-            />
-            <p className="text-xs text-ink-600">Lowercase letters, numbers, and hyphens only. Leave blank to use the episode ID.</p>
-          </div>
-          <Textarea label="Description / Show Notes *" placeholder="What's this episode about? Markdown supported." value={form.description} onChange={set("description")} rows={5} required />
-          <Textarea label="Summary" placeholder="Short plain-text summary (shown in podcast apps)" value={form.summary} onChange={set("summary")} rows={2} />
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-ink-300">Type</label>
-              <select value={form.episode_type} onChange={set("episode_type")}
-                className="w-full rounded-sm px-3.5 py-2.5 text-sm bg-ink-800 border border-ink-700 text-ink-100 focus:outline-none focus:ring-2 focus:ring-accent/40">
-                <option value="full">Full</option>
-                <option value="trailer">Trailer</option>
-                <option value="bonus">Bonus</option>
-              </select>
-            </div>
-            <Input label="Episode #" type="number" placeholder="1" value={form.episode_number} onChange={set("episode_number")} min="1" />
-            <Input label="Season #"  type="number" placeholder="1" value={form.season_number}  onChange={set("season_number")}  min="1" />
-          </div>
-          <Input label="Keywords" placeholder="tech, business, startup (comma-separated)" value={form.keywords} onChange={set("keywords")} />
-          <label className="flex items-center gap-2.5 cursor-pointer group">
-            <input type="checkbox" checked={form.explicit} onChange={(e) => setForm((f) => ({ ...f, explicit: e.target.checked }))}
-              className="w-4 h-4 rounded bg-ink-800 border border-ink-700" style={{ accentColor: "var(--accent)" }} />
-            <span className="text-sm text-ink-400 group-hover:text-ink-300 transition-colors">Explicit content</span>
-          </label>
-        </div>
-
-        <div className="flex items-center gap-3 justify-end">
-          <Button variant="secondary" type="button" onClick={() => router.back()}>Cancel</Button>
-          <Button type="submit" loading={loading}>Save Episode</Button>
-        </div>
-      </form>
+        <p className="text-sm text-ink-500">
+          Drop your audio file below. AI will automatically generate the title, description, and show notes from the transcript.
+        </p>
+        {currentOrg && (
+          <AudioUploader
+            orgSlug={currentOrg.slug}
+            podcastSlug={slug}
+            onFileSelected={handleFileSelected}
+            onUploadComplete={handleUploadComplete}
+            onError={(err) => toast.error("Upload failed", err)}
+          />
+        )}
+      </div>
     </div>
   );
 }

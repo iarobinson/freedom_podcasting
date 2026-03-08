@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Mic2, Clock } from "lucide-react";
+import { ArrowLeft, Mic2, Clock, Sparkles } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
@@ -50,15 +50,17 @@ export default function EditEpisodePage() {
     onError: () => toast.error("Failed to start show notes generation"),
   });
 
-  // Poll while show notes are being generated
+  // Poll while AI is generating (metadata or show notes)
+  const isGeneratingMetadata  = episode?.ai_metadata_status === "pending" || episode?.ai_metadata_status === "processing";
   const isGeneratingShowNotes = episode?.show_notes_ai_status === "pending" || episode?.show_notes_ai_status === "processing";
+  const isPolling = isGeneratingMetadata || isGeneratingShowNotes;
   useEffect(() => {
-    if (!isGeneratingShowNotes) return;
+    if (!isPolling) return;
     const interval = setInterval(() => {
       qc.invalidateQueries({ queryKey: ["episode", currentOrg?.slug, slug, id] });
     }, 5000);
     return () => clearInterval(interval);
-  }, [isGeneratingShowNotes, qc, currentOrg?.slug, slug, id]);
+  }, [isPolling, qc, currentOrg?.slug, slug, id]);
 
   const update = useMutation({
     mutationFn: () => episodesApi.update(currentOrg!.slug, slug, parseInt(id), {
@@ -88,6 +90,16 @@ export default function EditEpisodePage() {
       </button>
       <h1 className="font-display text-2xl text-ink-100 mb-1">Edit Episode</h1>
       <p className="text-sm text-ink-500 mb-8">{episode.title}</p>
+
+      {isGeneratingMetadata && (
+        <div className="flex items-start gap-3 rounded-sm border border-amber-500/30 bg-amber-500/8 px-4 py-3 mb-6">
+          <Sparkles className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-medium text-amber-300">AI is generating your episode details…</p>
+            <p className="text-xs text-amber-500 mt-0.5">Title, description, and summary will populate automatically once ready.</p>
+          </div>
+        </div>
+      )}
 
       <form onSubmit={(e) => { e.preventDefault(); update.mutate(); }} className="space-y-6">
         <div className="panel rounded-sm p-6 space-y-4">
@@ -135,40 +147,48 @@ export default function EditEpisodePage() {
 
         <div className="panel rounded-sm p-6 space-y-4">
           <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Episode Details</h2>
-          <Input label="Title *" value={form.title as string ?? ""} onChange={set("title")} required />
-          <div className="space-y-1.5">
-            <Input
-              label="Custom URL slug"
-              placeholder="my-episode-title (leave blank to use ID)"
-              value={form.slug as string ?? ""}
-              onChange={set("slug")}
-              onBlur={() => setForm((f) => ({ ...f, slug: (f.slug as string).trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/[^a-z0-9-]/g, "") }))}
-            />
-            <p className="text-xs text-ink-600">Lowercase letters, numbers, and hyphens only. Leave blank to use the episode ID.</p>
-          </div>
-          <Textarea label="Description *" value={form.description as string ?? ""} onChange={set("description")} rows={5} required />
+          <Input label="Title" value={form.title as string ?? ""} onChange={set("title")} required />
+          <Textarea label="Description" value={form.description as string ?? ""} onChange={set("description")} rows={5} required />
           <Textarea label="Summary" value={form.summary as string ?? ""} onChange={set("summary")} rows={2} />
-          <div className="grid grid-cols-3 gap-4">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-ink-300">Type</label>
-              <select value={form.episode_type as string ?? "full"} onChange={set("episode_type")}
-                className="w-full rounded-sm px-3.5 py-2.5 text-sm bg-ink-800 border border-ink-700 text-ink-100 focus:outline-none focus:ring-2 focus:ring-accent/40">
-                <option value="full">Full</option>
-                <option value="trailer">Trailer</option>
-                <option value="bonus">Bonus</option>
-              </select>
-            </div>
-            <Input label="Episode #" type="number" value={form.episode_number as string ?? ""} onChange={set("episode_number")} min="1" />
-            <Input label="Season #"  type="number" value={form.season_number  as string ?? ""} onChange={set("season_number")}  min="1" />
-          </div>
-          <Input label="Keywords" value={form.keywords as string ?? ""} onChange={set("keywords")} placeholder="tech, business (comma-separated)" />
-          <label className="flex items-center gap-2.5 cursor-pointer">
-            <input type="checkbox" checked={form.explicit as boolean ?? false}
-              onChange={(e) => setForm((f) => ({ ...f, explicit: e.target.checked }))}
-              className="w-4 h-4 rounded bg-ink-800 border border-ink-700" style={{ accentColor: "var(--accent)" }} />
-            <span className="text-sm text-ink-400">Explicit content</span>
-          </label>
         </div>
+
+        <details className="group">
+          <summary className="cursor-pointer text-xs text-ink-600 hover:text-ink-400 transition-colors uppercase tracking-widest select-none list-none flex items-center gap-1.5 mb-3">
+            <span className="group-open:rotate-90 transition-transform inline-block">▶</span> Advanced settings
+          </summary>
+          <div className="panel rounded-sm p-6 space-y-4">
+            <div className="space-y-1.5">
+              <Input
+                label="Custom URL slug"
+                placeholder="my-episode-title (leave blank to use ID)"
+                value={form.slug as string ?? ""}
+                onChange={set("slug")}
+                onBlur={() => setForm((f) => ({ ...f, slug: (f.slug as string).trim().toLowerCase().replace(/[\s_]+/g, "-").replace(/[^a-z0-9-]/g, "") }))}
+              />
+              <p className="text-xs text-ink-600">Leave blank to use the episode ID.</p>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-1.5">
+                <label className="block text-sm font-medium text-ink-300">Type</label>
+                <select value={form.episode_type as string ?? "full"} onChange={set("episode_type")}
+                  className="w-full rounded-sm px-3.5 py-2.5 text-sm bg-ink-800 border border-ink-700 text-ink-100 focus:outline-none focus:ring-2 focus:ring-accent/40">
+                  <option value="full">Full</option>
+                  <option value="trailer">Trailer</option>
+                  <option value="bonus">Bonus</option>
+                </select>
+              </div>
+              <Input label="Episode #" type="number" value={form.episode_number as string ?? ""} onChange={set("episode_number")} min="1" />
+              <Input label="Season #"  type="number" value={form.season_number  as string ?? ""} onChange={set("season_number")}  min="1" />
+            </div>
+            <Input label="Keywords" value={form.keywords as string ?? ""} onChange={set("keywords")} placeholder="tech, business (comma-separated)" />
+            <label className="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" checked={form.explicit as boolean ?? false}
+                onChange={(e) => setForm((f) => ({ ...f, explicit: e.target.checked }))}
+                className="w-4 h-4 rounded bg-ink-800 border border-ink-700" style={{ accentColor: "var(--accent)" }} />
+              <span className="text-sm text-ink-400">Explicit content</span>
+            </label>
+          </div>
+        </details>
 
         <div className="flex justify-end gap-3">
           <Button variant="secondary" type="button" onClick={() => router.back()}>Cancel</Button>
