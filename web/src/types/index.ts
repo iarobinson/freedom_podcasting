@@ -70,6 +70,8 @@ export interface Episode {
   updated_at: string;
   transcript?: string;
   transcription_status?: "pending" | "processing" | "done" | "failed";
+  show_notes_ai?: string;
+  show_notes_ai_status?: "pending" | "processing" | "done" | "failed";
 }
 
 export interface Member {

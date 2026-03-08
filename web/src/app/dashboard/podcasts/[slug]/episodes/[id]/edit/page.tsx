@@ -41,6 +41,25 @@ export default function EditEpisodePage() {
     });
   }, [episode]);
 
+  const generateShowNotes = useMutation({
+    mutationFn: () => episodesApi.generateShowNotes(currentOrg!.slug, slug, parseInt(id)),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["episode", currentOrg?.slug, slug, id] });
+      toast.success("Show notes generating…", "This will take about 30 seconds.");
+    },
+    onError: () => toast.error("Failed to start show notes generation"),
+  });
+
+  // Poll while show notes are being generated
+  const isGeneratingShowNotes = episode?.show_notes_ai_status === "pending" || episode?.show_notes_ai_status === "processing";
+  useEffect(() => {
+    if (!isGeneratingShowNotes) return;
+    const interval = setInterval(() => {
+      qc.invalidateQueries({ queryKey: ["episode", currentOrg?.slug, slug, id] });
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isGeneratingShowNotes, qc, currentOrg?.slug, slug, id]);
+
   const update = useMutation({
     mutationFn: () => episodesApi.update(currentOrg!.slug, slug, parseInt(id), {
       ...form,
@@ -170,6 +189,36 @@ export default function EditEpisodePage() {
             className="w-full bg-ink-900 border border-ink-800 rounded-sm px-4 py-3 text-sm text-ink-300 leading-relaxed resize-y focus:outline-none"
           />
           <p className="text-[10px] text-ink-600 uppercase tracking-widest">Transcript editing available in a future update.</p>
+        </div>
+      )}
+
+      {episode.transcript && (
+        <div className="panel rounded-sm p-6 space-y-3 mt-4">
+          <div className="ornament-divider">
+            <span>Show Notes</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] uppercase tracking-widest text-ink-600">AI-generated · Claude</p>
+            {(episode.show_notes_ai_status === "pending" || episode.show_notes_ai_status === "processing") ? (
+              <span className="text-[10px] uppercase tracking-widest text-amber-500">Generating…</span>
+            ) : (
+              <button
+                onClick={() => generateShowNotes.mutate()}
+                disabled={generateShowNotes.isPending}
+                className="text-xs text-ink-600 hover:text-accent transition-colors disabled:opacity-50">
+                {episode.show_notes_ai ? "Regenerate" : "Generate"}
+              </button>
+            )}
+          </div>
+          {episode.show_notes_ai && (
+            <textarea
+              readOnly
+              value={episode.show_notes_ai}
+              rows={14}
+              className="w-full bg-ink-900 border border-ink-800 rounded-sm px-4 py-3 text-sm text-ink-300 leading-relaxed resize-y focus:outline-none"
+            />
+          )}
+          <p className="text-[10px] text-ink-600 uppercase tracking-widest">Show notes editing available in a future update.</p>
         </div>
       )}
     </div>
