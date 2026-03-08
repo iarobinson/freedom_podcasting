@@ -232,7 +232,7 @@ export default function PodcastDetailPage() {
             {episodes.map((ep) => (
               <div key={ep.id}>
                 <div className="glass glass-hover rounded-xl px-4 py-3.5 flex items-center gap-3 group">
-                  <div className="flex-1 min-w-0">
+                  <Link href={`/p/${slug}/episodes/${ep.id}`} className="flex-1 min-w-0 cursor-pointer">
                     <div className="flex items-center gap-2 mb-0.5 flex-wrap">
                       <span className="text-[11px] font-mono text-ink-600">
                         {ep.season_number ? `S${ep.season_number}·` : ""}E{ep.episode_number ?? "—"}
@@ -259,7 +259,7 @@ export default function PodcastDetailPage() {
                       )}
                       {!ep.audio_url && <span className="text-amber-500">⚠ No audio</span>}
                     </div>
-                  </div>
+                  </Link>
 
                   {/* Actions — context-sensitive by status + role */}
                   {canEdit && (
