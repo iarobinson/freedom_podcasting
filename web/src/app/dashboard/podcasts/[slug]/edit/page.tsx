@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
+import { AlertTriangle, ArrowLeft } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { podcastsApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
@@ -35,15 +35,18 @@ export default function EditPodcastPage() {
       explicit: podcast.explicit, podcast_type: podcast.podcast_type,
       website_url: podcast.website_url ?? "",
       artwork_url: podcast.artwork_url ?? "",
+      slug: podcast.slug,
     });
   }, [podcast]);
 
   const update = useMutation({
     mutationFn: () => podcastsApi.update(currentOrg!.slug, slug, form),
     onSuccess: () => {
+      const newSlug = (form.slug as string) || slug;
       qc.invalidateQueries({ queryKey: ["podcast", currentOrg?.slug, slug] });
+      qc.invalidateQueries({ queryKey: ["podcast", currentOrg?.slug, newSlug] });
       toast.success("Podcast updated!");
-      router.push(`/dashboard/podcasts/${slug}`);
+      router.push(`/dashboard/podcasts/${newSlug}`);
     },
     onError: () => toast.error("Failed to update podcast"),
   });
@@ -116,6 +119,47 @@ export default function EditPodcastPage() {
               className="w-4 h-4 rounded accent-brand-500" />
             <span className="text-sm text-ink-400">Explicit content</span>
           </label>
+
+          <div className="pt-2 border-t border-white/5 space-y-2">
+            <div className="space-y-1.5">
+              <label className="block text-sm font-medium text-ink-300">Podcast URL slug</label>
+              <div className="flex items-stretch">
+                <span className="flex items-center px-3 text-xs text-ink-600 bg-ink-900 border border-r-0 border-ink-700 rounded-l-sm whitespace-nowrap select-none">
+                  /rss/
+                </span>
+                <input
+                  type="text"
+                  value={form.slug as string ?? ""}
+                  onChange={(e) => {
+                    const raw = e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-");
+                    setForm((f) => ({ ...f, slug: raw }));
+                  }}
+                  onBlur={(e) => {
+                    setForm((f) => ({ ...f, slug: e.target.value.replace(/^-+|-+$/g, "") }));
+                  }}
+                  className="flex-1 px-3 py-2.5 text-sm bg-white/5 border border-ink-700 rounded-r-sm text-ink-100 focus:outline-none focus:ring-2 focus:ring-accent/40"
+                  placeholder="my-podcast"
+                />
+              </div>
+              <p className="text-xs text-ink-600">
+                RSS feed: <span className="text-ink-500 font-mono">{podcast.rss_url.replace(`/${podcast.slug}`, `/${(form.slug as string) || podcast.slug}`)}</span>
+              </p>
+            </div>
+
+            {(form.slug as string) && (form.slug as string) !== podcast.slug && (
+              <div className="flex items-start gap-3 rounded-sm border border-amber-500/30 bg-amber-500/10 px-4 py-3">
+                <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-sm font-semibold text-amber-300">Changing this URL will break your RSS feed</p>
+                  <p className="text-xs text-amber-500 mt-1 leading-relaxed">
+                    If you&apos;ve already submitted this podcast to Apple Podcasts, Spotify, or other directories,
+                    they will continue pointing to the old URL. Subscribers may lose access to new episodes until
+                    each directory is manually updated with the new RSS feed URL.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex justify-end gap-3">
