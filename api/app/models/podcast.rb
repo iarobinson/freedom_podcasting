@@ -7,7 +7,8 @@ class Podcast < ApplicationRecord
   validates :description, presence: true
   validates :author, presence: true
   validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :slug, presence: true, uniqueness: { case_sensitive: false },
+  validates :slug, presence: true,
+                   uniqueness: { scope: :organization_id, case_sensitive: false },
                    format: { with: /\A[a-z0-9\-]+\z/ }
   validates :podcast_type, inclusion: { in: %w[episodic serial] }
 

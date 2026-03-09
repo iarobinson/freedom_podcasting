@@ -48,7 +48,10 @@ export default function EditPodcastPage() {
       toast.success("Podcast updated!");
       router.push(`/dashboard/podcasts/${newSlug}`);
     },
-    onError: () => toast.error("Failed to update podcast"),
+    onError: (err: unknown) => {
+      const msgs = (err as { response?: { data?: { errors?: string[] } } })?.response?.data?.errors;
+      toast.error("Failed to update podcast", msgs?.join(", ") ?? "Something went wrong.");
+    },
   });
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
