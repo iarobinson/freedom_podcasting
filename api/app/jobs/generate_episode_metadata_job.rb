@@ -14,12 +14,17 @@ class GenerateEpisodeMetadataJob < ApplicationJob
     prompt = <<~PROMPT
       You are a podcast producer. Given the transcript below, write episode metadata.
 
-      #{duration_note}Transcript:
+      #{duration_note}The transcript has ACCURATE timestamps in [M:SS] format (one every ~30 seconds from the real audio). Use these exact timestamps when writing chapter markers — do NOT estimate or invent different ones.
+
+      Transcript:
       #{episode.transcript}
 
       Reply in this EXACT format using ||| as separators — no preamble, no extra text:
 
-      TITLE|||A compelling episode title (max 80 characters)|||DESCRIPTION|||2-3 paragraphs of engaging show notes describing the episode|||SUMMARY|||One sentence summary for podcast apps (max 160 characters)
+      TITLE|||A compelling episode title (max 80 characters)|||DESCRIPTION|||2-3 paragraphs describing the episode, followed by a blank line and then a chapter list using ONLY timestamps that appear in the transcript above, formatted as:
+      [M:SS] Chapter title
+      [M:SS] Chapter title
+      |||SUMMARY|||One sentence summary for podcast apps (max 160 characters)
     PROMPT
 
     conn = Faraday.new("https://api.anthropic.com") do |f|

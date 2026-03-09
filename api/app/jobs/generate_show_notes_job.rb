@@ -14,27 +14,29 @@ class GenerateShowNotesJob < ApplicationJob
     prompt = <<~PROMPT
       You are a podcast producer writing show notes for a podcast episode.
 
-      #{duration_note}Transcript:
+      #{duration_note}The transcript below has ACCURATE timestamps in [M:SS] format (one every ~30 seconds from the real audio). Use these exact timestamps when writing chapter markers — do NOT estimate or invent different ones.
+
+      Transcript:
       #{episode.transcript}
 
       Write show notes in this exact format — no preamble, no commentary, just the show notes:
 
       First, write a 2-3 paragraph summary of the episode covering the main themes and key takeaways.
 
-      Then write a "Key Topics" section with timestamped bullet points. Estimate each timestamp based on where the topic appears in the transcript relative to the total episode duration. Format each line as:
-      - [M:SS] Brief description of the topic
+      Then write a "Chapters" section. Each line must reference a timestamp that actually appears in the transcript above. Format:
+      - [M:SS] Brief description of what is discussed at this point
 
-      Example output format:
+      Example output:
       In this episode, [host] discusses...
 
       [second paragraph]
 
       [optional third paragraph]
 
-      Key Topics:
-      - [0:30] Introduction and background
-      - [3:15] First major topic
-      - [8:45] Second major topic
+      Chapters:
+      - [0:00] Introduction
+      - [2:30] First major topic
+      - [8:00] Deep dive into...
     PROMPT
 
     conn = Faraday.new("https://api.anthropic.com") do |f|
