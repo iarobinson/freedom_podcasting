@@ -39,7 +39,8 @@ module Api::V1
       if mf.audio? && mf.episode_id.present?
         episode = Episode.find_by(id: mf.episode_id)
         if episode && !episode.transcript.present?
-          episode.update!(transcription_status: "pending", ai_metadata_status: "pending")
+          episode.update!(audio_url: mf.public_url, audio_content_type: mf.content_type,
+                          transcription_status: "pending", ai_metadata_status: "pending")
           TranscribeEpisodeJob.perform_later(episode.id)
         end
       end

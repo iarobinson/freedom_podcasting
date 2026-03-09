@@ -48,6 +48,7 @@ class ProcessAudioJob < ApplicationJob
   end
 
   def download_file(url, tmp)
+    tmp.binmode
     uri = URI.parse(url)
     Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https") do |http|
       http.request_get(uri.request_uri) { |r| r.read_body { |chunk| tmp.write(chunk) } }
