@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Mic2, Clock, Sparkles } from "lucide-react";
+import { ArrowLeft, Mic2, Clock, Sparkles, Lock } from "lucide-react";
+import Link from "next/link";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
@@ -47,7 +48,14 @@ export default function EditEpisodePage() {
       qc.invalidateQueries({ queryKey: ["episode", currentOrg?.slug, slug, id] });
       toast.success("Show notes generating…", "This will take about 30 seconds.");
     },
-    onError: () => toast.error("Failed to start show notes generation"),
+    onError: (err: unknown) => {
+      const status = (err as { response?: { status?: number } })?.response?.status;
+      if (status === 402) {
+        toast.error("Paid plan required", "Upgrade to Starter or higher to use AI show notes.");
+      } else {
+        toast.error("Failed to start show notes generation");
+      }
+    },
   });
 
   // Poll while AI is generating (metadata or show notes)
@@ -82,6 +90,7 @@ export default function EditEpisodePage() {
 
   const hasAudio = !!(form.audio_url as string);
   const showUploader = !hasAudio || replaceAudio;
+  const isFreePlan = currentOrg?.plan === "free";
 
   return (
     <div className="p-8 max-w-2xl mx-auto">
@@ -92,12 +101,29 @@ export default function EditEpisodePage() {
       <p className="text-sm text-ink-500 mb-8">{episode.title}</p>
 
       {isGeneratingMetadata && (
-        <div className="flex items-start gap-3 rounded-sm border border-amber-500/30 bg-amber-500/8 px-4 py-3 mb-6">
+        <div className="flex items-start gap-3 rounded-sm border border-amber-500/30 bg-amber-500/10 px-4 py-3 mb-6">
           <Sparkles className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
           <div>
             <p className="text-sm font-medium text-amber-300">AI is generating your episode details…</p>
             <p className="text-xs text-amber-500 mt-0.5">Title, description, and summary will populate automatically once ready.</p>
           </div>
+        </div>
+      )}
+
+      {isFreePlan && hasAudio && !episode.transcript && (
+        <div className="flex items-start gap-3 rounded-sm border border-ink-700 bg-ink-900 px-4 py-4 mb-6">
+          <Lock className="h-4 w-4 text-ink-500 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="text-sm font-semibold text-ink-200">AI features require a paid plan</p>
+            <p className="text-xs text-ink-500 mt-1 leading-relaxed">
+              Transcription, AI-generated show notes, titles, and descriptions are available on Starter and above.
+              Estimated cost for this episode: <span className="text-ink-300 font-mono">~$0.40</span>.
+            </p>
+          </div>
+          <Link href="/dashboard/settings/billing"
+            className="shrink-0 text-xs font-semibold text-accent hover:text-accent-light transition-colors border border-accent/30 hover:border-accent/60 px-3 py-1.5 rounded-sm">
+            Upgrade
+          </Link>
         </div>
       )}
 
@@ -219,7 +245,11 @@ export default function EditEpisodePage() {
           </div>
           <div className="flex items-center justify-between">
             <p className="text-[10px] uppercase tracking-widest text-ink-600">AI-generated · Claude</p>
-            {(episode.show_notes_ai_status === "pending" || episode.show_notes_ai_status === "processing") ? (
+            {isFreePlan ? (
+              <Link href="/dashboard/settings/billing" className="text-xs text-accent hover:text-accent-light transition-colors">
+                Upgrade to regenerate
+              </Link>
+            ) : (episode.show_notes_ai_status === "pending" || episode.show_notes_ai_status === "processing") ? (
               <span className="text-[10px] uppercase tracking-widest text-amber-500">Generating…</span>
             ) : (
               <button
@@ -238,7 +268,9 @@ export default function EditEpisodePage() {
               className="w-full bg-ink-900 border border-ink-800 rounded-sm px-4 py-3 text-sm text-ink-300 leading-relaxed resize-y focus:outline-none"
             />
           )}
-          <p className="text-[10px] text-ink-600 uppercase tracking-widest">Show notes editing available in a future update.</p>
+          {!episode.show_notes_ai && !isFreePlan && (
+            <p className="text-[10px] text-ink-600 uppercase tracking-widest">Click Generate to create AI show notes from your transcript.</p>
+          )}
         </div>
       )}
     </div>

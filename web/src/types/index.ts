@@ -46,6 +46,7 @@ export type EpisodeType   = "full" | "trailer" | "bonus";
 
 export interface Episode {
   id: number;
+  slug?: string;
   title: string;
   description: string;
   summary?: string;

@@ -61,6 +61,7 @@ module Api::V1
 
     def transcribe
       require_editor!
+      return if enforce_ai_features!
       return render(json: { error: "No audio file." }, status: :unprocessable_entity) unless @episode.audio_url.present?
       if %w[pending processing].include?(@episode.transcription_status)
         return render(json: { error: "Transcription already in progress." }, status: :unprocessable_entity)
@@ -72,6 +73,7 @@ module Api::V1
 
     def generate_show_notes
       require_editor!
+      return if enforce_ai_features!
       return render(json: { error: "No transcript available." }, status: :unprocessable_entity) unless @episode.transcript.present?
       if %w[pending processing].include?(@episode.show_notes_ai_status)
         return render(json: { error: "Already generating." }, status: :unprocessable_entity)

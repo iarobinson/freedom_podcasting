@@ -119,8 +119,14 @@ export default function PodcastDetailPage() {
     mutationFn: (ep: Episode) => episodesApi.transcribe(currentOrg!.slug, slug, ep.id),
     onSuccess: () => { invalidateEpisodes(); },
     onError: (err: unknown) => {
+      const status = (err as { response?: { status?: number } })?.response?.status;
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
-      toast.error("Could not start transcription", msg ?? "Something went wrong.");
+      if (status === 402) {
+        toast.error("Paid plan required", "Upgrade to Starter or higher to use AI transcription.");
+        router.push("/dashboard/settings/billing");
+      } else {
+        toast.error("Could not start transcription", msg ?? "Something went wrong.");
+      }
     },
   });
 
@@ -346,7 +352,7 @@ export default function PodcastDetailPage() {
 
                       {/* View public page (published only) */}
                       {ep.status === "published" && (
-                        <Link href={`/p/${slug}/episodes/${ep.id}`}
+                        <Link href={`/p/${currentOrg?.slug}/${slug}/episodes/${ep.slug ?? ep.id}`}
                           className="p-1.5 text-ink-600 hover:text-emerald-400 hover:bg-emerald-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100"
                           title="View public page">
                           <Globe className="h-3.5 w-3.5" />

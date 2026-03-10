@@ -50,4 +50,10 @@ class ApplicationController < ActionController::API
       render json: { error: "Monthly publish limit reached. Upgrade to publish more episodes." }, status: :unprocessable_entity
     end
   end
+
+  def enforce_ai_features!
+    if current_organization.plan == "free"
+      render json: { error: "AI features (transcription, show notes, and metadata) require a paid plan. Upgrade to Starter or higher." }, status: :payment_required
+    end
+  end
 end

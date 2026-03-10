@@ -73,8 +73,14 @@ Rails.application.routes.draw do
   get  "/feeds/:podcast_slug/episodes/:guid", to: "public/episodes#show", as: :public_episode
 
   namespace :public do
-    get "/podcasts/:slug",                         to: "podcasts#show"
-    get "/podcasts/:slug/episodes",                to: "podcasts#episodes"
-    get "/podcasts/:slug/episodes/:episode_id",    to: "podcasts#episode"
+    # Org-scoped (canonical) — unambiguous in multi-tenant
+    get "/podcasts/:org_slug/:podcast_slug",                         to: "podcasts#show"
+    get "/podcasts/:org_slug/:podcast_slug/episodes",                to: "podcasts#episodes"
+    get "/podcasts/:org_slug/:podcast_slug/episodes/:episode_id",    to: "podcasts#episode"
+
+    # Legacy slug-only routes — kept for backward-compat
+    get "/podcasts/:slug",                                           to: "podcasts#show_legacy"
+    get "/podcasts/:slug/episodes",                                  to: "podcasts#episodes_legacy"
+    get "/podcasts/:slug/episodes/:episode_id",                      to: "podcasts#episode_legacy"
   end
 end
