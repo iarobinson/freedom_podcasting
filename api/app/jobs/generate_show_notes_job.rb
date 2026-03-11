@@ -1,6 +1,8 @@
 class GenerateShowNotesJob < ApplicationJob
   queue_as :ai_processing
-  retry_on StandardError, wait: :polynomially_longer, attempts: 3
+  retry_on StandardError, wait: :polynomially_longer, attempts: 3 do |job, _err|
+    Episode.find_by(id: job.arguments.first)&.update_column(:show_notes_ai_status, "failed")
+  end
 
   def perform(episode_id)
     episode = Episode.find_by(id: episode_id)
@@ -59,7 +61,7 @@ class GenerateShowNotesJob < ApplicationJob
 
     episode.update!(show_notes_ai: content, show_notes_ai_status: "done")
   rescue => e
-    Episode.find_by(id: episode_id)&.update_column(:show_notes_ai_status, "failed")
+    Episode.find_by(id: episode_id)&.update_column(:show_notes_ai_status, "processing")
     raise e
   end
 end

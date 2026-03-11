@@ -1,6 +1,8 @@
 class GenerateEpisodeMetadataJob < ApplicationJob
   queue_as :ai_processing
-  retry_on StandardError, wait: :polynomially_longer, attempts: 3
+  retry_on StandardError, wait: :polynomially_longer, attempts: 3 do |job, _err|
+    Episode.find_by(id: job.arguments.first)&.update_column(:ai_metadata_status, "failed")
+  end
 
   def perform(episode_id)
     episode = Episode.find_by(id: episode_id)
@@ -65,7 +67,7 @@ class GenerateEpisodeMetadataJob < ApplicationJob
       ai_metadata_status: "done"
     )
   rescue => e
-    Episode.find_by(id: episode_id)&.update_column(:ai_metadata_status, "failed")
+    Episode.find_by(id: episode_id)&.update_column(:ai_metadata_status, "processing")
     raise e
   end
 end

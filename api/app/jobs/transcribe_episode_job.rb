@@ -1,8 +1,16 @@
 class TranscribeEpisodeJob < ApplicationJob
   queue_as :ai_processing
-  # 429 rate-limit: back off 2 min → 4 min → 8 min before giving up
-  retry_on Faraday::TooManyRequestsError, wait: :polynomially_longer, attempts: 4, jitter: 0.15
-  retry_on StandardError, wait: :polynomially_longer, attempts: 3
+
+  # Without a block, retry_on re-raises after exhaustion → Sidekiq adds it to its own 25-attempt
+  # retry queue on top of ours. The block prevents that: once attempts are exhausted, the block
+  # runs, status is marked failed, and the exception is NOT re-raised to Sidekiq.
+  retry_on Faraday::TooManyRequestsError, wait: :polynomially_longer, attempts: 4, jitter: 0.15 do |job, _err|
+    Episode.find_by(id: job.arguments.first)&.update_column(:transcription_status, "failed")
+  end
+
+  retry_on StandardError, wait: :polynomially_longer, attempts: 3 do |job, _err|
+    Episode.find_by(id: job.arguments.first)&.update_column(:transcription_status, "failed")
+  end
 
   MAX_WHISPER_BYTES = 24.megabytes
 
@@ -58,14 +66,9 @@ class TranscribeEpisodeJob < ApplicationJob
       end
     end
   rescue => e
-    # Keep status as "processing" while retries are still pending.
-    # Only flip to "failed" on the final attempt so the UI guard
-    # (which blocks re-trigger when status is pending/processing) stays active.
-    ep = Episode.find_by(id: episode_id)
-    if ep
-      max = e.is_a?(Faraday::TooManyRequestsError) ? 4 : 3
-      ep.update_column(:transcription_status, executions >= max ? "failed" : "processing")
-    end
+    # Keep status as "processing" so the UI guard blocks duplicate job creation during retries.
+    # The retry_on exhaustion blocks above set it to "failed" on the final attempt.
+    Episode.find_by(id: episode_id)&.update_column(:transcription_status, "processing")
     raise e
   end
 

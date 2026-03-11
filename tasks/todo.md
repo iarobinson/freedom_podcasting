@@ -112,38 +112,43 @@ Goal: A working podcast host where you can upload an episode and get a valid RSS
 ### Infrastructure
 - [x] 1.21 Dockerfile for Rails API
 - [x] 1.22 fly.toml config (API + worker processes)
-- [ ] 1.23 Cloudflare R2 bucket CORS policy (allow PUT from freedompodcasting.com + fly.dev origins)
+- [x] 1.23 Cloudflare R2 bucket CORS policy (allow PUT from freedompodcasting.com + fly.dev origins)
 - [x] 1.24 Environment variable management (fly secrets)
 - [ ] 1.25 CI/CD with GitHub Actions → Fly.io deploy
 
 ---
 
-## Phase 2 — Client Platform [ ]
+## Phase 2 — Client Platform [x]
 Goal: Paying clients can log in, manage their show, and collaborate with your team.
 
 - [x] 2.1 Invitation system (invite clients to their org)
 - [x] 2.2 Role-based access control (useRole hook + backend require_manager!/require_editor! helpers)
 - [x] 2.3 Episode workflow: draft → review → approved → published
-- [ ] 2.4 Comments/feedback on episodes (for producer ↔ client communication)
+- [ ] 2.4 Comments/feedback on episodes (for producer ↔ client communication) — deferred, use Slack
 - [x] 2.5 Analytics: download counts, geographic distribution
 - [x] 2.6 Stripe subscription billing (free/starter/pro/agency tiers)
-- [x] 2.7 Podcast website (public-facing, SEO optimized)
+- [x] 2.7 Podcast website (public-facing, SEO optimized) — org-scoped URLs (/p/{org}/{podcast})
 - [ ] 2.8 Custom domain support (CNAME → Cloudflare)
+- [x] 2.9 Podcast directory links (Apple Podcasts, Spotify, Amazon Music) on edit + public pages
+- [x] 2.10 RSS feed org-scoped URLs (/feeds/{org}/{podcast}) — fixes multi-tenant slug collision
+- [x] 2.11 AI features paywall — transcription/show notes gated to paid plans (402 for free)
 
 ---
 
-## Phase 3 — AI Production Tools [ ]
+## Phase 3 — AI Production Tools [~]
 Goal: AI makes production faster and better.
 
-- [ ] 3.1 Whisper transcription pipeline (Sidekiq job after upload)
-- [ ] 3.2 Claude: auto-generate show notes from transcript
-- [ ] 3.3 Claude: episode summary (short + long versions)
-- [ ] 3.4 Claude: chapter markers with timestamps
-- [ ] 3.5 Claude: SEO title suggestions
-- [ ] 3.6 Claude: social media clip suggestions
-- [ ] 3.7 Transcript editor (correct errors, search within transcript)
-- [ ] 3.8 Audio waveform visualization with chapter markers
-- [ ] 3.9 Drop in audio advertisement injection to add to mp3s.
+- [x] 3.1 Whisper transcription pipeline (Sidekiq job, 16kHz mono transcode, timestamped output)
+- [x] 3.2 Claude: auto-generate show notes with chapter markers from transcript
+- [x] 3.3 Claude: episode summary (one-sentence for podcast apps)
+- [x] 3.4 Claude: chapter markers with real timestamps from Whisper segments
+- [x] 3.5 Audio-first episode creation — upload audio → AI auto-fills title/description/summary
+- [x] 3.6 AI processing status indicator (step-by-step progress panel with polling)
+- [ ] 3.7 Claude: SEO title suggestions
+- [ ] 3.8 Claude: social media clip suggestions
+- [ ] 3.9 Transcript editor (correct errors, search within transcript)
+- [ ] 3.10 Audio waveform visualization with chapter markers
+- [ ] 3.11 Drop in audio advertisement injection to add to mp3s.
 
 ---
 
