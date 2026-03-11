@@ -106,6 +106,24 @@ export default async function PublicPodcastPage({ params }: { params: { slug: st
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm panel panel-hover text-xs font-medium text-ink-300 transition-colors">
                 <Rss className="h-3.5 w-3.5 text-accent" /> Subscribe via RSS
               </a>
+              {podcast.apple_podcasts_url && (
+                <a href={podcast.apple_podcasts_url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm panel panel-hover text-xs font-medium text-ink-300 transition-colors">
+                  <ExternalLink className="h-3.5 w-3.5" /> Apple Podcasts
+                </a>
+              )}
+              {podcast.spotify_url && (
+                <a href={podcast.spotify_url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm panel panel-hover text-xs font-medium text-ink-300 transition-colors">
+                  <ExternalLink className="h-3.5 w-3.5" /> Spotify
+                </a>
+              )}
+              {podcast.amazon_music_url && (
+                <a href={podcast.amazon_music_url} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm panel panel-hover text-xs font-medium text-ink-300 transition-colors">
+                  <ExternalLink className="h-3.5 w-3.5" /> Amazon Music
+                </a>
+              )}
               {podcast.website_url && (
                 <a href={podcast.website_url} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-sm panel panel-hover text-xs font-medium text-ink-300 transition-colors">

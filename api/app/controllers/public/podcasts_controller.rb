@@ -53,7 +53,8 @@ module Public
         slug: p.slug, org_slug: p.organization.slug,
         artwork_url: p.artwork_url, language: p.language,
         category: p.category, website_url: p.website_url, explicit: p.explicit,
-        podcast_type: p.podcast_type, episode_count: p.published_episodes.count }
+        podcast_type: p.podcast_type, episode_count: p.published_episodes.count,
+        apple_podcasts_url: p.apple_podcasts_url, spotify_url: p.spotify_url, amazon_music_url: p.amazon_music_url }
     end
 
     def episode_json(e)

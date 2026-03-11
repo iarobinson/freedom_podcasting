@@ -37,6 +37,9 @@ export interface Podcast {
   rss_url: string;
   episode_count: number;
   published_episode_count: number;
+  apple_podcasts_url?: string;
+  spotify_url?: string;
+  amazon_music_url?: string;
   created_at: string;
   updated_at: string;
 }

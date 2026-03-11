@@ -36,6 +36,9 @@ export default function EditPodcastPage() {
       website_url: podcast.website_url ?? "",
       artwork_url: podcast.artwork_url ?? "",
       slug: podcast.slug,
+      apple_podcasts_url: podcast.apple_podcasts_url ?? "",
+      spotify_url: podcast.spotify_url ?? "",
+      amazon_music_url: podcast.amazon_music_url ?? "",
     });
   }, [podcast]);
 
@@ -163,6 +166,34 @@ export default function EditPodcastPage() {
               </div>
             )}
           </div>
+        </div>
+
+        <div className="glass rounded-2xl p-6 space-y-4">
+          <div>
+            <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider mb-1">Podcast Directories</h2>
+            <p className="text-xs text-ink-600">After your podcast is approved on each platform, paste the URL here to show subscribe buttons on your public podcast page.</p>
+          </div>
+          <Input
+            label="Apple Podcasts URL"
+            type="url"
+            placeholder="https://podcasts.apple.com/podcast/id..."
+            value={form.apple_podcasts_url as string ?? ""}
+            onChange={set("apple_podcasts_url")}
+          />
+          <Input
+            label="Spotify URL"
+            type="url"
+            placeholder="https://open.spotify.com/show/..."
+            value={form.spotify_url as string ?? ""}
+            onChange={set("spotify_url")}
+          />
+          <Input
+            label="Amazon Music URL"
+            type="url"
+            placeholder="https://music.amazon.com/podcasts/..."
+            value={form.amazon_music_url as string ?? ""}
+            onChange={set("amazon_music_url")}
+          />
         </div>
 
         <div className="flex justify-end gap-3">

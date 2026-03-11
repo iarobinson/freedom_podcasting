@@ -46,7 +46,8 @@ module Api::V1
 
     def podcast_params
       params.require(:podcast).permit(:title, :description, :author, :email, :slug,
-        :artwork_url, :language, :category, :subcategory, :explicit, :podcast_type, :website_url, :copyright)
+        :artwork_url, :language, :category, :subcategory, :explicit, :podcast_type, :website_url, :copyright,
+        :apple_podcasts_url, :spotify_url, :amazon_music_url)
     end
 
     def podcast_json(p)
@@ -54,6 +55,7 @@ module Api::V1
         slug: p.slug, artwork_url: p.artwork_url, language: p.language, category: p.category,
         explicit: p.explicit, podcast_type: p.podcast_type, website_url: p.website_url,
         published: p.published, published_at: p.published_at, rss_url: p.rss_url,
+        apple_podcasts_url: p.apple_podcasts_url, spotify_url: p.spotify_url, amazon_music_url: p.amazon_music_url,
         episode_count: p.episodes.count, published_episode_count: p.published_episodes.count,
         created_at: p.created_at, updated_at: p.updated_at }
     end
