@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Mic2, Clock, Sparkles, Lock } from "lucide-react";
+import { ArrowLeft, Mic2, Clock, Lock, CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
@@ -12,6 +12,27 @@ import { Button } from "@/components/ui/Button";
 import { AudioUploader } from "@/components/upload/AudioUploader";
 import { toast } from "@/lib/toast";
 import type { Episode } from "@/types";
+
+function AiStep({ done, active, failed, label, hint }: { done: boolean; active: boolean; failed: boolean; label: string; hint: string }) {
+  return (
+    <div className="flex items-center gap-2 text-xs">
+      {done ? (
+        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400 shrink-0" />
+      ) : failed ? (
+        <div className="h-3.5 w-3.5 rounded-full border-2 border-red-500/60 shrink-0" />
+      ) : active ? (
+        <Loader2 className="h-3.5 w-3.5 text-amber-400 animate-spin shrink-0" />
+      ) : (
+        <div className="h-3.5 w-3.5 rounded-full border border-ink-700 shrink-0" />
+      )}
+      <span className={done ? "text-emerald-400" : failed ? "text-red-400" : active ? "text-amber-200" : "text-ink-600"}>
+        {label}
+      </span>
+      {active && <span className="text-ink-600">{hint}</span>}
+      {failed && <span className="text-red-500">— failed, retrying…</span>}
+    </div>
+  );
+}
 
 export default function EditEpisodePage() {
   const { slug, id } = useParams<{ slug: string; id: string }>();
@@ -58,17 +79,18 @@ export default function EditEpisodePage() {
     },
   });
 
-  // Poll while AI is generating (metadata or show notes)
+  // Poll while any AI step is in-flight
+  const isTranscribing        = episode?.transcription_status === "pending" || episode?.transcription_status === "processing";
   const isGeneratingMetadata  = episode?.ai_metadata_status === "pending" || episode?.ai_metadata_status === "processing";
   const isGeneratingShowNotes = episode?.show_notes_ai_status === "pending" || episode?.show_notes_ai_status === "processing";
-  const isPolling = isGeneratingMetadata || isGeneratingShowNotes;
+  const isAiRunning = isTranscribing || isGeneratingMetadata || isGeneratingShowNotes;
   useEffect(() => {
-    if (!isPolling) return;
+    if (!isAiRunning) return;
     const interval = setInterval(() => {
       qc.invalidateQueries({ queryKey: ["episode", currentOrg?.slug, slug, id] });
-    }, 5000);
+    }, 4000);
     return () => clearInterval(interval);
-  }, [isPolling, qc, currentOrg?.slug, slug, id]);
+  }, [isAiRunning, qc, currentOrg?.slug, slug, id]);
 
   const update = useMutation({
     mutationFn: () => episodesApi.update(currentOrg!.slug, slug, parseInt(id), {
@@ -100,12 +122,40 @@ export default function EditEpisodePage() {
       <h1 className="font-display text-2xl text-ink-100 mb-1">Edit Episode</h1>
       <p className="text-sm text-ink-500 mb-8">{episode.title}</p>
 
-      {isGeneratingMetadata && (
-        <div className="flex items-start gap-3 rounded-sm border border-amber-500/30 bg-amber-500/10 px-4 py-3 mb-6">
-          <Sparkles className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
-          <div>
-            <p className="text-sm font-medium text-amber-300">AI is generating your episode details…</p>
-            <p className="text-xs text-amber-500 mt-0.5">Title, description, and summary will populate automatically once ready.</p>
+      {isAiRunning && (
+        <div className="panel rounded-sm p-4 mb-6 border border-amber-500/20 bg-amber-500/5">
+          <div className="flex items-center gap-2 mb-3">
+            <Loader2 className="h-4 w-4 text-amber-400 animate-spin shrink-0" />
+            <p className="text-sm font-medium text-amber-300">
+              {isTranscribing ? "Transcribing audio…" : isGeneratingMetadata ? "Generating episode details…" : "Generating show notes…"}
+            </p>
+          </div>
+          <div className="space-y-2 pl-6">
+            <AiStep
+              done={episode.transcription_status === "done" || !!episode.transcript}
+              active={isTranscribing}
+              failed={episode.transcription_status === "failed"}
+              label="Transcribing audio"
+              hint="~1 min per 10 min of audio"
+            />
+            {episode.ai_metadata_status != null && (
+              <AiStep
+                done={episode.ai_metadata_status === "done"}
+                active={isGeneratingMetadata}
+                failed={episode.ai_metadata_status === "failed"}
+                label="Writing title & description"
+                hint="~15 seconds"
+              />
+            )}
+            {episode.show_notes_ai_status != null && (
+              <AiStep
+                done={episode.show_notes_ai_status === "done"}
+                active={isGeneratingShowNotes}
+                failed={episode.show_notes_ai_status === "failed"}
+                label="Writing show notes"
+                hint="~30 seconds"
+              />
+            )}
           </div>
         </div>
       )}
@@ -249,7 +299,7 @@ export default function EditEpisodePage() {
               <Link href="/dashboard/settings/billing" className="text-xs text-accent hover:text-accent-light transition-colors">
                 Upgrade to regenerate
               </Link>
-            ) : (episode.show_notes_ai_status === "pending" || episode.show_notes_ai_status === "processing") ? (
+            ) : isGeneratingShowNotes ? (
               <span className="text-[10px] uppercase tracking-widest text-amber-500">Generating…</span>
             ) : (
               <button

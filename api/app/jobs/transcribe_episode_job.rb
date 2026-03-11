@@ -1,5 +1,7 @@
 class TranscribeEpisodeJob < ApplicationJob
   queue_as :ai_processing
+  # 429 rate-limit: back off 2 min → 4 min → 8 min before giving up
+  retry_on Faraday::TooManyRequestsError, wait: :polynomially_longer, attempts: 4, jitter: 0.15
   retry_on StandardError, wait: :polynomially_longer, attempts: 3
 
   MAX_WHISPER_BYTES = 24.megabytes
@@ -56,7 +58,14 @@ class TranscribeEpisodeJob < ApplicationJob
       end
     end
   rescue => e
-    Episode.find_by(id: episode_id)&.update_column(:transcription_status, "failed")
+    # Keep status as "processing" while retries are still pending.
+    # Only flip to "failed" on the final attempt so the UI guard
+    # (which blocks re-trigger when status is pending/processing) stays active.
+    ep = Episode.find_by(id: episode_id)
+    if ep
+      max = e.is_a?(Faraday::TooManyRequestsError) ? 4 : 3
+      ep.update_column(:transcription_status, executions >= max ? "failed" : "processing")
+    end
     raise e
   end
 
