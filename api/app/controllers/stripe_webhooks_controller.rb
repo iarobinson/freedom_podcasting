@@ -30,12 +30,31 @@ class StripeWebhooksController < ActionController::Base
   private
 
   def handle_checkout_completed(session)
+    if session.metadata["episode_id"].present?
+      handle_episode_ai_purchase(session)
+    else
+      handle_subscription_checkout(session)
+    end
+  end
+
+  def handle_episode_ai_purchase(session)
+    episode = Episode.find_by(id: session.metadata["episode_id"])
+    return unless episode
+    episode.update!(
+      ai_purchased_at:      Time.current,
+      transcription_status: "pending",
+      ai_metadata_status:   "pending"
+    )
+    TranscribeEpisodeJob.perform_later(episode.id)
+  end
+
+  def handle_subscription_checkout(session)
     org = Organization.find_by(id: session.metadata["organization_id"])
     return unless org
     org.update!(
-      plan:                    session.metadata["plan"],
-      stripe_customer_id:      session.customer,
-      stripe_subscription_id:  session.subscription
+      plan:                   session.metadata["plan"],
+      stripe_customer_id:     session.customer,
+      stripe_subscription_id: session.subscription
     )
   end
 

@@ -3,7 +3,7 @@ module Api::V1
     before_action :current_organization
     before_action :require_organization_membership!
     before_action :set_podcast
-    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject, :transcribe, :generate_show_notes]
+    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject, :transcribe, :generate_show_notes, :checkout_ai]
 
     def index
       episodes = @podcast.episodes.order(created_at: :desc)
@@ -59,9 +59,40 @@ module Api::V1
       render json: { data: episode_json(@episode) }
     end
 
+    def checkout_ai
+      require_editor!
+      return render json: { url: nil } if @episode.ai_purchased_at.present?
+
+      duration_seconds = @episode.audio_duration_seconds
+      if duration_seconds.blank?
+        return render json: { error: "Audio is still being processed. Please wait a moment and try again." },
+                      status: :unprocessable_entity
+      end
+
+      cents_per_minute = ENV.fetch("STRIPE_AI_PRICE_PER_MINUTE_CENTS", "50").to_i
+      minutes          = (duration_seconds / 60.0).ceil
+      amount_cents     = minutes * cents_per_minute
+
+      session = Stripe::Checkout::Session.create(
+        mode:       "payment",
+        line_items: [{
+          price_data: {
+            currency:     "usd",
+            unit_amount:  amount_cents,
+            product_data: { name: "Episode AI Processing — #{minutes} min" }
+          },
+          quantity: 1
+        }],
+        success_url: "#{ENV.fetch('WEB_URL')}/dashboard/podcasts/#{@podcast.slug}/episodes/#{@episode.id}/edit?ai_purchased=true",
+        cancel_url:  "#{ENV.fetch('WEB_URL')}/dashboard/podcasts/#{@podcast.slug}/episodes/#{@episode.id}/edit",
+        metadata:    { organization_id: current_organization.id, episode_id: @episode.id, podcast_slug: @podcast.slug }
+      )
+      render json: { url: session.url }
+    end
+
     def transcribe
       require_editor!
-      return if enforce_ai_features!
+      return if enforce_ai_features!(episode: @episode)
       return render(json: { error: "No audio file." }, status: :unprocessable_entity) unless @episode.audio_url.present?
       if %w[pending processing].include?(@episode.transcription_status)
         return render(json: { error: "Transcription already in progress." }, status: :unprocessable_entity)
@@ -73,7 +104,7 @@ module Api::V1
 
     def generate_show_notes
       require_editor!
-      return if enforce_ai_features!
+      return if enforce_ai_features!(episode: @episode)
       return render(json: { error: "No transcript available." }, status: :unprocessable_entity) unless @episode.transcript.present?
       if %w[pending processing].include?(@episode.show_notes_ai_status)
         return render(json: { error: "Already generating." }, status: :unprocessable_entity)
@@ -106,7 +137,7 @@ module Api::V1
         guid: e.guid, download_count: e.download_count, created_at: e.created_at, updated_at: e.updated_at,
         transcript: e.transcript, transcription_status: e.transcription_status,
         show_notes_ai: e.show_notes_ai, show_notes_ai_status: e.show_notes_ai_status,
-        ai_metadata_status: e.ai_metadata_status }
+        ai_metadata_status: e.ai_metadata_status, ai_purchased_at: e.ai_purchased_at }
     end
   end
 end

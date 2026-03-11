@@ -51,9 +51,9 @@ class ApplicationController < ActionController::API
     end
   end
 
-  def enforce_ai_features!
-    if current_organization.plan == "free"
-      render json: { error: "AI features (transcription, show notes, and metadata) require a paid plan. Upgrade to Starter or higher." }, status: :payment_required
-    end
+  def enforce_ai_features!(episode: nil)
+    return unless current_organization.plan == "free"
+    return if episode&.ai_purchased_at.present?
+    render json: { error: "AI features require a paid plan or a per-episode purchase." }, status: :payment_required
   end
 end

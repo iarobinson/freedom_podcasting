@@ -47,6 +47,7 @@ Rails.application.routes.draw do
               post :reject
               post :transcribe
               post :generate_show_notes
+              post :checkout_ai
             end
           end
 

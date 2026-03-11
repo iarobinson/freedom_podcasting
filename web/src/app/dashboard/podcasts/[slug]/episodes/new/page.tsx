@@ -9,6 +9,14 @@ import { Button } from "@/components/ui/Button";
 import { toast } from "@/lib/toast";
 import type { Episode } from "@/types";
 
+const PRICE_PER_MIN = parseFloat(process.env.NEXT_PUBLIC_AI_PRICE_PER_MINUTE ?? "0.50");
+
+function calcAiPrice(durationSeconds?: number | null): string {
+  if (!durationSeconds) return "calculating…";
+  const minutes = Math.ceil(durationSeconds / 60);
+  return `$${(minutes * PRICE_PER_MIN).toFixed(2)}`;
+}
+
 function AiStep({ done, active, failed, label, hint }: {
   done: boolean; active: boolean; failed: boolean; label: string; hint: string;
 }) {
@@ -39,6 +47,9 @@ export default function NewEpisodePage() {
   const [episodeId, setEpisodeId] = useState<number | null>(null);
   const [uploadDone, setUploadDone] = useState(false);
   const [episode, setEpisode] = useState<Episode | null>(null);
+  const [checkingOut, setCheckingOut] = useState(false);
+
+  const isFreePlan = currentOrg?.plan === "free";
 
   const handleFileSelected = useCallback(async () => {
     if (!currentOrg) return undefined;
@@ -64,10 +75,11 @@ export default function NewEpisodePage() {
     const aiDone =
       episode?.ai_metadata_status === "done" ||
       episode?.ai_metadata_status === "failed" ||
-      // No AI triggered (free plan) — treat as done after first fetch
+      // No AI triggered (free plan) — done once duration is known for price display
       (episode != null &&
         episode.transcription_status == null &&
-        episode.ai_metadata_status == null);
+        episode.ai_metadata_status == null &&
+        (currentOrg?.plan !== "free" || episode.audio_duration_seconds != null));
 
     if (aiDone) return;
 
@@ -83,7 +95,19 @@ export default function NewEpisodePage() {
     fetch();
     const interval = setInterval(fetch, 4000);
     return () => clearInterval(interval);
-  }, [uploadDone, episodeId, currentOrg, slug, episode?.ai_metadata_status, episode?.transcription_status]);
+  }, [uploadDone, episodeId, currentOrg, slug, episode?.ai_metadata_status, episode?.transcription_status, episode?.audio_duration_seconds]);
+
+  const handleCheckoutAi = async () => {
+    if (!currentOrg || !episodeId) return;
+    setCheckingOut(true);
+    try {
+      const res = await episodesApi.checkoutAi(currentOrg.slug, slug, episodeId);
+      window.location.href = res.data.url;
+    } catch {
+      toast.error("Could not start checkout", "Please try again in a moment.");
+      setCheckingOut(false);
+    }
+  };
 
   const isTranscribing       = episode?.transcription_status === "pending" || episode?.transcription_status === "processing";
   const isGeneratingMetadata = episode?.ai_metadata_status === "pending"   || episode?.ai_metadata_status === "processing";
@@ -170,22 +194,53 @@ export default function NewEpisodePage() {
             </div>
           )}
 
-          {(isAiFailed || noAiTriggered) && (
+          {isAiFailed && (
             <div className="space-y-4">
-              {isAiFailed && (
-                <p className="text-sm text-amber-400">
-                  AI processing encountered an issue — you can still edit the episode manually and the system will retry.
-                </p>
-              )}
-              {noAiTriggered && (
-                <p className="text-sm text-ink-400">
-                  Your audio has been uploaded. Head to the edit page to add your episode details.
-                </p>
-              )}
+              <p className="text-sm text-amber-400">
+                AI processing encountered an issue — you can still edit the episode manually and the system will retry.
+              </p>
               <Button onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/${episodeId}/edit`)}>
                 Edit Episode <ArrowRight className="h-3.5 w-3.5 ml-1" />
               </Button>
             </div>
+          )}
+
+          {noAiTriggered && (
+            isFreePlan ? (
+              <div className="space-y-4">
+                <p className="text-sm text-ink-400">
+                  Your audio is uploaded. Unlock AI to auto-generate the title, description, and show notes from your transcript.
+                </p>
+                {episode?.audio_duration_seconds ? (
+                  <div className="space-y-3">
+                    <p className="text-xs text-ink-600">
+                      $0.50/min · {Math.ceil(episode.audio_duration_seconds / 60)} min = {calcAiPrice(episode.audio_duration_seconds)}
+                    </p>
+                    <Button onClick={handleCheckoutAi} loading={checkingOut}>
+                      Unlock AI — {calcAiPrice(episode.audio_duration_seconds)} <Sparkles className="h-3.5 w-3.5 ml-1.5" />
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-2 text-xs text-ink-500">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Calculating price…
+                  </div>
+                )}
+                <button
+                  onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/${episodeId}/edit`)}
+                  className="text-xs text-ink-600 hover:text-ink-400 transition-colors block">
+                  Skip — I&apos;ll fill in details manually
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <p className="text-sm text-ink-400">
+                  Your audio has been uploaded. Head to the edit page to add your episode details.
+                </p>
+                <Button onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/${episodeId}/edit`)}>
+                  Edit Episode <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                </Button>
+              </div>
+            )
           )}
 
           {/* Loading state before first fetch returns */}

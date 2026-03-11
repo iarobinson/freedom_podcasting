@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Mic2, Clock, Lock, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowLeft, Mic2, Clock, Sparkles, CheckCircle2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
@@ -37,10 +37,12 @@ function AiStep({ done, active, failed, label, hint }: { done: boolean; active: 
 export default function EditEpisodePage() {
   const { slug, id } = useParams<{ slug: string; id: string }>();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const qc = useQueryClient();
   const { currentOrg } = useAuthStore();
   const [form, setForm] = useState<Record<string, unknown>>({});
   const [replaceAudio, setReplaceAudio] = useState(false);
+  const [checkingOut, setCheckingOut] = useState(false);
 
   const { data: episode } = useQuery<Episode>({
     queryKey: ["episode", currentOrg?.slug, slug, id],
@@ -62,6 +64,26 @@ export default function EditEpisodePage() {
       audio_url:      episode.audio_url ?? "",
     });
   }, [episode]);
+
+  // Show success toast when returning from Stripe and strip the param
+  useEffect(() => {
+    if (searchParams.get("ai_purchased") === "true") {
+      toast.success("Payment confirmed!", "AI is processing your episode — this page will update automatically.");
+      router.replace(`/dashboard/podcasts/${slug}/episodes/${id}/edit`);
+    }
+  }, []);
+
+  const handleCheckoutAi = async () => {
+    if (!currentOrg) return;
+    setCheckingOut(true);
+    try {
+      const res = await episodesApi.checkoutAi(currentOrg.slug, slug, parseInt(id));
+      window.location.href = res.data.url;
+    } catch {
+      toast.error("Could not start checkout", "Please try again in a moment.");
+      setCheckingOut(false);
+    }
+  };
 
   const generateShowNotes = useMutation({
     mutationFn: () => episodesApi.generateShowNotes(currentOrg!.slug, slug, parseInt(id)),
@@ -113,6 +135,11 @@ export default function EditEpisodePage() {
   const hasAudio = !!(form.audio_url as string);
   const showUploader = !hasAudio || replaceAudio;
   const isFreePlan = currentOrg?.plan === "free";
+  const PRICE_PER_MIN = parseFloat(process.env.NEXT_PUBLIC_AI_PRICE_PER_MINUTE ?? "0.50");
+  const calcAiPrice = (secs?: number) => {
+    if (!secs) return "…";
+    return `$${(Math.ceil(secs / 60) * PRICE_PER_MIN).toFixed(2)}`;
+  };
 
   return (
     <div className="p-8 max-w-2xl mx-auto">
@@ -160,20 +187,22 @@ export default function EditEpisodePage() {
         </div>
       )}
 
-      {isFreePlan && hasAudio && !episode.transcript && (
+      {isFreePlan && hasAudio && !episode.transcript && !episode.ai_purchased_at && (
         <div className="flex items-start gap-3 rounded-sm border border-ink-700 bg-ink-900 px-4 py-4 mb-6">
-          <Lock className="h-4 w-4 text-ink-500 shrink-0 mt-0.5" />
+          <Sparkles className="h-4 w-4 text-accent shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="text-sm font-semibold text-ink-200">AI features require a paid plan</p>
+            <p className="text-sm font-semibold text-ink-200">Unlock AI for this episode</p>
             <p className="text-xs text-ink-500 mt-1 leading-relaxed">
-              Transcription, AI-generated show notes, titles, and descriptions are available on Starter and above.
-              Estimated cost for this episode: <span className="text-ink-300 font-mono">~$0.40</span>.
+              One-time charge: transcription + AI-generated title, description, and show notes.
+              {episode.audio_duration_seconds
+                ? <> Billed at $0.50/min · {Math.ceil(episode.audio_duration_seconds / 60)} min</>
+                : null}
             </p>
           </div>
-          <Link href="/dashboard/settings/billing"
-            className="shrink-0 text-xs font-semibold text-accent hover:text-accent-light transition-colors border border-accent/30 hover:border-accent/60 px-3 py-1.5 rounded-sm">
-            Upgrade
-          </Link>
+          <Button size="sm" onClick={handleCheckoutAi} loading={checkingOut}
+            disabled={!episode.audio_duration_seconds}>
+            Unlock — {calcAiPrice(episode.audio_duration_seconds)}
+          </Button>
         </div>
       )}
 

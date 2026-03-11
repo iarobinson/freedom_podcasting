@@ -63,6 +63,7 @@ export const episodesApi = {
   reject:          (orgSlug: string, podcastSlug: string, id: number, notes: string) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/reject`, { notes }),
   transcribe:        (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/transcribe`),
   generateShowNotes: (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/generate_show_notes`),
+  checkoutAi:        (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/checkout_ai`),
 };
 
 export const membersApi = {

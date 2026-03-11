@@ -39,8 +39,8 @@ module Api::V1
       if mf.audio? && mf.episode_id.present?
         episode = Episode.find_by(id: mf.episode_id)
         if episode && !episode.transcript.present?
-          if current_organization.plan == "free"
-            # Free plan: save audio URL but skip AI pipeline
+          if current_organization.plan == "free" && !episode.ai_purchased_at.present?
+            # Free plan without purchase: save audio URL but skip AI pipeline
             episode.update!(audio_url: mf.public_url, audio_content_type: mf.content_type)
           else
             episode.update!(audio_url: mf.public_url, audio_content_type: mf.content_type,
