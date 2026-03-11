@@ -69,8 +69,13 @@ Rails.application.routes.draw do
 
   post "/stripe/webhooks", to: "stripe_webhooks#receive"
 
-  get  "/feeds/:podcast_slug",              to: "public/feeds#show",    format: :xml, as: :public_rss_feed
-  get  "/feeds/:podcast_slug/episodes/:guid", to: "public/episodes#show", as: :public_episode
+  # Org-scoped (canonical, unambiguous)
+  get  "/feeds/:org_slug/:podcast_slug",                    to: "public/feeds#show_scoped",    format: :xml, as: :public_rss_feed_scoped
+  get  "/feeds/:org_slug/:podcast_slug/episodes/:guid",     to: "public/episodes#show_scoped", as: :public_episode_scoped
+
+  # Legacy slug-only (backward-compat for existing RSS subscribers)
+  get  "/feeds/:podcast_slug",                              to: "public/feeds#show",    format: :xml, as: :public_rss_feed
+  get  "/feeds/:podcast_slug/episodes/:guid",               to: "public/episodes#show", as: :public_episode
 
   namespace :public do
     # Org-scoped (canonical) — unambiguous in multi-tenant
