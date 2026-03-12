@@ -1,5 +1,7 @@
 module Public
   class FeedsController < ActionController::Base
+    rescue_from ActiveRecord::RecordNotFound, with: -> { head :not_found }
+
     # GET /feeds/:org_slug/:podcast_slug — canonical, org-scoped (no slug collision)
     def show_scoped
       org      = Organization.find_by!(slug: params[:org_slug])
