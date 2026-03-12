@@ -42,7 +42,7 @@ class TranscribeEpisodeJob < ApplicationJob
       end
 
       # 3. Send to OpenAI Whisper (verbose_json gives us real segment timestamps)
-      client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"))
+      client = OpenAI::Client.new(access_token: ENV.fetch("OPENAI_API_KEY"), request_timeout: 600)
       response = client.audio.transcribe(
         parameters: {
           model:           "whisper-1",
