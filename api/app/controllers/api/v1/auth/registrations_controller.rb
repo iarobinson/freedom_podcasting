@@ -9,6 +9,7 @@ module Api::V1::Auth
         org = create_personal_org(resource)
         # Auto-accept invitation if a token was passed during registration
         accept_invitation(resource, params.dig(:user, :invitation_token))
+        AdminMailer.new_signup(resource).deliver_later
         render json: { message: "Account created.", data: {
           id: resource.id, email: resource.email,
           first_name: resource.first_name, last_name: resource.last_name,
