@@ -121,14 +121,15 @@ module Api::V1
 
     def episode_params
       params.require(:episode).permit(:title, :description, :summary, :artwork_url,
-        :audio_url, :audio_file_size, :audio_duration_seconds, :audio_content_type,
+        :audio_url, :audio_file_size, :audio_duration_seconds, :audio_content_type, :audio_filename,
         :episode_type, :episode_number, :season_number, :explicit, :keywords, :status, :published_at,
         :slug)
     end
 
     def episode_json(e)
       { id: e.id, slug: e.slug, title: e.title, description: e.description, summary: e.summary,
-        artwork_url: e.artwork_url, audio_url: e.audio_url, audio_file_size: e.audio_file_size,
+        artwork_url: e.artwork_url, audio_url: e.audio_url, audio_filename: e.audio_filename,
+        audio_file_size: e.audio_file_size,
         audio_duration_seconds: e.audio_duration_seconds, formatted_duration: e.formatted_duration,
         audio_content_type: e.audio_content_type, episode_type: e.episode_type,
         episode_number: e.episode_number, season_number: e.season_number, explicit: e.explicit,

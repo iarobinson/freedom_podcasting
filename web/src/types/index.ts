@@ -55,6 +55,7 @@ export interface Episode {
   summary?: string;
   artwork_url?: string;
   audio_url?: string;
+  audio_filename?: string;
   audio_file_size?: number;
   audio_duration_seconds?: number;
   formatted_duration?: string;

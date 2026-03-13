@@ -39,11 +39,14 @@ module Api::V1
       if mf.audio? && mf.episode_id.present?
         episode = Episode.find_by(id: mf.episode_id)
         if episode && !episode.transcript.present?
+          normalized = normalize_audio_filename(mf.filename)
           if current_organization.plan == "free" && !episode.ai_purchased_at.present?
             # Free plan without purchase: save audio URL but skip AI pipeline
-            episode.update!(audio_url: mf.public_url, audio_content_type: mf.content_type)
+            episode.update!(audio_url: mf.public_url, audio_content_type: mf.content_type,
+                            audio_filename: normalized)
           else
             episode.update!(audio_url: mf.public_url, audio_content_type: mf.content_type,
+                            audio_filename: normalized,
                             transcription_status: "pending", ai_metadata_status: "pending")
             TranscribeEpisodeJob.perform_later(episode.id)
           end
@@ -51,6 +54,19 @@ module Api::V1
       end
 
       render json: { data: { media_file_id: mf.id, public_url: mf.public_url, processing_status: mf.processing_status } }
+    end
+
+    private
+
+    def normalize_audio_filename(original)
+      basename = File.basename(original.to_s, ".*")
+      ext      = File.extname(original.to_s).downcase
+      slug     = basename.downcase.strip
+                         .gsub(/\s+/, "-")
+                         .gsub(/[^a-z0-9\-]/, "-")
+                         .gsub(/-+/, "-")
+                         .gsub(/\A-|-\z/, "")
+      "#{slug}#{ext}"
     end
   end
 end

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Mic2, Clock, Sparkles, CheckCircle2, Loader2 } from "lucide-react";
+import { ArrowLeft, Mic2, Clock, Sparkles, CheckCircle2, Loader2, Copy, Check } from "lucide-react";
 import Link from "next/link";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
@@ -43,6 +43,16 @@ export default function EditEpisodePage() {
   const [form, setForm] = useState<Record<string, unknown>>({});
   const [replaceAudio, setReplaceAudio] = useState(false);
   const [checkingOut, setCheckingOut] = useState(false);
+  const [urlCopied, setUrlCopied] = useState(false);
+
+  const handleCopyAudioUrl = () => {
+    const url = form.audio_url as string;
+    if (!url) return;
+    navigator.clipboard.writeText(url).then(() => {
+      setUrlCopied(true);
+      setTimeout(() => setUrlCopied(false), 2000);
+    });
+  };
 
   const { data: episode } = useQuery<Episode>({
     queryKey: ["episode", currentOrg?.slug, slug, id],
@@ -213,26 +223,42 @@ export default function EditEpisodePage() {
             <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Audio File</h2>
           </div>
           {hasAudio && !replaceAudio && (
-            <div className="rounded-sm border border-emerald-500/25 bg-emerald-500/8 p-4 flex items-center gap-3">
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-emerald-300">Audio attached</p>
-                <div className="flex items-center gap-3 mt-0.5">
-                  {episode.formatted_duration && (
-                    <span className="text-xs text-emerald-500 flex items-center gap-1">
-                      <Clock className="h-3 w-3" />{episode.formatted_duration}
+            <div className="rounded-sm border border-emerald-500/25 bg-emerald-500/8 p-4 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-emerald-300">Audio attached</p>
+                  <div className="flex items-center gap-3 mt-0.5">
+                    {episode.formatted_duration && (
+                      <span className="text-xs text-emerald-500 flex items-center gap-1">
+                        <Clock className="h-3 w-3" />{episode.formatted_duration}
+                      </span>
+                    )}
+                    <span className="text-xs text-emerald-600 truncate">
+                      {episode.audio_filename || (form.audio_url as string).split("/").pop()}
                     </span>
-                  )}
-                  <span className="text-xs text-emerald-600 truncate">
-                    {(form.audio_url as string).split("/").pop()}
-                  </span>
+                  </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setReplaceAudio(true)}
+                  className="text-xs text-ink-600 hover:text-ink-400 transition-colors shrink-0">
+                  Replace
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => setReplaceAudio(true)}
-                className="text-xs text-ink-600 hover:text-ink-400 transition-colors shrink-0">
-                Replace
-              </button>
+              <div className="flex items-center gap-2 rounded-sm border border-ink-700/60 bg-ink-900/60 px-2.5 py-1.5">
+                <span className="text-[11px] text-ink-500 font-mono truncate flex-1 select-all">
+                  {form.audio_url as string}
+                </span>
+                <button
+                  type="button"
+                  onClick={handleCopyAudioUrl}
+                  title="Copy media URL"
+                  className="shrink-0 text-ink-600 hover:text-ink-300 transition-colors">
+                  {urlCopied
+                    ? <Check className="h-3.5 w-3.5 text-emerald-400" />
+                    : <Copy className="h-3.5 w-3.5" />}
+                </button>
+              </div>
             </div>
           )}
           {showUploader && currentOrg && (
