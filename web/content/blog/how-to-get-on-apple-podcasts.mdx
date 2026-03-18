@@ -1,0 +1,134 @@
+---
+title: "How to Submit Your Podcast to Apple Podcasts (Step-by-Step)"
+excerpt: "Everything you need to know to get your RSS feed accepted by Apple Podcasts — the required tags, cover art specs, and what to do if you're rejected."
+date: "2026-02-01"
+slug: "how-to-get-on-apple-podcasts"
+---
+
+Apple Podcasts remains the largest podcast directory by listener share. Getting listed there is non-negotiable if you want broad discoverability — it's also where your show will appear when Siri is asked "play [your podcast name]." The submission process is straightforward, but Apple has strict technical requirements that trip up many first-time podcasters.
+
+Here is the complete guide.
+
+## Before You Submit: Technical Requirements
+
+Apple validates your RSS feed automatically. If your feed doesn't meet these requirements, it will be rejected with an error code. Your podcast hosting platform should handle most of this, but it's worth verifying.
+
+### Required RSS Feed Tags
+
+Your feed must include at minimum:
+
+```xml
+<channel>
+  <title>Your Podcast Name</title>
+  <link>https://yourwebsite.com</link>
+  <language>en</language>
+  <itunes:author>Your Name</itunes:author>
+  <itunes:email>your@email.com</itunes:email>
+  <itunes:image href="https://...3000x3000.jpg" />
+  <itunes:category text="Technology" />
+  <itunes:explicit>false</itunes:explicit>
+  <itunes:type>episodic</itunes:type>
+</channel>
+```
+
+Each episode must include:
+
+```xml
+<item>
+  <title>Episode Title</title>
+  <description>Episode description</description>
+  <enclosure url="https://...episode.mp3" length="12345678" type="audio/mpeg" />
+  <guid isPermaLink="false">unique-guid-here</guid>
+  <pubDate>Mon, 01 Jan 2025 08:00:00 +0000</pubDate>
+  <itunes:duration>1234</itunes:duration>
+  <itunes:explicit>false</itunes:explicit>
+</item>
+```
+
+Quality podcast hosting platforms like [FreedomPodcasting](https://app.freedompodcasting.com) generate all of these tags automatically, so you never have to touch the XML directly.
+
+### Cover Art Requirements
+
+- **Size:** 3000 × 3000 pixels (minimum: 1400 × 1400)
+- **Format:** JPEG or PNG
+- **Color space:** RGB (not CMYK)
+- **Resolution:** 72 dpi
+- Keep text readable at small sizes — it will often appear at 55 × 55 px in search results
+
+### Audio File Requirements
+
+- Format: MP3 or AAC
+- Maximum file size: no published hard limit, but episodes over 200 MB can cause issues
+- ID3 tags should match your feed metadata
+
+## Step 1: Publish at Least One Episode
+
+Apple Podcasts requires at least one episode in your feed before it will accept your submission. Publish your first episode through your hosting platform and confirm it appears in the RSS feed.
+
+You can view your raw RSS feed by appending your hosting platform's feed URL in a browser. It should return XML that begins with `<?xml version="1.0" encoding="UTF-8"?>` and contains your episode data.
+
+## Step 2: Validate Your RSS Feed
+
+Before submitting to Apple, run your feed through a validator:
+
+- **Podbase RSS feed validator** — flags iTunes-specific issues
+- **Cast Feed Validator** — checks for common formatting problems
+- **Apple Podcasts Connect** — will give you detailed errors on rejection
+
+Fix any errors before submitting. The most common issues are:
+
+- Missing `<itunes:email>` (Apple requires this for ownership verification)
+- Cover art that's the wrong size or format
+- Missing `<itunes:explicit>` tag on episodes
+- GUIDs that aren't unique across all episodes
+
+## Step 3: Submit via Apple Podcasts Connect
+
+1. Go to [podcasters.apple.com](https://podcasters.apple.com)
+2. Sign in with your Apple ID (or create one if you don't have one)
+3. Click **Add a Show** or the **+** button
+4. Paste your RSS feed URL
+5. Apple will immediately validate the feed and show you a preview of how your show will appear
+6. Review the preview, then click **Submit**
+
+If Apple detects errors, it will list them specifically — fix each one in your hosting platform and re-submit.
+
+## Step 4: Wait for Approval
+
+Apple typically approves new podcasts within **1–5 business days**. You'll receive an email confirmation when your show is live. During busy periods (e.g., January after New Year's resolutions), it can take longer.
+
+You can check the status at any time in Podcasts Connect under **My Shows**.
+
+## Step 5: Submit to Other Directories
+
+While you're waiting for Apple, submit to the other major directories using the same RSS feed URL:
+
+- **Spotify** — [podcasters.spotify.com](https://podcasters.spotify.com) (near-instant approval)
+- **Amazon Music** — [music.amazon.com/podcasters](https://music.amazon.com/podcasters) (1–2 days)
+- **iHeartRadio** — apply via their podcast partner portal
+- **Overcast, Pocket Casts, Castbox** — these directories automatically index Apple Podcasts listings, so you'll appear there once Apple approves you
+
+## Common Rejection Reasons
+
+**"Your show artwork does not meet our guidelines"**
+Check that the image is exactly 3000 × 3000, in RGB color mode (not CMYK), and under 1 MB.
+
+**"Your RSS feed does not contain valid items"**
+Usually means the `<enclosure>` tag on your episode is malformed or the audio URL is not publicly accessible.
+
+**"Your show is a duplicate"**
+If you previously submitted the same RSS feed under a different Apple ID, contact Apple Podcasts support to merge or remove the duplicate.
+
+**Missing itunes namespace**
+Your RSS feed must declare the iTunes namespace in the `<rss>` tag: `xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"`. All major hosting platforms include this automatically.
+
+## After Approval: Maintaining Good Standing
+
+Once you're listed, a few practices keep your show healthy in the directory:
+
+- **Don't change your RSS feed URL** without setting up a 301 redirect from the old URL — subscribers will lose the show if the feed disappears
+- **Publish consistently** — Apple's algorithm favors shows with regular new episodes
+- **Keep your email current** in your feed — Apple uses it to contact you if there's a problem
+- **Respond to listener reviews** through Podcasts Connect — it shows engagement
+
+Getting on Apple Podcasts is a one-time process. Once you're in, every episode you publish to your hosting platform appears automatically without any additional submission required.

@@ -142,6 +142,91 @@
     pointer-events: none;
   }
 
+  /* Blog prose typography */
+  .blog-prose h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--ink-50);
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.01em;
+  }
+  .blog-prose h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink-100);
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .blog-prose p {
+    color: var(--ink-400);
+    line-height: 1.75;
+    margin-bottom: 1.25rem;
+  }
+  .blog-prose ul,
+  .blog-prose ol {
+    color: var(--ink-400);
+    padding-left: 1.5rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.75;
+  }
+  .blog-prose ul { list-style-type: disc; }
+  .blog-prose ol { list-style-type: decimal; }
+  .blog-prose li { margin-bottom: 0.4rem; }
+  .blog-prose strong { color: var(--ink-200); font-weight: 700; }
+  .blog-prose em { color: var(--ink-300); font-style: italic; }
+  .blog-prose a {
+    color: var(--accent-light);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .blog-prose a:hover { color: var(--ink-100); }
+  .blog-prose pre,
+  .blog-prose code {
+    font-family: 'PT Mono', monospace;
+    font-size: 0.8rem;
+    background: var(--ink-900);
+    border: 1px solid var(--ink-800);
+    border-radius: 2px;
+  }
+  .blog-prose code { padding: 0.1em 0.35em; }
+  .blog-prose pre {
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    margin-bottom: 1.25rem;
+  }
+  .blog-prose pre code { background: none; border: none; padding: 0; }
+  .blog-prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+  }
+  .blog-prose th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--ink-700);
+    color: var(--ink-300);
+    font-weight: 700;
+  }
+  .blog-prose td {
+    padding: 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--ink-800);
+    color: var(--ink-500);
+  }
+  .blog-prose blockquote {
+    border-left: 3px solid var(--accent);
+    padding-left: 1rem;
+    margin: 1.5rem 0;
+    color: var(--ink-500);
+    font-style: italic;
+  }
+  .blog-prose hr {
+    border: none;
+    border-top: 1px solid var(--ink-800);
+    margin: 2rem 0;
+  }
+
   /* Status badges */
   .badge {
     display: inline-flex;

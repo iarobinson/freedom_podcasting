@@ -73,6 +73,9 @@ export default function HomePage() {
         <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
           <span className="font-display text-sm tracking-widest text-ink-50">FREEDOM PODCASTING</span>
           <div className="flex items-center gap-3">
+            <Link href="/blog" className="text-sm text-ink-400 hover:text-ink-200 transition-colors px-3 py-1.5">
+              Blog
+            </Link>
             <Link href="/auth/login" className="text-sm text-ink-400 hover:text-ink-200 transition-colors px-3 py-1.5">
               Sign In
             </Link>
@@ -172,7 +175,10 @@ export default function HomePage() {
       <footer className="border-t border-ink-800 mt-8">
         <div className="max-w-5xl mx-auto px-6 py-8 flex items-center justify-between text-xs text-ink-700">
           <span>© {new Date().getFullYear()} FreedomPodcasting. All rights reserved.</span>
-          <Link href="/auth/login" className="hover:text-ink-500 transition-colors">Sign In</Link>
+          <div className="flex items-center gap-4">
+            <Link href="/blog" className="hover:text-ink-500 transition-colors">Blog</Link>
+            <Link href="/auth/login" className="hover:text-ink-500 transition-colors">Sign In</Link>
+          </div>
         </div>
       </footer>
     </div>
