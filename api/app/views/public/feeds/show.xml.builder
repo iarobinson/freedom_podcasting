@@ -7,7 +7,7 @@ xml.rss version: "2.0",
   "xmlns:podcast" => "https://podcastindex.org/namespace/1.0" do
 
   xml.channel do
-    feed_url = "#{request.protocol}#{request.host_with_port}/feeds/#{podcast.organization.slug}/#{podcast.slug}"
+    feed_url = "#{request.protocol}#{request.host_with_port}/feeds/#{podcast.rss_token}"
 
     xml.title         podcast.title
     xml.description   podcast.description
@@ -65,7 +65,7 @@ xml.rss version: "2.0",
 
         if episode.audio_url.present?
           xml.enclosure(
-            url:    "#{request.protocol}#{request.host_with_port}/feeds/#{podcast.organization.slug}/#{podcast.slug}/episodes/#{episode.guid}",
+            url:    "#{request.protocol}#{request.host_with_port}/feeds/#{podcast.rss_token}/episodes/#{episode.guid}",
             length: episode.audio_file_size.to_i,
             type:   episode.audio_content_type.presence || "audio/mpeg"
           )

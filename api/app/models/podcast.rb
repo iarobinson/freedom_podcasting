@@ -20,11 +20,8 @@ class Podcast < ApplicationRecord
   def published_episodes = episodes.published.order(published_at: :desc)
 
   def rss_url
-    Rails.application.routes.url_helpers.public_rss_feed_scoped_url(
-      org_slug:     organization.slug,
-      podcast_slug: slug,
-      host: ENV.fetch("API_HOST", "api.freedompodcasting.com")
-    )
+    host = ENV.fetch("API_HOST", "api.freedompodcasting.com")
+    "https://#{host}/feeds/#{rss_token}"
   end
 
   private

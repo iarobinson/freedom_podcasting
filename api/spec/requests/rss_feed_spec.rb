@@ -7,7 +7,7 @@ RSpec.describe "RSS Feed", type: :request do
   let!(:episode2) { create(:episode, :published, podcast: podcast, episode_number: 2, title: "Episode Two", explicit: true) }
   let!(:draft_episode) { create(:episode, podcast: podcast, status: "draft", title: "Draft Episode") }
 
-  subject { get "/feeds/#{podcast.slug}", headers: { "Accept" => "application/xml" } }
+  subject { get "/feeds/#{podcast.rss_token}", headers: { "Accept" => "application/xml" } }
 
   # ── Basic validity ────────────────────────────────────────────────────────────
 
@@ -170,5 +170,30 @@ RSpec.describe "RSS Feed", type: :request do
   it "returns 404 for a nonexistent slug" do
     get "/feeds/nonexistent-podcast-slug"
     expect(response).to have_http_status(:not_found)
+  end
+
+  # ── URL scheme ────────────────────────────────────────────────────────────────
+
+  it "feed URL in the XML uses the rss_token (not the org slug)" do
+    subject
+    expect(response.body).to include("/feeds/#{podcast.rss_token}")
+    expect(response.body).not_to include(org.slug)
+  end
+
+  it "enclosure URLs use the rss_token (not the org slug)" do
+    subject
+    expect(response.body).to include("/feeds/#{podcast.rss_token}/episodes/")
+    expect(response.body).not_to include("#{org.slug}/#{podcast.slug}/episodes")
+  end
+
+  it "serves the feed by legacy slug for backward compatibility" do
+    get "/feeds/#{podcast.slug}"
+    expect(response).to have_http_status(:ok)
+  end
+
+  it "redirects org-scoped URL to canonical token URL with 301" do
+    get "/feeds/#{org.slug}/#{podcast.slug}"
+    expect(response).to have_http_status(:moved_permanently)
+    expect(response.location).to include("/feeds/#{podcast.rss_token}")
   end
 end
