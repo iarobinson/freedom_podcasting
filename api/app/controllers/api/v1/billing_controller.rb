@@ -45,23 +45,25 @@ module Api::V1
         customer_id = current_organization.stripe_customer_id.presence
         begin
           session = Stripe::Checkout::Session.create(
-            mode:         "subscription",
-            customer:     customer_id,
-            line_items:   [{ price: price_id, quantity: 1 }],
-            success_url:  "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing?success=true",
-            cancel_url:   "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing",
-            metadata:     { organization_id: current_organization.id, plan: plan }
+            mode:                  "subscription",
+            customer:              customer_id,
+            line_items:            [{ price: price_id, quantity: 1 }],
+            allow_promotion_codes: true,
+            success_url:           "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing?success=true",
+            cancel_url:            "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing",
+            metadata:              { organization_id: current_organization.id, plan: plan }
           )
         rescue Stripe::InvalidRequestError
           # Stale customer ID — retry without it so Stripe creates a fresh customer
           current_organization.update_columns(stripe_customer_id: nil, stripe_subscription_id: nil)
           session = Stripe::Checkout::Session.create(
-            mode:         "subscription",
-            line_items:   [{ price: price_id, quantity: 1 }],
-            customer_email: current_organization.owner&.email,
-            success_url:  "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing?success=true",
-            cancel_url:   "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing",
-            metadata:     { organization_id: current_organization.id, plan: plan }
+            mode:                  "subscription",
+            line_items:            [{ price: price_id, quantity: 1 }],
+            customer_email:        current_organization.owner&.email,
+            allow_promotion_codes: true,
+            success_url:           "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing?success=true",
+            cancel_url:            "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing",
+            metadata:              { organization_id: current_organization.id, plan: plan }
           )
         end
         render json: { url: session.url }

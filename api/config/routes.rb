@@ -48,6 +48,8 @@ Rails.application.routes.draw do
               post :transcribe
               post :generate_show_notes
               post :checkout_ai
+              post :suggest_titles
+              post :suggest_clips
             end
           end
 
@@ -58,6 +60,8 @@ Rails.application.routes.draw do
             end
           end
         end
+
+        resources :podcast_imports, only: [:create, :show]
       end
 
       resources :invitations, only: [] do

@@ -3,6 +3,7 @@ class Organization < ApplicationRecord
   has_many :users, through: :memberships
   has_many :podcasts, dependent: :destroy
   has_many :media_files, dependent: :destroy
+  has_many :podcast_imports, dependent: :destroy
 
   PLANS = %w[free starter pro agency].freeze
   PLAN_LIMITS = {

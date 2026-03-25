@@ -31,9 +31,11 @@ class ProcessAudioJob < ApplicationJob
         metadata: { bitrate: movie.bitrate, audio_codec: safe_utf8(movie.audio_codec) }
       )
 
+      peaks = extract_waveform_peaks(tmp.path)
       media_file.episode&.update!(
         audio_duration_seconds: duration,
-        audio_file_size:        tmp.size
+        audio_file_size:        tmp.size,
+        waveform_peaks:         peaks.presence
       )
     end
   rescue => e
@@ -45,6 +47,22 @@ class ProcessAudioJob < ApplicationJob
 
   def safe_utf8(str)
     str.to_s.encode("UTF-8", invalid: :replace, undef: :replace, replace: "")
+  end
+
+  def extract_waveform_peaks(audio_path, num_points: 200)
+    raw = `ffmpeg -i "#{audio_path}" -f f32le -acodec pcm_f32le -ar 8000 -ac 1 - 2>/dev/null`
+    samples = raw.unpack("f*")
+    return [] if samples.empty?
+
+    chunk_size = [samples.length / num_points, 1].max
+    peaks = samples.each_slice(chunk_size).map { |chunk| chunk.map(&:abs).max.to_f }
+    peaks = peaks.first(num_points)
+    max_peak = peaks.max
+    return [] if max_peak.zero?
+    peaks.map { |p| (p / max_peak).round(3) }
+  rescue => e
+    Rails.logger.warn "Waveform peak extraction failed: #{e.message}"
+    []
   end
 
   def download_file(url, tmp)

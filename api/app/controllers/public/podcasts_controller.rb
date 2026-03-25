@@ -64,7 +64,7 @@ module Public
         formatted_duration: e.formatted_duration, episode_number: e.episode_number,
         season_number: e.season_number, episode_type: e.episode_type,
         explicit: e.explicit, published_at: e.published_at, guid: e.guid,
-        transcript: e.transcript }
+        transcript: e.transcript, waveform_peaks: e.waveform_peaks }
     end
   end
 end

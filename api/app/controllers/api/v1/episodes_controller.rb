@@ -3,10 +3,10 @@ module Api::V1
     before_action :current_organization
     before_action :require_organization_membership!
     before_action :set_podcast
-    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject, :transcribe, :generate_show_notes, :checkout_ai]
+    before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject, :transcribe, :generate_show_notes, :checkout_ai, :suggest_titles, :suggest_clips]
 
     def index
-      episodes = @podcast.episodes.order(created_at: :desc)
+      episodes = @podcast.episodes.order(updated_at: :desc)
       render json: { data: episodes.map { |e| episode_json(e) }, meta: { total: episodes.count } }
     end
 
@@ -114,6 +114,58 @@ module Api::V1
       render json: { show_notes_ai_status: "pending" }
     end
 
+    def suggest_titles
+      require_editor!
+      return if enforce_ai_features!(episode: @episode)
+      return render(json: { error: "Transcript required." }, status: :unprocessable_entity) unless @episode.transcript.present?
+
+      client = Anthropic::Client.new
+      message = client.messages.create(
+        model: "claude-sonnet-4-6",
+        max_tokens: 300,
+        messages: [{
+          role: "user",
+          content: <<~PROMPT
+            Based on this podcast episode transcript, suggest 5 SEO-optimized episode titles.
+            Requirements: under 70 characters each, target searchable queries, no clickbait.
+            Return ONLY a JSON array of 5 strings, nothing else.
+
+            Transcript:
+            #{@episode.transcript.truncate(3000)}
+          PROMPT
+        }]
+      )
+      titles = JSON.parse(message.content.first.text) rescue []
+      render json: { titles: titles }
+    end
+
+    def suggest_clips
+      require_editor!
+      return if enforce_ai_features!(episode: @episode)
+      return render(json: { error: "Transcript required." }, status: :unprocessable_entity) unless @episode.transcript.present?
+
+      client = Anthropic::Client.new
+      message = client.messages.create(
+        model: "claude-sonnet-4-6",
+        max_tokens: 600,
+        messages: [{
+          role: "user",
+          content: <<~PROMPT
+            Identify 4 standout moments from this podcast transcript that would make compelling
+            social media clips (30–90 seconds). For each, return the timestamp, a direct quote
+            (1–3 sentences), and a one-sentence hook.
+
+            Return ONLY a JSON array of objects: [{"timestamp":"12:34","quote":"...","hook":"..."}]
+
+            Transcript:
+            #{@episode.transcript.truncate(4000)}
+          PROMPT
+        }]
+      )
+      clips = JSON.parse(message.content.first.text) rescue []
+      render json: { clips: clips }
+    end
+
     private
 
     def set_podcast = (@podcast = current_organization.podcasts.find_by!(slug: params[:podcast_slug]))
@@ -123,7 +175,7 @@ module Api::V1
       params.require(:episode).permit(:title, :description, :summary, :artwork_url,
         :audio_url, :audio_file_size, :audio_duration_seconds, :audio_content_type, :audio_filename,
         :episode_type, :episode_number, :season_number, :explicit, :keywords, :status, :published_at,
-        :slug)
+        :slug, :transcript)
     end
 
     def episode_json(e)
@@ -138,7 +190,8 @@ module Api::V1
         guid: e.guid, download_count: e.download_count, created_at: e.created_at, updated_at: e.updated_at,
         transcript: e.transcript, transcription_status: e.transcription_status,
         show_notes_ai: e.show_notes_ai, show_notes_ai_status: e.show_notes_ai_status,
-        ai_metadata_status: e.ai_metadata_status, ai_purchased_at: e.ai_purchased_at }
+        ai_metadata_status: e.ai_metadata_status, ai_purchased_at: e.ai_purchased_at,
+        waveform_peaks: e.waveform_peaks }
     end
   end
 end

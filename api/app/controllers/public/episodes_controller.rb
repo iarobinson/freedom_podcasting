@@ -6,7 +6,7 @@ module Public
       identifier = params[:podcast_slug]
       podcast = Podcast.published.find_by(rss_token: identifier) ||
                 Podcast.published.find_by!(slug: identifier)
-      episode = podcast.published_episodes.find_by!(guid: params[:guid])
+      episode = podcast.published_episodes.find_by!(id: params[:guid])
       episode.increment!(:download_count)
       redirect_to episode.audio_url, allow_other_host: true, status: :found
     end
