@@ -24,6 +24,7 @@ module Api::V1
     def import_json(i)
       { id: i.id, status: i.status, rss_url: i.rss_url,
         total_episodes: i.total_episodes, imported_episodes: i.imported_episodes,
+        skipped_episodes: i.skipped_episodes,
         podcast_id: i.podcast_id, podcast_slug: i.podcast&.slug,
         error_message: i.error_message, created_at: i.created_at }
     end

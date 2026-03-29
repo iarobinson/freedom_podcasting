@@ -6,7 +6,7 @@ module Api::V1
     before_action :set_episode, only: [:show, :update, :destroy, :publish, :unpublish, :submit_for_review, :approve, :reject, :transcribe, :generate_show_notes, :checkout_ai, :suggest_titles, :suggest_clips]
 
     def index
-      episodes = @podcast.episodes.order(updated_at: :desc)
+      episodes = @podcast.episodes.order(Arel.sql("published_at DESC NULLS FIRST, updated_at DESC"))
       render json: { data: episodes.map { |e| episode_json(e) }, meta: { total: episodes.count } }
     end
 

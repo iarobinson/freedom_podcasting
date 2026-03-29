@@ -2,6 +2,7 @@ class Podcast < ApplicationRecord
   belongs_to :organization
   has_many :episodes, dependent: :destroy
   has_many :media_files, dependent: :nullify
+  has_many :podcast_imports, dependent: :destroy
 
   validates :title, presence: true
   validates :description, presence: true

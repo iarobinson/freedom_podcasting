@@ -167,11 +167,28 @@ class ImportRssFeedJob < ApplicationJob
   def download_file(url, tmp)
     tmp.binmode
     uri = URI.parse(url)
-    Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == "https",
-                    open_timeout: 10, read_timeout: 60) do |http|
-      http.request_get(uri.request_uri, "User-Agent" => "FreedomPodcasting/1.0") do |r|
-        r.read_body { |chunk| tmp.write(chunk) }
+    redirects = 0
+    loop do
+      raise "Too many redirects fetching file" if redirects > 5
+      done = false
+      Net::HTTP.start(uri.host, uri.port,
+                      use_ssl: uri.scheme == "https",
+                      open_timeout: 10,
+                      read_timeout: 60) do |http|
+        http.request_get(uri.request_uri, "User-Agent" => "FreedomPodcasting/1.0") do |r|
+          case r.code.to_i
+          when 200..299
+            r.read_body { |chunk| tmp.write(chunk) }
+            done = true
+          when 301, 302, 303, 307, 308
+            uri = URI.parse(r["Location"])
+            redirects += 1
+          else
+            raise "HTTP #{r.code} downloading file"
+          end
+        end
       end
+      break if done
     end
     tmp.flush
     tmp.rewind
