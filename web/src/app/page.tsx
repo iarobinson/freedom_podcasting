@@ -76,6 +76,9 @@ export default function HomePage() {
             <Link href="/blog" className="text-sm text-ink-400 hover:text-ink-200 transition-colors px-3 py-1.5">
               Blog
             </Link>
+            <Link href="/tools" className="text-sm text-ink-400 hover:text-ink-200 transition-colors px-3 py-1.5">
+              Tools
+            </Link>
             <Link href="/auth/login" className="text-sm text-ink-400 hover:text-ink-200 transition-colors px-3 py-1.5">
               Sign In
             </Link>
@@ -177,6 +180,7 @@ export default function HomePage() {
           <span>© {new Date().getFullYear()} FreedomPodcasting. All rights reserved.</span>
           <div className="flex items-center gap-4">
             <Link href="/blog" className="hover:text-ink-500 transition-colors">Blog</Link>
+            <Link href="/tools" className="hover:text-ink-500 transition-colors">Tools</Link>
             <Link href="/auth/login" className="hover:text-ink-500 transition-colors">Sign In</Link>
           </div>
         </div>

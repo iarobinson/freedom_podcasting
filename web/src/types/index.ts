@@ -79,6 +79,7 @@ export interface Episode {
   show_notes_ai_status?: "pending" | "processing" | "done" | "failed";
   ai_metadata_status?: "pending" | "processing" | "done" | "failed";
   ai_purchased_at?: string;
+  waveform_peaks?: number[];
 }
 
 export interface Member {
@@ -95,4 +96,17 @@ export interface PresignedUploadResponse {
   presigned_url: string;
   r2_key: string;
   expires_in: number;
+}
+
+export interface PodcastImport {
+  id: number;
+  status: "pending" | "processing" | "done" | "failed";
+  rss_url: string;
+  total_episodes: number;
+  imported_episodes: number;
+  skipped_episodes: number;
+  podcast_id?: number;
+  podcast_slug?: string;
+  error_message?: string;
+  created_at: string;
 }

@@ -64,6 +64,8 @@ export const episodesApi = {
   transcribe:        (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/transcribe`),
   generateShowNotes: (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/generate_show_notes`),
   checkoutAi:        (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/checkout_ai`),
+  suggestTitles:     (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/suggest_titles`),
+  suggestClips:      (orgSlug: string, podcastSlug: string, id: number) => apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/episodes/${id}/suggest_clips`),
 };
 
 export const membersApi = {
@@ -86,6 +88,13 @@ export const billingApi = {
     apiClient.post(`/api/v1/organizations/${orgSlug}/billing/portal`),
   cancel: (orgSlug: string) =>
     apiClient.post(`/api/v1/organizations/${orgSlug}/billing/cancel`),
+};
+
+export const podcastImportsApi = {
+  create: (orgSlug: string, rss_url: string) =>
+    apiClient.post(`/api/v1/organizations/${orgSlug}/podcast_imports`, { rss_url }),
+  get: (orgSlug: string, id: number) =>
+    apiClient.get(`/api/v1/organizations/${orgSlug}/podcast_imports/${id}`),
 };
 
 export const uploadsApi = {

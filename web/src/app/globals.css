@@ -242,4 +242,5 @@
   .badge-live     { background: rgba(204,0,0,0.15); color: var(--accent-light); border: 1px solid rgba(204,0,0,0.3); }
   .badge-warning  { background: rgba(180,130,50,0.15); color: #c8a44a; border: 1px solid rgba(180,130,50,0.3); }
   .badge-info     { background: rgba(80,120,180,0.15); color: #7aa0cc; border: 1px solid rgba(80,120,180,0.3); }
+  .badge-success  { background: rgba(40,140,60,0.15); color: #5dbf72; border: 1px solid rgba(40,140,60,0.3); }
 }

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowLeft, Clock, Mic2 } from "lucide-react";
 import type { Metadata } from "next";
-import { AudioPlayer } from "@/components/ui/AudioPlayer";
+import { WaveformPlayer, parseChapters } from "@/components/ui/WaveformPlayer";
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -132,10 +132,12 @@ export default async function EpisodePage({ params }: { params: { slug: string; 
         {/* Player */}
         {episode.audio_url && (
           <div className="panel rounded-sm p-4 mb-8">
-            <AudioPlayer
+            <WaveformPlayer
               src={episode.audio_url}
               type={episode.audio_content_type ?? "audio/mpeg"}
               durationSecs={episode.audio_duration_seconds}
+              peaks={episode.waveform_peaks}
+              chapters={episode.transcript ? parseChapters(episode.transcript) : []}
             />
           </div>
         )}
