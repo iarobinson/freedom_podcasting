@@ -47,7 +47,6 @@ yarn-debug.log*
 # Rails generated runtime files
 api/log/
 api/tmp/
-api/db/schema.rb
 
 # Local bundler vendor path (bundle install --path)
 api/gems/
