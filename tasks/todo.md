@@ -128,10 +128,13 @@ Goal: Paying clients can log in, manage their show, and collaborate with your te
 - [x] 2.5 Analytics: download counts, geographic distribution
 - [x] 2.6 Stripe subscription billing (free/starter/pro/agency tiers)
 - [x] 2.7 Podcast website (public-facing, SEO optimized) — org-scoped URLs (/p/{org}/{podcast})
-- [ ] 2.8 Custom domain support (CNAME → Cloudflare)
+- [ ] 2.8 Custom domain support (CNAME → Cloudflare) — deferred
 - [x] 2.9 Podcast directory links (Apple Podcasts, Spotify, Amazon Music) on edit + public pages
-- [x] 2.10 RSS feed org-scoped URLs (/feeds/{org}/{podcast}) — fixes multi-tenant slug collision
+- [x] 2.10 RSS feed token-based URLs (/feeds/{rss_token}) — opaque, stable, no org name exposed; org-scoped URLs 301 redirect to canonical token URL
 - [x] 2.11 AI features paywall — transcription/show notes gated to paid plans (402 for free)
+- [x] 2.12 Per-episode AI purchase for free tier — Stripe Checkout one-time payment ($0.50/min), ai_purchased_at column, unlocks transcription + show notes for that episode
+- [x] 2.13 SEO blog + content marketing — MDX blog at /blog, 5 keyword-targeted articles, sitemap.xml, robots.txt, Article/ItemList JSON-LD schema, Google Search Console verified
+- [x] 2.14 Admin signup notification email — AdminMailer delivers to ian@freedompodcasting.com on new user registration
 
 ---
 
@@ -144,10 +147,10 @@ Goal: AI makes production faster and better.
 - [x] 3.4 Claude: chapter markers with real timestamps from Whisper segments
 - [x] 3.5 Audio-first episode creation — upload audio → AI auto-fills title/description/summary
 - [x] 3.6 AI processing status indicator (step-by-step progress panel with polling)
-- [ ] 3.7 Claude: SEO title suggestions
-- [ ] 3.8 Claude: social media clip suggestions
-- [ ] 3.9 Transcript editor (correct errors, search within transcript)
-- [ ] 3.10 Audio waveform visualization with chapter markers
+- [x] 3.7 Claude: SEO title suggestions (lightbulb button near title → 5 clickable pill suggestions)
+- [x] 3.8 Claude: social media clip suggestions (Scissors button → timestamp/quote/hook cards with copy)
+- [x] 3.9 Transcript editor (editable textarea, search/highlight, Save button on change)
+- [x] 3.10 Audio waveform visualization with chapter markers (pre-computed peaks via ffmpeg, SVG bars, chapter lines on both edit + public pages)
 - [ ] 3.11 Drop in audio advertisement injection to add to mp3s.
 
 ---
