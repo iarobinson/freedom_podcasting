@@ -50,9 +50,9 @@ jobs:
           bundler-cache: true
           working-directory: api
 
-      - name: Load database schema
+      - name: Set up database
         working-directory: api
-        run: bundle exec rails db:schema:load
+        run: bundle exec rails db:migrate
 
       - name: RSpec
         working-directory: api
