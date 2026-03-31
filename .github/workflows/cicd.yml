@@ -1,0 +1,132 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  # ─────────────────────────────────────────────────────────────
+  # Rails: RSpec tests + Rubocop
+  # ─────────────────────────────────────────────────────────────
+  api-checks:
+    name: API — Tests & Lint
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: freedom_podcasting_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/freedom_podcasting_test
+      SECRET_KEY_BASE: "0000000000000000000000000000000000000000000000000000000000000001"
+      DEVISE_JWT_SECRET_KEY: "0000000000000000000000000000000000000000000000000000000000000002"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3.0"
+          bundler-cache: true
+          working-directory: api
+
+      - name: Load database schema
+        working-directory: api
+        run: bundle exec rails db:schema:load
+
+      - name: RSpec
+        working-directory: api
+        run: bundle exec rspec --format progress --format documentation --out tmp/rspec_results.txt
+
+      - name: Rubocop
+        working-directory: api
+        run: bundle exec rubocop --no-color --format github
+        continue-on-error: true
+
+  # ─────────────────────────────────────────────────────────────
+  # Next.js: TypeScript, ESLint, build
+  # ─────────────────────────────────────────────────────────────
+  web-checks:
+    name: Web — Type Check, Lint & Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: TypeScript
+        working-directory: web
+        run: npm run type-check
+
+      - name: ESLint
+        working-directory: web
+        run: npm run lint
+
+      - name: Build
+        working-directory: web
+        env:
+          NEXT_PUBLIC_API_URL: https://api.freedompodcasting.com
+        run: npm run build
+
+  # ─────────────────────────────────────────────────────────────
+  # Deploy API to Fly.io  (master push only, after checks pass)
+  # ─────────────────────────────────────────────────────────────
+  deploy-api:
+    name: Deploy API
+    needs: [api-checks, web-checks]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy API
+        working-directory: api
+        run: fly deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+  # ─────────────────────────────────────────────────────────────
+  # Deploy Web to Fly.io  (after API deploy succeeds)
+  # ─────────────────────────────────────────────────────────────
+  deploy-web:
+    name: Deploy Web
+    needs: [deploy-api]
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Deploy Web
+        working-directory: web
+        run: fly deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
