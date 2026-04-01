@@ -155,6 +155,20 @@ Goal: AI makes production faster and better.
 
 ---
 
+## Phase 3.5 — Production Hardening [ ]
+Goal: Application is reliable and safe for real users before public launch.
+
+- [ ] H.1 Fix login infinite spinner — add try/catch to login/fetchMe in store.ts so isLoading always resets on error; show user-facing error message
+- [ ] H.2 Frontend error boundaries — surface API errors as toast/inline messages instead of silent failures or spinners across all key flows
+- [ ] H.3 Verify R2 CORS is correctly configured in Cloudflare dashboard (allow PUT from freedompodcasting.com + fly.dev) — test a real upload from production browser
+- [ ] H.4 Add web unit tests (Jest/Vitest) for critical frontend paths — at minimum: auth flow, episode upload, RSS feed URL display
+- [ ] H.5 OOM hardening — monitor memory under concurrent RSS imports with concurrency=2; consider auto-restart policy or alerting on Fly.io
+- [ ] H.6 CI deploy visibility — --detach means broken deploys won't fail CI; add Fly.io status monitoring or webhook alert so silent failures are caught
+- [ ] H.7 Email verification on registration — prevent typo emails, reduce bounce rate, confirm real users
+- [ ] H.8 Password reset flow — end-to-end test that reset emails deliver and tokens work in production
+
+---
+
 ## Phase 4 — Mobile App [ ]
 Goal: Producers and clients can manage shows from mobile.
 

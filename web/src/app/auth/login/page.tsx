@@ -2,6 +2,7 @@
 import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
+import { AxiosError } from "axios";
 import { useAuthStore } from "@/lib/store";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
@@ -23,8 +24,13 @@ function LoginForm() {
     try {
       await login(form.email, form.password);
       router.push("/dashboard");
-    } catch {
-      setError("Invalid email or password.");
+    } catch (err) {
+      const status = (err as AxiosError).response?.status;
+      if (status === 401 || status === 422) {
+        setError("Invalid email or password.");
+      } else {
+        setError("Unable to reach the server. Please try again in a moment.");
+      }
     } finally {
       setLoading(false);
     }
