@@ -19,6 +19,8 @@ COPY . .
 
 RUN bundle exec bootsnap precompile app/ lib/ 2>/dev/null || true
 
+RUN mkdir -p tmp/pids tmp/cache tmp/sockets log
+
 RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails /rails
 USER rails
