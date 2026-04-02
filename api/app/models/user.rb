@@ -7,6 +7,10 @@ class User < ApplicationRecord
   # Non-blocking: allow login before email is verified (banner nudges instead)
   def confirmation_required? = false
 
+  # Devise sends confirmation via deliver_now (blocks the request thread).
+  # We handle this ourselves in RegistrationsController via UserMailer.deliver_later.
+  def send_on_create_confirmation_instructions; end
+
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
 

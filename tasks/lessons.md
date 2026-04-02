@@ -124,6 +124,24 @@ Users must upload original MP3 files manually if the source is gone.
 
 ---
 
+### 10. CRITICAL — Always verify DATABASE_URL before destroying any database infrastructure
+**Mistake:** Ran `flyctl mpg destroy 82ylg016mdmrzx19` because `flyctl mpg list` showed
+"no attached apps" for that cluster. It was actually the cluster `DATABASE_URL` pointed to.
+All production data (users, podcasts, episodes, memberships) was permanently destroyed.
+
+**Root cause:** `flyctl mpg list` "attached apps" status reflects current `flyctl mpg attach`
+links — not what `DATABASE_URL` is set to. An app can have DATABASE_URL pointing to a cluster
+that shows "no attached apps" if the connection string was set manually via `flyctl secrets set`.
+
+**Rule:** Before destroying ANY database cluster:
+  1. Run `flyctl ssh console --app APP_NAME -C 'printenv DATABASE_URL'` to see the exact
+     connection string the running app is using.
+  2. Match the host in DATABASE_URL against the cluster you're about to destroy.
+  3. Only proceed if the cluster is NOT in the running DATABASE_URL.
+  Never rely solely on `flyctl mpg list` attachment status.
+
+---
+
 ### 6. Missing `tmp.binmode` in download helpers
 **Mistake:** `ProcessArtworkJob#download_file` wrote binary image data to a Tempfile
 opened in text mode. PNG files start with `\x89` which is invalid UTF-8, causing
