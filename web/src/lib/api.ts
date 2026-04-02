@@ -5,6 +5,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 export const apiClient = axios.create({
   baseURL: API_BASE,
   headers: { "Content-Type": "application/json" },
+  timeout: 15000,
 });
 
 apiClient.interceptors.request.use((config) => {
@@ -18,8 +19,18 @@ apiClient.interceptors.request.use((config) => {
 apiClient.interceptors.response.use(
   (r) => r,
   (error: AxiosError) => {
-    const isAuthRoute = error.config?.url?.includes("/auth/login") || error.config?.url?.includes("/auth/register");
-    if (error.response?.status === 401 && !isAuthRoute && typeof window !== "undefined") {
+    const status = error.response?.status;
+    const url = error.config?.url;
+    const isAuthRoute = url?.includes("/auth/login") || url?.includes("/auth/register");
+
+    // Log all API errors for debugging
+    if (status && status >= 500) {
+      console.error(`[api] Server error ${status} on ${url}`, error.response?.data);
+    } else if (!status) {
+      console.error(`[api] Network error on ${url}:`, error.message);
+    }
+
+    if (status === 401 && !isAuthRoute && typeof window !== "undefined") {
       localStorage.removeItem("fp_token");
       window.location.href = "/auth/login";
     }

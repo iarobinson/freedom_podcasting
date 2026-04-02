@@ -7,6 +7,7 @@ import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Cl
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { podcastsApi, episodesApi } from "@/lib/api";
+import { extractErrorMessage } from "@/lib/errorUtils";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { toast } from "@/lib/toast";
@@ -29,13 +30,13 @@ export default function PodcastDetailPage() {
   const [rejectingEpisodeId, setRejectingEpisodeId] = useState<number | null>(null);
   const [rejectNotes, setRejectNotes] = useState("");
 
-  const { data: podcast, isLoading } = useQuery<Podcast>({
+  const { data: podcast, isLoading, isError: podcastError } = useQuery<Podcast>({
     queryKey: ["podcast", currentOrg?.slug, slug],
     queryFn:  () => podcastsApi.get(currentOrg!.slug, slug).then((r) => r.data.data),
     enabled:  !!currentOrg,
   });
 
-  const { data: episodesData } = useQuery({
+  const { data: episodesData, isError: episodesError } = useQuery({
     queryKey: ["episodes", currentOrg?.slug, slug],
     queryFn:  () => episodesApi.list(currentOrg!.slug, slug).then((r) => r.data),
     enabled:  !!currentOrg,
@@ -75,6 +76,7 @@ export default function PodcastDetailPage() {
   const unpublishEpisode = useMutation({
     mutationFn: (ep: Episode) => episodesApi.unpublish(currentOrg!.slug, slug, ep.id),
     onSuccess: () => { invalidateEpisodes(); toast.success("Episode unpublished"); },
+    onError: (err: unknown) => toast.error("Could not unpublish", extractErrorMessage(err)),
   });
 
   const submitForReview = useMutation({
@@ -113,6 +115,7 @@ export default function PodcastDetailPage() {
   const deleteEpisode = useMutation({
     mutationFn: (id: number) => episodesApi.delete(currentOrg!.slug, slug, id),
     onSuccess: () => { invalidateEpisodes(); toast.success("Episode deleted"); },
+    onError: (err: unknown) => toast.error("Could not delete episode", extractErrorMessage(err)),
   });
 
   const transcribeEpisode = useMutation({
@@ -154,7 +157,9 @@ export default function PodcastDetailPage() {
   }, [anyProcessing, qc, currentOrg?.slug, slug]);
 
   if (isLoading) return <div className="p-8"><div className="glass rounded-2xl h-48 shimmer-bg" /></div>;
+  if (podcastError) return <div className="p-8 text-accent text-sm">Failed to load podcast. Please refresh.</div>;
   if (!podcast)  return <div className="p-8 text-ink-500">Podcast not found.</div>;
+  if (episodesError) toast.error("Could not load episodes", "Refresh to try again.");
 
   return (
     <div className="p-8 max-w-5xl mx-auto">

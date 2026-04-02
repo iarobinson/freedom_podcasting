@@ -48,6 +48,7 @@ export default function NewEpisodePage() {
   const [uploadDone, setUploadDone] = useState(false);
   const [episode, setEpisode] = useState<Episode | null>(null);
   const [checkingOut, setCheckingOut] = useState(false);
+  const [pollErrors, setPollErrors] = useState(0);
 
   const isFreePlan = currentOrg?.plan === "free";
 
@@ -82,20 +83,27 @@ export default function NewEpisodePage() {
         (currentOrg?.plan !== "free" || episode.audio_duration_seconds != null));
 
     if (aiDone) return;
+    if (pollErrors >= 5) return;
 
     const fetch = async () => {
       try {
         const res = await episodesApi.get(currentOrg.slug, slug, episodeId);
         setEpisode(res.data.data);
-      } catch {
-        // ignore transient errors
+        setPollErrors(0);
+      } catch (err) {
+        const next = pollErrors + 1;
+        setPollErrors(next);
+        console.error("[new-episode] poll error", next, err);
+        if (next >= 5) {
+          toast.error("Connection issue", "Could not reach the server. Refresh the page to check your episode status.");
+        }
       }
     };
 
     fetch();
     const interval = setInterval(fetch, 4000);
     return () => clearInterval(interval);
-  }, [uploadDone, episodeId, currentOrg, slug, episode?.ai_metadata_status, episode?.transcription_status, episode?.audio_duration_seconds]);
+  }, [uploadDone, episodeId, currentOrg, slug, episode?.ai_metadata_status, episode?.transcription_status, episode?.audio_duration_seconds, pollErrors]);
 
   const handleCheckoutAi = async () => {
     if (!currentOrg || !episodeId) return;

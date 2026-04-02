@@ -7,12 +7,22 @@ class ApplicationController < ActionController::API
   rescue_from Pundit::NotAuthorizedError,   with: :render_forbidden
   rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
   rescue_from ActiveRecord::RecordInvalid,  with: :render_unprocessable
+  rescue_from StandardError,               with: :render_internal_error
 
   private
 
   def render_forbidden               = render(json: { error: "Forbidden." }, status: :forbidden)
   def render_not_found               = render(json: { error: "Not found." }, status: :not_found)
   def render_unprocessable(e)        = render(json: { errors: e.record.errors.full_messages }, status: :unprocessable_entity)
+
+  def render_internal_error(e)
+    Rails.logger.error(
+      "[500] #{e.class}: #{e.message} | " \
+      "user=#{current_user&.id} org=#{params[:organization_slug]} " \
+      "#{request.method} #{request.path} | #{e.backtrace&.first(3)&.join(' | ')}"
+    )
+    render json: { error: "An unexpected error occurred." }, status: :internal_server_error
+  end
 
   def current_organization
     @current_organization ||= Organization.find_by!(slug: params[:organization_slug])
