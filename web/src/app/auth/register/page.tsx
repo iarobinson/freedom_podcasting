@@ -1,21 +1,18 @@
 "use client";
 import { useState, Suspense } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { useAuthStore } from "@/lib/store";
+import { MailCheck } from "lucide-react";
 import { authApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 
 function RegisterForm() {
-  const router  = useRouter();
-  const params  = useSearchParams();
-  const { login } = useAuthStore();
+  const params = useSearchParams();
 
   const invitationToken = params.get("invitation_token") ?? "";
   const prefillEmail    = params.get("email") ?? "";
-  const redirectTo      = params.get("redirect") ?? "/dashboard";
 
   const [form, setForm] = useState({
     first_name: "", last_name: "",
@@ -23,6 +20,7 @@ function RegisterForm() {
   });
   const [error, setError]     = useState("");
   const [loading, setLoading] = useState(false);
+  const [done, setDone]       = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +28,7 @@ function RegisterForm() {
     setError(""); setLoading(true);
     try {
       await authApi.register({ ...form, invitation_token: invitationToken || undefined });
-      await login(form.email, form.password);
-      router.push(redirectTo);
+      setDone(true);
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { errors?: string[]; message?: string } } };
       const msg = axiosErr.response?.data?.errors?.join(", ")
@@ -45,6 +42,29 @@ function RegisterForm() {
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
+
+  if (done) {
+    return (
+      <div className="w-full max-w-sm relative text-center space-y-6">
+        <div className="flex justify-center">
+          <div className="h-14 w-14 rounded-full bg-green-500/10 border border-green-500/30 flex items-center justify-center">
+            <MailCheck className="h-7 w-7 text-green-400" />
+          </div>
+        </div>
+        <div>
+          <h1 className="text-xl font-bold uppercase tracking-widest text-ink-100">Check your inbox</h1>
+          <hr className="accent-rule mt-3 mx-auto w-16" />
+        </div>
+        <p className="text-sm text-ink-400">
+          We sent a confirmation link to <span className="text-ink-200">{form.email}</span>.
+          Click it to verify your account, then sign in.
+        </p>
+        <Link href="/auth/login" className="btn btn-primary w-full block text-center py-2.5">
+          Go to Sign In
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-sm relative">

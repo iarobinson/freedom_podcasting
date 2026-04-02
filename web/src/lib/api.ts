@@ -49,6 +49,10 @@ export const authApi = {
     apiClient.post("/api/v1/auth/password", { email }),
   resetPassword: (reset_password_token: string, password: string, password_confirmation: string) =>
     apiClient.put("/api/v1/auth/password", { reset_password_token, password, password_confirmation }),
+  confirmEmail: (token: string) =>
+    apiClient.get(`/api/v1/auth/confirm?token=${encodeURIComponent(token)}`),
+  resendConfirmation: () =>
+    apiClient.post("/api/v1/auth/resend-confirmation"),
 };
 
 export const podcastsApi = {

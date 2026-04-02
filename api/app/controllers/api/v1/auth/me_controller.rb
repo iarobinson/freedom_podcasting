@@ -4,11 +4,12 @@ module Api
       class MeController < ApplicationController
         def show
           render json: { data: {
-            id:         current_user.id,
-            email:      current_user.email,
-            first_name: current_user.first_name,
-            last_name:  current_user.last_name,
-            full_name:  current_user.full_name,
+            id:           current_user.id,
+            email:        current_user.email,
+            first_name:   current_user.first_name,
+            last_name:    current_user.last_name,
+            full_name:    current_user.full_name,
+            confirmed_at: current_user.confirmed_at,
             organizations: current_user.organizations.map { |org|
               {
                 id:   org.id,

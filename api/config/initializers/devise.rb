@@ -12,6 +12,7 @@ Devise.setup do |config|
   config.password_length        = 8..128
   config.email_regexp           = /\A[^@\s]+@[^@\s]+\z/
   config.reset_password_within  = 6.hours
+  config.confirm_within         = 7.days
   config.sign_out_via           = :delete
   config.navigational_formats   = []
 

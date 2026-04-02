@@ -2,7 +2,10 @@ class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
 
   devise :database_authenticatable, :registerable, :recoverable,
-         :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
+         :validatable, :confirmable, :jwt_authenticatable, jwt_revocation_strategy: self
+
+  # Non-blocking: allow login before email is verified (banner nudges instead)
+  def confirmation_required? = false
 
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships

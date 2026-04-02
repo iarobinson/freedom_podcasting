@@ -159,10 +159,10 @@ Goal: AI makes production faster and better.
 Goal: Application is reliable and safe for real users before public launch.
 
 - [x] H.1 Fix login infinite spinner — add try/catch to login/fetchMe in store.ts so isLoading always resets on error; show user-facing error message
-- [ ] H.2 Frontend error boundaries — surface API errors as toast/inline messages instead of silent failures or spinners across all key flows
+- [x] H.2 Frontend error boundaries — error.tsx, global-error.tsx, not-found.tsx created; missing onError handlers fixed; API logging + 15s timeout added; errorUtils.ts DRYs error extraction
 - [x] H.3 Verify R2 CORS — confirmed working: PUT preflight from app.freedompodcasting.com returns correct Access-Control-Allow-Origin header
 - [ ] H.4 Add web unit tests (Jest/Vitest) for critical frontend paths — at minimum: auth flow, episode upload, RSS feed URL display
-- [ ] H.5 OOM hardening — monitor memory under concurrent RSS imports with concurrency=2; consider auto-restart policy or alerting on Fly.io
+- [x] H.5 OOM hardening — concurrency reduced to 2; worker downsized to 512mb; restart policy always; scaled to 1 worker; deleted orphan DB cluster (~$40/mo saved)
 - [ ] H.6 CI deploy visibility — --detach means broken deploys won't fail CI; add Fly.io status monitoring or webhook alert so silent failures are caught
 - [ ] H.7 Email verification on registration — prevent typo emails, reduce bounce rate, confirm real users
 - [ ] H.8 Password reset flow — end-to-end test that reset emails deliver and tokens work in production
