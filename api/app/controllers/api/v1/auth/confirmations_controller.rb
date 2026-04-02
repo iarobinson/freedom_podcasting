@@ -20,8 +20,7 @@ module Api::V1::Auth
       if current_user.confirmed_at?
         render json: { message: "Email is already confirmed." }
       else
-        current_user.generate_confirmation_token!
-        UserMailer.verification_email(current_user).deliver_later
+        current_user.send_confirmation_email!
         render json: { message: "Verification email sent." }
       end
     end

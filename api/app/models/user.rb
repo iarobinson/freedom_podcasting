@@ -11,6 +11,12 @@ class User < ApplicationRecord
   # We handle this ourselves in RegistrationsController via UserMailer.deliver_later.
   def send_on_create_confirmation_instructions; end
 
+  # Public wrapper: generate token (protected in Devise) then enqueue email async.
+  def send_confirmation_email!
+    generate_confirmation_token!
+    UserMailer.verification_email(self).deliver_later
+  end
+
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
 
