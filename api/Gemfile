@@ -19,7 +19,7 @@ gem "jsonapi-serializer"
 
 # Background jobs — pin connection_pool to avoid Ruby 3.3 syntax error
 gem "connection_pool", "~> 2.4"
-gem "sidekiq", "~> 7.2.0"
+gem "sidekiq", "~> 8.0.10"
 
 # Storage — Cloudflare R2 is S3-compatible
 gem "aws-sdk-s3", "~> 1.218"

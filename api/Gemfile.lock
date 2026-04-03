@@ -309,7 +309,7 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
-    redis-client (0.26.4)
+    redis-client (0.28.0)
       connection_pool
     regexp_parser (2.11.3)
     reline (0.6.3)
@@ -373,11 +373,12 @@ GEM
     securerandom (0.4.1)
     shoulda-matchers (7.0.1)
       activesupport (>= 7.1)
-    sidekiq (7.2.4)
-      concurrent-ruby (< 2)
-      connection_pool (>= 2.3.0)
-      rack (>= 2.2.4)
-      redis-client (>= 0.19.0)
+    sidekiq (8.0.10)
+      connection_pool (>= 2.5.0)
+      json (>= 2.9.0)
+      logger (>= 1.6.2)
+      rack (>= 3.1.0)
+      redis-client (>= 0.23.2)
     streamio-ffmpeg (3.0.2)
       multi_json (~> 1.8)
     stringio (3.2.0)
@@ -439,7 +440,7 @@ DEPENDENCIES
   ruby-openai (~> 7.0)
   ruby-vips (~> 2.2)
   shoulda-matchers
-  sidekiq (~> 7.2.0)
+  sidekiq (~> 8.0.10)
   streamio-ffmpeg (~> 3.0)
   stripe (~> 19.0)
   tzinfo-data
