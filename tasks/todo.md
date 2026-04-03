@@ -155,7 +155,7 @@ Goal: AI makes production faster and better.
 
 ---
 
-## Phase 3.5 — Production Hardening [ ]
+## Phase 3.5 — Production Hardening [~]
 Goal: Application is reliable and safe for real users before public launch.
 
 - [x] H.1 Fix login infinite spinner — add try/catch to login/fetchMe in store.ts so isLoading always resets on error; show user-facing error message
@@ -164,8 +164,8 @@ Goal: Application is reliable and safe for real users before public launch.
 - [ ] H.4 Add web unit tests (Jest/Vitest) for critical frontend paths — at minimum: auth flow, episode upload, RSS feed URL display
 - [x] H.5 OOM hardening — concurrency reduced to 2; worker downsized to 512mb; restart policy always; scaled to 1 worker; deleted orphan DB cluster (~$40/mo saved)
 - [ ] H.6 CI deploy visibility — --detach means broken deploys won't fail CI; add Fly.io status monitoring or webhook alert so silent failures are caught
-- [ ] H.7 Email verification on registration — prevent typo emails, reduce bounce rate, confirm real users
-- [ ] H.8 Password reset flow — end-to-end test that reset emails deliver and tokens work in production
+- [x] H.7 Email verification on registration — Devise :confirmable with non-blocking flow; custom UserMailer.deliver_later; unverified banner in dashboard layout; resend endpoint; verify-email landing page
+- [ ] H.8 Password reset flow — end-to-end smoke test that reset emails deliver and tokens work in production (code built and tested in RSpec; needs live verification)
 
 ---
 
