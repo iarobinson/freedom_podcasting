@@ -22,7 +22,7 @@ gem "connection_pool", "~> 2.4"
 gem "sidekiq", "~> 7.2.0"
 
 # Storage — Cloudflare R2 is S3-compatible
-gem "aws-sdk-s3", "~> 1.148"
+gem "aws-sdk-s3", "~> 1.218"
 
 # Image processing
 gem "ruby-vips", "~> 2.2"
