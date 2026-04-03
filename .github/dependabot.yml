@@ -16,6 +16,10 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 10
+    ignore:
+      # eslint-config-next must stay in sync with the next package version
+      - dependency-name: "eslint-config-next"
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
     groups:
       security-updates:
         applies-to: security-updates
