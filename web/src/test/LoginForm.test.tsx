@@ -27,7 +27,7 @@ describe("LoginForm", () => {
 
   beforeEach(() => {
     mockPush.mockClear();
-    vi.mocked(useRouter).mockReturnValue({ push: mockPush, back: vi.fn() } as ReturnType<typeof useRouter>);
+    vi.mocked(useRouter).mockReturnValue({ push: mockPush, back: vi.fn(), forward: vi.fn(), refresh: vi.fn(), replace: vi.fn(), prefetch: vi.fn() } as ReturnType<typeof useRouter>);
     vi.mocked(useSearchParams).mockReturnValue(new URLSearchParams() as ReturnType<typeof useSearchParams>);
   });
 
