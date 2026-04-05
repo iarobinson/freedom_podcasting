@@ -127,6 +127,21 @@ jobs:
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
 
+      - name: Verify API health post-deploy
+        run: |
+          echo "Waiting for API to become healthy..."
+          for i in $(seq 1 24); do
+            status=$(curl -s -o /dev/null -w "%{http_code}" https://api.freedompodcasting.com/health)
+            if [ "$status" = "200" ]; then
+              echo "API healthy after ~$((i * 5))s"
+              exit 0
+            fi
+            echo "Attempt $i: got $status, retrying in 5s..."
+            sleep 5
+          done
+          echo "API did not become healthy within 120s"
+          exit 1
+
   # ─────────────────────────────────────────────────────────────
   # Deploy Web to Fly.io  (after API deploy succeeds)
   # ─────────────────────────────────────────────────────────────
@@ -148,3 +163,18 @@ jobs:
         run: flyctl deploy --remote-only --detach
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      - name: Verify Web health post-deploy
+        run: |
+          echo "Waiting for Web to become healthy..."
+          for i in $(seq 1 24); do
+            status=$(curl -s -o /dev/null -w "%{http_code}" https://app.freedompodcasting.com)
+            if [ "$status" = "200" ]; then
+              echo "Web healthy after ~$((i * 5))s"
+              exit 0
+            fi
+            echo "Attempt $i: got $status, retrying in 5s..."
+            sleep 5
+          done
+          echo "Web did not become healthy within 120s"
+          exit 1
