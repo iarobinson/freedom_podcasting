@@ -19,6 +19,7 @@ class User < ApplicationRecord
 
   has_many :memberships, dependent: :destroy
   has_many :organizations, through: :memberships
+  has_many :personal_access_tokens, dependent: :destroy
 
   validates :first_name, presence: true, length: { maximum: 100 }
   validates :last_name,  presence: true, length: { maximum: 100 }

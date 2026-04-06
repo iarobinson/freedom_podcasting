@@ -66,6 +66,12 @@ Rails.application.routes.draw do
         resources :podcast_imports, only: [:create, :show]
       end
 
+      namespace :wordpress do
+        scope "/organizations/:organization_slug" do
+          resources :tokens, only: [:index, :create, :destroy]
+        end
+      end
+
       resources :invitations, only: [] do
         collection { post :accept }
       end

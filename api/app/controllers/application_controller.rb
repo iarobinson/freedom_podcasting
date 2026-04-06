@@ -4,10 +4,10 @@ class ApplicationController < ActionController::API
 
   before_action :authenticate_user!
 
-  rescue_from Pundit::NotAuthorizedError,   with: :render_forbidden
-  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
-  rescue_from ActiveRecord::RecordInvalid,  with: :render_unprocessable
   rescue_from StandardError,               with: :render_internal_error
+  rescue_from ActiveRecord::RecordInvalid,  with: :render_unprocessable
+  rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
+  rescue_from Pundit::NotAuthorizedError,   with: :render_forbidden
 
   private
 

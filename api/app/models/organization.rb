@@ -4,6 +4,7 @@ class Organization < ApplicationRecord
   has_many :podcasts, dependent: :destroy
   has_many :media_files, dependent: :destroy
   has_many :podcast_imports, dependent: :destroy
+  has_many :personal_access_tokens, dependent: :destroy
 
   PLANS = %w[free starter pro agency].freeze
   PLAN_LIMITS = {

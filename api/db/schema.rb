@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_21_000001) do
+ActiveRecord::Schema[7.1].define(version: 2026_04_06_220609) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -47,6 +47,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_21_000001) do
     t.string "ai_metadata_status"
     t.datetime "ai_purchased_at"
     t.string "audio_filename"
+    t.jsonb "waveform_peaks"
     t.index ["guid"], name: "index_episodes_on_guid", unique: true
     t.index ["podcast_id", "slug"], name: "index_episodes_on_podcast_id_and_slug", unique: true, where: "(slug IS NOT NULL)"
     t.index ["podcast_id"], name: "index_episodes_on_podcast_id"
@@ -102,6 +103,39 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_21_000001) do
     t.index ["slug"], name: "index_organizations_on_slug", unique: true
   end
 
+  create_table "personal_access_tokens", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "organization_id", null: false
+    t.string "token_digest", null: false
+    t.string "token_prefix", null: false
+    t.string "name", null: false
+    t.string "scopes", default: "wordpress", null: false
+    t.datetime "last_used_at"
+    t.datetime "expires_at"
+    t.datetime "revoked_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_personal_access_tokens_on_organization_id"
+    t.index ["token_digest"], name: "index_personal_access_tokens_on_token_digest", unique: true
+    t.index ["token_prefix"], name: "index_personal_access_tokens_on_token_prefix"
+    t.index ["user_id"], name: "index_personal_access_tokens_on_user_id"
+  end
+
+  create_table "podcast_imports", force: :cascade do |t|
+    t.bigint "organization_id", null: false
+    t.bigint "podcast_id"
+    t.text "rss_url", null: false
+    t.string "status", default: "pending", null: false
+    t.integer "total_episodes", default: 0, null: false
+    t.integer "imported_episodes", default: 0, null: false
+    t.text "error_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "skipped_episodes", default: 0, null: false
+    t.index ["organization_id"], name: "index_podcast_imports_on_organization_id"
+    t.index ["podcast_id"], name: "index_podcast_imports_on_podcast_id"
+  end
+
   create_table "podcasts", force: :cascade do |t|
     t.bigint "organization_id", null: false
     t.string "title", null: false
@@ -146,6 +180,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_21_000001) do
     t.string "jti", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["jti"], name: "index_users_on_jti", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -158,5 +196,9 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_21_000001) do
   add_foreign_key "media_files", "podcasts"
   add_foreign_key "memberships", "organizations"
   add_foreign_key "memberships", "users"
+  add_foreign_key "personal_access_tokens", "organizations"
+  add_foreign_key "personal_access_tokens", "users"
+  add_foreign_key "podcast_imports", "organizations"
+  add_foreign_key "podcast_imports", "podcasts"
   add_foreign_key "podcasts", "organizations"
 end

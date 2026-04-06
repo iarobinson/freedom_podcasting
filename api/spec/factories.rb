@@ -13,6 +13,13 @@ FactoryBot.define do
   factory :membership do
     user; organization; role { "owner" }; accepted_at { Time.current }
   end
+  factory :personal_access_token do
+    user; organization
+    name { "WordPress - mysite.com" }
+    scopes { "wordpress" }
+    token_prefix { SecureRandom.urlsafe_base64(9)[0, 12] }
+    token_digest { BCrypt::Password.create("fp_pat_#{SecureRandom.urlsafe_base64(32)}") }
+  end
   factory :podcast do
     organization
     title { Faker::Music.band }; description { Faker::Lorem.paragraph }
