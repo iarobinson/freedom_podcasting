@@ -112,6 +112,18 @@ export const podcastImportsApi = {
     apiClient.get(`/api/v1/organizations/${orgSlug}/podcast_imports/${id}`),
 };
 
+export const wordpressTokensApi = {
+  create: (orgSlug: string, callbackUrl: string, name?: string) =>
+    apiClient.post(`/api/v1/wordpress/organizations/${orgSlug}/tokens`, {
+      callback_url: callbackUrl,
+      ...(name ? { name } : {}),
+    }),
+  list:   (orgSlug: string) =>
+    apiClient.get(`/api/v1/wordpress/organizations/${orgSlug}/tokens`),
+  revoke: (orgSlug: string, tokenId: number) =>
+    apiClient.delete(`/api/v1/wordpress/organizations/${orgSlug}/tokens/${tokenId}`),
+};
+
 export const uploadsApi = {
   presign:    (orgSlug: string, podcastSlug: string, data: { filename: string; content_type: string; upload_type: "audio" | "artwork" }) =>
     apiClient.post(`/api/v1/organizations/${orgSlug}/podcasts/${podcastSlug}/uploads/presign`, data),
