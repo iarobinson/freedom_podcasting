@@ -27,6 +27,13 @@ FactoryBot.define do
     slug { Faker::Internet.unique.slug(glue: "-") }
     language { "en" }; category { "Technology" }; podcast_type { "episodic" }; published { false }
   end
+  factory :media_file do
+    organization
+    filename { "episode.mp3" }
+    content_type { "audio/mpeg" }
+    r2_key { "organizations/1/audio/#{SecureRandom.uuid}.mp3" }
+    processing_status { "pending" }
+  end
   factory :episode do
     podcast
     title { Faker::Lorem.sentence(word_count: 5) }

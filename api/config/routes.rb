@@ -67,8 +67,20 @@ Rails.application.routes.draw do
       end
 
       namespace :wordpress do
+        # Token management — JWT auth (user must be logged in to FP)
         scope "/organizations/:organization_slug" do
           resources :tokens, only: [:index, :create, :destroy]
+        end
+
+        # WordPress plugin API — PAT auth (fp_pat_xxx Bearer token)
+        get "me", to: "me#show"
+        resources :podcasts, only: [:create, :update] do
+          resources :uploads, only: [] do
+            collection do
+              post :presign
+              post :complete
+            end
+          end
         end
       end
 

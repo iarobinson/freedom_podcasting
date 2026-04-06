@@ -155,21 +155,71 @@ Goal: AI makes production faster and better.
 
 ---
 
-## Phase 3.5 — Production Hardening [~]
+## Phase 3.5 — Production Hardening [x]
 Goal: Application is reliable and safe for real users before public launch.
 
 - [x] H.1 Fix login infinite spinner — add try/catch to login/fetchMe in store.ts so isLoading always resets on error; show user-facing error message
 - [x] H.2 Frontend error boundaries — error.tsx, global-error.tsx, not-found.tsx created; missing onError handlers fixed; API logging + 15s timeout added; errorUtils.ts DRYs error extraction
 - [x] H.3 Verify R2 CORS — confirmed working: PUT preflight from app.freedompodcasting.com returns correct Access-Control-Allow-Origin header
-- [ ] H.4 Add web unit tests (Jest/Vitest) for critical frontend paths — at minimum: auth flow, episode upload, RSS feed URL display
-- [x] H.5 OOM hardening — concurrency reduced to 2; worker downsized to 512mb; restart policy always; scaled to 1 worker; deleted orphan DB cluster (~$40/mo saved)
-- [ ] H.6 CI deploy visibility — --detach means broken deploys won't fail CI; add Fly.io status monitoring or webhook alert so silent failures are caught
+- [x] H.4 Add web unit tests — Vitest + RTL; 9 tests: LoginForm (401/500/success/reset-banner) + AudioUploader (MIME rejection, size rejection, presign params, progress, success); runs in CI before build
+- [x] H.5 OOM hardening — concurrency reduced to 1; worker downsized then bumped to 1gb; restart policy always; scaled to 1 worker; deleted orphan DB cluster (~$40/mo saved)
+- [x] H.6 CI deploy visibility — post-deploy health check polls live /health endpoint (24x at 5s) after each detached deploy; CI fails if app doesn't come up within 120s
 - [x] H.7 Email verification on registration — Devise :confirmable with non-blocking flow; custom UserMailer.deliver_later; unverified banner in dashboard layout; resend endpoint; verify-email landing page
-- [ ] H.8 Password reset flow — end-to-end smoke test that reset emails deliver and tokens work in production (code built and tested in RSpec; needs live verification)
+- [x] H.8 Password reset flow — verified in production: reset email delivers via Resend, token link works, password updates, redirects to /auth/login?reset=1
 
 ---
 
-## Phase 4 — Mobile App [ ]
+## Phase 3.6 — WordPress Plugin [ ]
+Goal: Free WordPress podcast plugin on wordpress.org that drives FreedomPodcasting hosting adoption.
+Separate repo: `freedom-podcasting-wp-plugin`. Plan in tasks/wp-plugin-plan.md.
+
+### Part 1 — FP API changes (Rails, must be done first)
+- [ ] W.1 PersonalAccessToken model + migration — long-lived tokens, hashed with BCrypt, prefix-indexed for fast lookup; format `fp_pat_<32 random chars>`
+- [ ] W.2 PAT auth concern — `PersonalAccessTokenAuthenticatable` concern; WordPress controllers use PAT auth instead of Devise JWT
+- [ ] W.3 WordPress API namespace — `GET /api/v1/wordpress/me`, `POST /podcasts`, `POST /podcasts/:id/uploads/presign`, `POST /podcasts/:id/uploads/complete`
+- [ ] W.4 Token management endpoints — `POST /api/v1/wordpress/tokens` (create, JWT auth), `GET` (list), `DELETE /:id` (revoke)
+- [ ] W.5 CORS update — allow any HTTPS origin for `/api/v1/wordpress/*` endpoints; R2 bucket needs PUT from `*` for browser uploads
+
+### Part 2 — FP Connect UI (Next.js web app)
+- [ ] W.6 `/connect/wordpress` page — shows org selector + authorize screen; POSTs to Rails to create PAT; redirects back to WP callback URL with `?fp_token=`
+
+### Part 3 — WordPress Plugin (new repo)
+- [ ] W.7 Plugin scaffold — OOP structure, GPL-2.0, readme.txt, activator/deactivator, translation-ready
+- [ ] W.8 Show settings page — Title, Author, Description, Email, Language, Category, Explicit, Artwork URL; stored in wp_options with sanitization
+- [ ] W.9 RSS feed — `/?feed=podcast`; full iTunes/Spotify spec (enclosure, itunes:*, atom:link self, content:encoded); validated at castfeedvalidator.com before submission
+- [ ] W.10 Episode meta box — Media URL, Episode Number, Season, Type, Explicit stored as post_meta; nonce-protected save
+- [ ] W.11 [fp_player] shortcode + Gutenberg block — HTML5 audio player; CSS only loaded on pages with the shortcode
+- [ ] W.12 FP Connect section — "Connect to FreedomPodcasting" button → OAuth-style redirect → callback stores PAT silently; Disconnect button
+- [ ] W.13 Upload widget — when connected: file picker → presign → browser PUT to R2 → complete → auto-populates media URL field
+- [ ] W.14 wordpress.org submission — Plugin Check plugin: 0 errors/warnings; readme.txt complete; external service disclosure in description; uninstall.php cleanup
+
+---
+
+## Phase 5 — User Acquisition & Growth [ ]
+Goal: Get the first paying clients via two parallel tracks.
+
+### Track A — Agency Migration (internal team, existing clients)
+Move existing podcast production clients from other hosts to FreedomPodcasting.
+Team of 4, each needing cross-org admin access to multiple client shows.
+
+- [ ] A.1 Agency admin layer — team members need a way to access/manage multiple client orgs without being invited to each one individually. Requires architectural decision: agency-scoped superuser role vs. cross-org admin panel vs. per-org invitations at scale
+- [ ] A.2 Tiered team permissions — define what each team role can do: e.g. owner (Ian) can create orgs + billing; producer can import/edit shows; editor can manage episodes only
+- [ ] A.3 Client org provisioning flow — admin UI to create a new client org, import their RSS feed, and optionally invite the client as a viewer
+- [ ] A.4 Uptime monitoring — external health check (Better Uptime / UptimeRobot free tier) before migrating real clients; RSS outage = client emergency
+- [ ] A.5 Migration playbook — documented internal process: RSS import → audio migration check → publish verification → client invite → old host cancel
+
+### Track B — Self-Serve / Organic Growth (new podcasters)
+Attract and convert podcasters who find the site via Google, blogs, AI recommendations.
+
+- [ ] B.1 Homepage conversion — clear value prop, pricing table, CTA above fold; optimized for "podcast hosting" search intent
+- [ ] B.2 Onboarding flow — post-registration first-run: guided prompt to create first podcast + links to Apple/Spotify submission guides
+- [ ] B.3 Welcome email — sent on registration; brief "here's what to do next" with 3 steps
+- [ ] B.4 "Podcast is live" email — triggered when first episode publishes; includes RSS URL + directory submission links
+- [ ] B.5 Paid ad landing pages — dedicated pages for specific offers/audiences (e.g. "switching from Buzzsprout", "new podcast starter kit"); separate from homepage so ad ROI is measurable
+
+---
+
+## Phase 6 — Mobile App [ ]
 Goal: Producers and clients can manage shows from mobile.
 
 - [ ] 4.1 Expo React Native app setup
