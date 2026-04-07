@@ -206,7 +206,7 @@ Team of 4, each needing cross-org admin access to multiple client shows.
 - [ ] A.1 Agency admin layer — team members need a way to access/manage multiple client orgs without being invited to each one individually. Requires architectural decision: agency-scoped superuser role vs. cross-org admin panel vs. per-org invitations at scale
 - [ ] A.2 Tiered team permissions — define what each team role can do: e.g. owner (Ian) can create orgs + billing; producer can import/edit shows; editor can manage episodes only
 - [ ] A.3 Client org provisioning flow — admin UI to create a new client org, import their RSS feed, and optionally invite the client as a viewer
-- [ ] A.4 Uptime monitoring — external health check (Better Uptime / UptimeRobot free tier) before migrating real clients; RSS outage = client emergency
+- [x] A.4 Uptime monitoring — UptimeRobot free tier; monitors for API /health, web app, and RSS feed; email alerts configured
 - [ ] A.5 Migration playbook — documented internal process: RSS import → audio migration check → publish verification → client invite → old host cancel
 
 ### Track B — Self-Serve / Organic Growth (new podcasters)
@@ -214,7 +214,7 @@ Attract and convert podcasters who find the site via Google, blogs, AI recommend
 
 - [ ] B.1 Homepage conversion — clear value prop, pricing table, CTA above fold; optimized for "podcast hosting" search intent
 - [ ] B.2 Onboarding flow — post-registration first-run: guided prompt to create first podcast + links to Apple/Spotify submission guides
-- [ ] B.3 Welcome email — sent on registration; brief "here's what to do next" with 3 steps
+- [x] B.3 Welcome email — sent on registration; brief "here's what to do next" with 3 steps
 - [ ] B.4 "Podcast is live" email — triggered when first episode publishes; includes RSS URL + directory submission links
 - [ ] B.5 Paid ad landing pages — dedicated pages for specific offers/audiences (e.g. "switching from Buzzsprout", "new podcast starter kit"); separate from homepage so ad ROI is measurable
 
