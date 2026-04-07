@@ -182,15 +182,17 @@ Separate repo: `freedom-podcasting-wp-plugin`. Plan in tasks/wp-plugin-plan.md.
 ### Part 2 — FP Connect UI (Next.js web app)
 - [x] W.5 `/connect/wordpress` page — login → org selector → PAT create → redirect back with `?fp_token=`; HTTPS callback_url validation; `wordpressTokensApi` in api.ts
 
-### Part 3 — WordPress Plugin (new repo)
-- [ ] W.7 Plugin scaffold — OOP structure, GPL-2.0, readme.txt, activator/deactivator, translation-ready
-- [ ] W.8 Show settings page — Title, Author, Description, Email, Language, Category, Explicit, Artwork URL; stored in wp_options with sanitization
-- [ ] W.9 RSS feed — `/?feed=podcast`; full iTunes/Spotify spec (enclosure, itunes:*, atom:link self, content:encoded); validated at castfeedvalidator.com before submission
-- [ ] W.10 Episode meta box — Media URL, Episode Number, Season, Type, Explicit stored as post_meta; nonce-protected save
-- [ ] W.11 [fp_player] shortcode + Gutenberg block — HTML5 audio player; CSS only loaded on pages with the shortcode
-- [ ] W.12 FP Connect section — "Connect to FreedomPodcasting" button → OAuth-style redirect → callback stores PAT silently; Disconnect button
-- [ ] W.13 Upload widget — when connected: file picker → presign → browser PUT to R2 → complete → auto-populates media URL field
-- [ ] W.14 wordpress.org submission — Plugin Check plugin: 0 errors/warnings; readme.txt complete; external service disclosure in description; uninstall.php cleanup
+### Part 3 — WordPress Plugin (new repo: freedom-podcasting-wp-plugin)
+- [x] W.6 Plugin scaffold — OOP singleton, GPL-2.0, activator/deactivator, translation-ready; all 18 files committed
+- [x] W.7 Show settings page — Settings API, all fp_show_* options, sanitize callbacks, iTunes category dropdown
+- [x] W.8 RSS feed — `/?feed=podcast`; full iTunes/Podcast Index spec; atom:link self, content:encoded, pubDate +0000, guid isPermaLink=false
+- [x] W.9 Episode meta box — Audio URL, Duration, File Size, Content Type, Episode Number, Season, Type, Explicit; nonce-protected save
+- [x] W.10 [fp_player] shortcode — HTML5 audio player; CSS only loaded when shortcode is present
+- [x] W.11 FP Connect section — OAuth-style redirect to /connect/wordpress; nonce in callback URL; disconnect form
+- [x] W.12 Upload widget — presign → XHR PUT to R2 with progress bar → complete → auto-populates Audio URL + Duration fields
+- [x] W.13 uninstall.php — deletes all fp_* options and _fp_* post meta via $wpdb->prepare()
+- [ ] W.14 Manual QA — install on real WP site, validate feed at castfeedvalidator.com, test connect flow end-to-end, test upload
+- [ ] W.15 wordpress.org submission — Plugin Check: 0 errors/warnings; readme.txt complete; external service disclosure
 
 ---
 
