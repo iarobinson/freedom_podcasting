@@ -11,6 +11,7 @@ module Api::V1::Auth
         accept_invitation(resource, params.dig(:user, :invitation_token))
         AdminMailer.new_signup(resource).deliver_later
         resource.send_confirmation_email!
+        UserMailer.welcome(resource).deliver_later
         render json: { message: "Account created.", data: {
           id: resource.id, email: resource.email,
           first_name: resource.first_name, last_name: resource.last_name,
