@@ -174,14 +174,13 @@ Goal: Free WordPress podcast plugin on wordpress.org that drives FreedomPodcasti
 Separate repo: `freedom-podcasting-wp-plugin`. Plan in tasks/wp-plugin-plan.md.
 
 ### Part 1 — FP API changes (Rails, must be done first)
-- [ ] W.1 PersonalAccessToken model + migration — long-lived tokens, hashed with BCrypt, prefix-indexed for fast lookup; format `fp_pat_<32 random chars>`
-- [ ] W.2 PAT auth concern — `PersonalAccessTokenAuthenticatable` concern; WordPress controllers use PAT auth instead of Devise JWT
-- [ ] W.3 WordPress API namespace — `GET /api/v1/wordpress/me`, `POST /podcasts`, `POST /podcasts/:id/uploads/presign`, `POST /podcasts/:id/uploads/complete`
-- [ ] W.4 Token management endpoints — `POST /api/v1/wordpress/tokens` (create, JWT auth), `GET` (list), `DELETE /:id` (revoke)
-- [ ] W.5 CORS update — allow any HTTPS origin for `/api/v1/wordpress/*` endpoints; R2 bucket needs PUT from `*` for browser uploads
+- [x] W.1 PersonalAccessToken model + migration — long-lived tokens, hashed with BCrypt, prefix-indexed for fast lookup; format `fp_pat_<32 random chars>`
+- [x] W.2 PAT auth concern + WordPress API namespace — `PersonalAccessTokenAuthenticatable` concern; BaseController, MeController, PodcastsController, UploadsController; 35 specs passing
+- [x] W.3 Token management endpoints — `POST /api/v1/wordpress/organizations/:slug/tokens` (create, JWT auth), `GET` (list), `DELETE /:id` (revoke); 13 specs
+- [x] W.4 CORS update — any HTTPS origin allowed for `/api/v1/wordpress/*`; R2 bucket PUT from `*` already permitted
 
 ### Part 2 — FP Connect UI (Next.js web app)
-- [ ] W.6 `/connect/wordpress` page — shows org selector + authorize screen; POSTs to Rails to create PAT; redirects back to WP callback URL with `?fp_token=`
+- [x] W.5 `/connect/wordpress` page — login → org selector → PAT create → redirect back with `?fp_token=`; HTTPS callback_url validation; `wordpressTokensApi` in api.ts
 
 ### Part 3 — WordPress Plugin (new repo)
 - [ ] W.7 Plugin scaffold — OOP structure, GPL-2.0, readme.txt, activator/deactivator, translation-ready
