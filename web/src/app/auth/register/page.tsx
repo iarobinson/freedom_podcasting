@@ -13,6 +13,7 @@ function RegisterForm() {
 
   const invitationToken = params.get("invitation_token") ?? "";
   const prefillEmail    = params.get("email") ?? "";
+  const next            = params.get("next") ?? "";
 
   const [form, setForm] = useState({
     first_name: "", last_name: "",
@@ -59,7 +60,10 @@ function RegisterForm() {
           We sent a confirmation link to <span className="text-ink-200">{form.email}</span>.
           Click it to verify your account, then sign in.
         </p>
-        <Link href="/auth/login" className="btn btn-primary w-full block text-center py-2.5">
+        <Link
+          href={next ? `/auth/login?next=${encodeURIComponent(next)}` : "/auth/login"}
+          className="btn btn-primary w-full block text-center py-2.5"
+        >
           Go to Sign In
         </Link>
       </div>

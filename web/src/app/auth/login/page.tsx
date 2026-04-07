@@ -17,13 +17,14 @@ function LoginForm() {
   const [loading, setLoading] = useState(false);
 
   const resetSuccess = searchParams.get("reset") === "1";
+  const next = searchParams.get("next") ?? "";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(""); setLoading(true);
     try {
       await login(form.email, form.password);
-      router.push("/dashboard");
+      router.push(next || "/dashboard");
     } catch (err) {
       const status = (err as AxiosError).response?.status;
       if (status === 401 || status === 422) {

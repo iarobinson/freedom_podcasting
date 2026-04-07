@@ -175,6 +175,15 @@ function ConnectWordPressContent() {
                 </Button>
               </div>
             </form>
+            <p className="text-center text-[11px] text-ink-600 uppercase tracking-widest">
+              No account?{" "}
+              <a
+                href={`/auth/register?next=${encodeURIComponent(`/connect/wordpress?callback_url=${encodeURIComponent(callbackUrl)}`)}`}
+                className="text-ink-400 hover:text-accent transition-colors"
+              >
+                Create one free
+              </a>
+            </p>
           </div>
         )}
 
