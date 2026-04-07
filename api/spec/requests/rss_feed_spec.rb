@@ -139,12 +139,40 @@ RSpec.describe "RSS Feed", type: :request do
     expect(response.body).to include("<enclosure")
   end
 
-  it "enclosure URL routes through the streaming endpoint (not direct R2 URL)" do
+  it "enclosure URL routes through the streaming endpoint using episode id" do
     subject
-    # Enclosure URLs go through /feeds/<org>/<podcast>/episodes/<guid> so
-    # Apple can fetch them. They must NOT be bare R2 URLs.
-    expect(response.body).to include("episodes/#{episode1.guid}")
-    expect(response.body).not_to include('url="https://pub-')  # not a raw R2 CDN URL
+    # Enclosure URLs must use the integer episode ID — never the guid, which
+    # can be an arbitrary URL for imported episodes (e.g. https://site.com/?p=123).
+    expect(response.body).to include("episodes/#{episode1.id}")
+    expect(response.body).not_to include("episodes/#{episode1.guid}")
+  end
+
+  it "enclosure URL is a valid URL with no embedded protocol (guards against imported URL-style guids)" do
+    subject
+    doc = Nokogiri::XML(response.body)
+    doc.remove_namespaces!
+    doc.xpath("//enclosure").each do |enc|
+      url = enc["url"]
+      # A URL with a guid embedded as a path segment would look like
+      # .../episodes/https://... — the double-protocol is the tell.
+      expect(url).not_to match(%r{episodes/https?://})
+      expect(url).to start_with("http")
+      # Must be parseable
+      expect { URI.parse(url) }.not_to raise_error
+    end
+  end
+
+  it "enclosure URL works even when episode guid is a WordPress-style URL" do
+    wp_episode = create(:episode, :published, podcast: podcast,
+                        guid: "https://example.com/?p=9999")
+    subject
+    doc = Nokogiri::XML(response.body)
+    doc.remove_namespaces!
+    enclosures = doc.xpath("//enclosure").map { |e| e["url"] }
+    wp_enc = enclosures.find { |u| u.include?("episodes/#{wp_episode.id}") }
+    expect(wp_enc).to be_present
+    expect(wp_enc).not_to include("https://example.com")
+    expect { URI.parse(wp_enc) }.not_to raise_error
   end
 
   it "enclosure has length and type attributes" do
@@ -180,10 +208,11 @@ RSpec.describe "RSS Feed", type: :request do
     expect(response.body).not_to include(org.slug)
   end
 
-  it "enclosure URLs use the rss_token (not the org slug)" do
+  it "enclosure URLs use the rss_token (not the org slug or guid)" do
     subject
-    expect(response.body).to include("/feeds/#{podcast.rss_token}/episodes/")
+    expect(response.body).to include("/feeds/#{podcast.rss_token}/episodes/#{episode1.id}")
     expect(response.body).not_to include("#{org.slug}/#{podcast.slug}/episodes")
+    expect(response.body).not_to include("episodes/#{episode1.guid}")
   end
 
   it "serves the feed by legacy slug for backward compatibility" do
