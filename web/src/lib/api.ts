@@ -136,3 +136,10 @@ export const uploadsApi = {
     });
   },
 };
+
+export const staffApi = {
+  listOrgs: (params?: { page?: number; q?: string }) =>
+    apiClient.get("/api/v1/staff/organizations", { params }),
+  createOrg: (data: { organization: { name: string; slug?: string }; plan?: string; rss_url?: string }) =>
+    apiClient.post("/api/v1/staff/organizations", data),
+};

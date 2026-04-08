@@ -28,8 +28,11 @@ class ApplicationController < ActionController::API
     @current_organization ||= Organization.find_by!(slug: params[:organization_slug])
   end
 
+  # Staff bypass: uses User#membership_for which returns a real membership if one
+  # exists, or a virtual (unsaved) Membership for staff users so that all
+  # downstream role checks (can_edit?, can_manage?) work transparently.
   def require_organization_membership!
-    @current_membership = current_user.memberships.find_by(organization: current_organization)
+    @current_membership = current_user.membership_for(current_organization)
     render_forbidden unless @current_membership
   end
 
@@ -41,6 +44,11 @@ class ApplicationController < ActionController::API
   def require_manager!
     require_organization_membership!
     render_forbidden unless @current_membership&.can_manage?
+  end
+
+  # Hard staff-only gate — used by Api::V1::Staff::BaseController.
+  def require_staff!
+    render_forbidden unless current_user.staff?
   end
 
   def enforce_podcast_limit!

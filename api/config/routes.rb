@@ -84,6 +84,10 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :staff do
+        resources :organizations, only: [:index, :create]
+      end
+
       resources :invitations, only: [] do
         collection { post :accept }
       end

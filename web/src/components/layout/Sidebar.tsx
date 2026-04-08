@@ -1,27 +1,29 @@
 "use client";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Users, CreditCard } from "lucide-react";
+import { LayoutDashboard, Mic2, Upload, Settings, LogOut, Users, CreditCard, Shield } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
+import { StaffOrgSwitcher } from "@/components/layout/StaffOrgSwitcher";
 import { clsx } from "clsx";
 
 export function Sidebar() {
   const pathname = usePathname();
   const router   = useRouter();
   const { user, currentOrg, logout } = useAuthStore();
-  const { canEdit, canManage } = useRole();
+  const { canEdit, canManage, isStaff } = useRole();
 
   const handleLogout = () => { logout(); router.push("/auth/login"); };
 
   const nav = [
-    { href: "/dashboard",                  label: "Dashboard", icon: LayoutDashboard, show: true,      exact: true  },
-    { href: "/dashboard/podcasts",         label: "Podcasts",  icon: Mic2,            show: true,      exact: false },
-    { href: "/dashboard/upload",           label: "Upload",    icon: Upload,          show: canEdit,   exact: false },
-    { href: "/dashboard/settings",         label: "Settings",  icon: Settings,        show: true,                            exact: true  },
+    { href: "/dashboard",                  label: "Dashboard", icon: LayoutDashboard, show: true,                             exact: true  },
+    { href: "/dashboard/podcasts",         label: "Podcasts",  icon: Mic2,            show: true,                             exact: false },
+    { href: "/dashboard/upload",           label: "Upload",    icon: Upload,          show: canEdit,                          exact: false },
+    { href: "/dashboard/settings",         label: "Settings",  icon: Settings,        show: true,                             exact: true  },
     { href: "/dashboard/settings/members", label: "Members",   icon: Users,           show: canManage,                        exact: false },
     { href: "/dashboard/settings/billing", label: "Billing",   icon: CreditCard,      show: currentOrg?.role === "owner",     exact: false },
+    { href: "/dashboard/admin",            label: "Admin",     icon: Shield,          show: isStaff,                          exact: false },
   ];
 
   return (
@@ -40,10 +42,18 @@ export function Sidebar() {
 
       {currentOrg && (
         <div className="px-5 py-3 border-b border-ink-800">
-          <p className="text-[9px] uppercase tracking-widest text-ink-600 font-bold">Organization</p>
+          <p className="text-[9px] uppercase tracking-widest text-ink-600 font-bold">
+            {isStaff ? (
+              <span className="text-purple-400">Staff — Client Org</span>
+            ) : (
+              "Organization"
+            )}
+          </p>
           <p className="text-xs text-ink-300 font-bold truncate">{currentOrg.name}</p>
         </div>
       )}
+
+      {isStaff && <StaffOrgSwitcher />}
 
       <nav className="flex-1 px-3 py-4 space-y-0.5">
         {nav.filter(n => n.show).map(({ href, label, icon: Icon, exact }) => {

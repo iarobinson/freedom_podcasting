@@ -10,6 +10,8 @@ module Api
             last_name:    current_user.last_name,
             full_name:    current_user.full_name,
             confirmed_at: current_user.confirmed_at,
+            is_staff:     current_user.is_staff,
+            staff_role:   current_user.staff_role,
             organizations: current_user.organizations.map { |org|
               {
                 id:   org.id,

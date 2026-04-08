@@ -2,6 +2,7 @@ module Api::V1
   class BillingController < ApplicationController
     before_action :current_organization
     before_action :require_organization_membership!
+    before_action :require_org_owner!
 
     PRICE_MAP = {
       "starter" => ENV["STRIPE_STARTER_PRICE_ID"],
@@ -112,6 +113,13 @@ module Api::V1
 
     def current_organization
       @current_organization ||= Organization.find_by!(slug: params[:slug])
+    end
+
+    # Billing requires a real ownership row — staff virtual memberships are not
+    # sufficient. This prevents staff from accidentally modifying client billing.
+    def require_org_owner!
+      is_owner = current_organization.memberships.exists?(user: current_user, role: "owner")
+      render_forbidden unless is_owner
     end
   end
 end

@@ -5,7 +5,24 @@ export interface User {
   last_name: string;
   full_name: string;
   confirmed_at: string | null;
+  is_staff: boolean;
+  staff_role: "admin" | "editor" | null;
   organizations: OrganizationSummary[];
+}
+
+export interface StaffOrgSummary {
+  id: number;
+  name: string;
+  slug: string;
+  plan: Plan;
+  podcast_count: number;
+  created_at: string;
+}
+
+export interface StaffOrgListMeta {
+  total: number;
+  page: number;
+  per_page: number;
 }
 
 export interface OrganizationSummary {

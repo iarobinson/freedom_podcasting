@@ -9,10 +9,11 @@ interface AuthState {
   token: string | null;
   currentOrg: OrganizationSummary | null;
   isLoading: boolean;
-  login:       (email: string, password: string) => Promise<void>;
-  logout:      () => Promise<void>;
-  fetchMe:     () => Promise<void>;
-  setCurrentOrg: (org: OrganizationSummary) => void;
+  login:               (email: string, password: string) => Promise<void>;
+  logout:              () => Promise<void>;
+  fetchMe:             () => Promise<void>;
+  setCurrentOrg:       (org: OrganizationSummary) => void;
+  setCurrentOrgFromStaff: (org: OrganizationSummary) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -52,7 +53,20 @@ export const useAuthStore = create<AuthState>()(
           const res = await authApi.me();
           const user: User = res.data.data;
           const persisted = get().currentOrg;
-          const freshOrg = user.organizations.find(o => o.slug === persisted?.slug) ?? user.organizations[0] ?? null;
+
+          // Staff users may have no memberships of their own. Keep their
+          // currently selected org (could be a client org) if it's still valid.
+          // If they have no org selected yet, fall through to their own orgs or null.
+          let freshOrg: OrganizationSummary | null;
+          if (user.is_staff && persisted && !user.organizations.find(o => o.slug === persisted.slug)) {
+            // Staff is viewing a client org — preserve it across token refreshes
+            freshOrg = persisted;
+          } else {
+            freshOrg = user.organizations.find(o => o.slug === persisted?.slug)
+              ?? user.organizations[0]
+              ?? null;
+          }
+
           set({ user, currentOrg: freshOrg });
         } catch (err) {
           const axiosErr = err as AxiosError;
@@ -62,6 +76,10 @@ export const useAuthStore = create<AuthState>()(
       },
 
       setCurrentOrg: (org) => set({ currentOrg: org }),
+
+      // Staff-only: switch into any client org. The org is constructed with
+      // role = user.staff_role so that useRole() returns correct permissions.
+      setCurrentOrgFromStaff: (org) => set({ currentOrg: org }),
     }),
     {
       name: "fp-auth",

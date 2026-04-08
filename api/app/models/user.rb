@@ -4,6 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable,
          :validatable, :confirmable, :jwt_authenticatable, jwt_revocation_strategy: self
 
+  STAFF_ROLES = %w[admin editor].freeze
+
+  validates :staff_role, inclusion: { in: STAFF_ROLES }, allow_nil: true
+
   # Non-blocking: allow login before email is verified (banner nudges instead)
   def confirmation_required? = false
 
@@ -27,4 +31,14 @@ class User < ApplicationRecord
   def full_name = "#{first_name} #{last_name}".strip
   def owner_of?(org) = memberships.exists?(organization: org, role: "owner")
   def role_in(org)   = memberships.find_by(organization: org)&.role
+
+  # Staff helpers
+  def staff? = is_staff?
+
+  # Returns a real membership if one exists, otherwise a virtual (unsaved) one
+  # for staff users so that require_organization_membership! works transparently.
+  def membership_for(org)
+    memberships.find_by(organization: org) ||
+      (staff? ? Membership.new(user: self, organization: org, role: staff_role) : nil)
+  end
 end
