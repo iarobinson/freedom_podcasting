@@ -25,6 +25,33 @@
     --ink-200:      #e8e6e3;
     --ink-100:      #f2f0ee;
     --ink-50:       #f9f8f7;
+
+    /* Semantic layer — dark defaults (public pages use these) */
+    --bg-canvas:      var(--ink-950);
+    --bg-surface:     var(--ink-900);
+    --bg-raised:      var(--ink-800);
+    --border-subtle:  var(--ink-800);
+    --border-muted:   var(--ink-700);
+    --text-primary:   var(--ink-50);
+    --text-body:      var(--ink-100);
+    --text-muted:     var(--ink-400);
+    --text-faint:     var(--ink-600);
+  }
+
+  /* Light mode — only affects public pages that use semantic tokens.
+     Dashboard uses hardcoded bg-ink-950 (compiled to fixed hex) — unaffected. */
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg-canvas:     #f5f4f2;
+      --bg-surface:    #ffffff;
+      --bg-raised:     #ededeb;
+      --border-subtle: #dedad6;
+      --border-muted:  #c8c5c0;
+      --text-primary:  #0d0c0b;
+      --text-body:     #1e1c1a;
+      --text-muted:    #4a4845;
+      --text-faint:    #7a7874;
+    }
   }
 
   * { box-sizing: border-box; }
@@ -41,8 +68,14 @@
   body {
     background-color: var(--ink-950);
     min-height: 100vh;
-    /* Subtle noise texture for depth */
+    /* Subtle noise texture for depth — white noise on dark, dark noise on light */
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  }
+
+  @media (prefers-color-scheme: light) {
+    body {
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' fill='%23000000' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    }
   }
 
   /* Scrollbar */
@@ -64,7 +97,7 @@
 
 /* ── Component utilities ────────────────────────────────────────────────────── */
 @layer components {
-  /* Card / Panel */
+  /* Card / Panel — fixed dark colours for dashboard */
   .panel {
     background: var(--ink-900);
     border: 1px solid var(--ink-800);
@@ -77,6 +110,21 @@
   .panel-hover:hover {
     background: var(--ink-800);
     border-color: var(--ink-700);
+  }
+
+  /* Public panel — uses semantic tokens, adapts to light/dark OS preference */
+  .public-panel {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 2px;
+  }
+
+  .public-panel-hover {
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .public-panel-hover:hover {
+    background: var(--bg-raised);
+    border-color: var(--border-muted);
   }
 
   /* Accent rule — thin horizontal line in accent color */

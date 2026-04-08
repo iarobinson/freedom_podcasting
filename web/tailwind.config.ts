@@ -30,6 +30,11 @@ const config: Config = {
           dark:    "#aa0000",
           muted:   "#cc000033",
         },
+        // Semantic tokens — public pages only. Resolve through CSS vars so
+        // @media (prefers-color-scheme: light) overrides work correctly.
+        canvas:  "var(--bg-canvas)",
+        surface: "var(--bg-surface)",
+        raised:  "var(--bg-raised)",
       },
       fontFamily: {
         display: ["Raleway", "Georgia", "sans-serif"],
