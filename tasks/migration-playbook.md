@@ -43,28 +43,16 @@ ImportRssFeedJob.perform_later(PodcastImport.last.id)
 
 ---
 
-## Step 3 — Migrate Audio Files (if needed)
+## Step 3 — Verify Audio Migration to R2
 
-Imported episodes point to the **old host's CDN URLs** — those break when the client cancels. Decide:
+Audio migration is **automatic**. `ImportRssFeedJob` enqueues `MigrateEpisodeAudioJob` for every episode — it downloads each file from the old host and re-uploads it to R2. By the time the import status shows "done", all audio is already on the FreedomPodcasting CDN and `audio_url` on each episode points to R2.
 
-**Option A — Leave as-is temporarily** (safe while old host is still active)
-- Client stays on old host until you're ready to cut over
-- Audio URLs are still valid
+Check:
+- [ ] Import status is "done" (visible in the admin page or via Rails console: `PodcastImport.last`)
+- [ ] Spot-check a few episode `audio_url` values — they should start with `https://` pointing to your R2 public URL, not the old host
+- [ ] Any episodes with unavailable audio on the old host will be set to `draft` automatically (check for unexpected drafts)
 
-**Option B — Re-upload audio to R2** (full migration, required before cancelling old host)
-- Download each audio file from the old URL
-- Re-upload via the episode edit page or directly to R2
-- Update `audio_url` on each episode
-
-For bulk migrations, use the Rails console on the worker machine:
-
-```ruby
-# Example: download + re-upload one episode
-ep = Episode.find(<id>)
-# download ep.audio_url, upload to R2 via StorageService, update ep.audio_url
-```
-
-> **Note:** A bulk audio migration tool is not yet built (Phase 3.11 area). For now, do this manually or defer until the client is ready to cancel the old host.
+If audio migration is still in progress (import not yet "done"), wait for Sidekiq to finish before cancelling the old host.
 
 ---
 
@@ -109,7 +97,7 @@ If the client wants their own login:
 ## Step 7 — Cancel the Old Host
 
 Only cancel after:
-- [ ] Audio files are all on R2 (or old host confirmed staying active during transition)
+- [ ] Import status is "done" (all audio migrated to R2)
 - [ ] Directories have updated to new feed URL
 - [ ] Client has confirmed they're happy
 
