@@ -203,11 +203,11 @@ Goal: Get the first paying clients via two parallel tracks.
 Move existing podcast production clients from other hosts to FreedomPodcasting.
 Team of 4, each needing cross-org admin access to multiple client shows.
 
-- [ ] A.1 Agency admin layer — team members need a way to access/manage multiple client orgs without being invited to each one individually. Requires architectural decision: agency-scoped superuser role vs. cross-org admin panel vs. per-org invitations at scale
-- [ ] A.2 Tiered team permissions — define what each team role can do: e.g. owner (Ian) can create orgs + billing; producer can import/edit shows; editor can manage episodes only
-- [ ] A.3 Client org provisioning flow — admin UI to create a new client org, import their RSS feed, and optionally invite the client as a viewer
+- [x] A.1 Agency admin layer — is_staff boolean + staff_role on User; virtual Membership for staff bypasses per-org invitations; billing locked to real DB owner rows only
+- [x] A.2 Tiered team permissions — staff_role: admin|editor mirrors org roles; useRole() isStaff flag; Admin nav item + StaffOrgSwitcher in sidebar
+- [x] A.3 Client org provisioning flow — /dashboard/admin page: searchable paginated org list, new org form (name/slug/plan/optional RSS import)
 - [x] A.4 Uptime monitoring — UptimeRobot free tier; monitors for API /health, web app, and RSS feed; email alerts configured
-- [ ] A.5 Migration playbook — documented internal process: RSS import → audio migration check → publish verification → client invite → old host cancel
+- [x] A.5 Migration playbook — documented internal process: RSS import → audio migration check → publish verification → client invite → old host cancel (tasks/migration-playbook.md)
 
 ### Track B — Self-Serve / Organic Growth (new podcasters)
 Attract and convert podcasters who find the site via Google, blogs, AI recommendations.
