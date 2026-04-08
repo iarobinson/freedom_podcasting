@@ -35,6 +35,11 @@ jobs:
       SECRET_KEY_BASE: "0000000000000000000000000000000000000000000000000000000000000001"
       DEVISE_JWT_SECRET_KEY: "0000000000000000000000000000000000000000000000000000000000000002"
       WEB_URL: "http://localhost:3001"
+      R2_ACCESS_KEY_ID: "test-key-id"
+      R2_SECRET_ACCESS_KEY: "test-secret-key"
+      R2_ENDPOINT: "https://r2.example.com"
+      R2_BUCKET: "test-bucket"
+      R2_PUBLIC_URL: "https://cdn.example.com"
 
     steps:
       - uses: actions/checkout@v4
