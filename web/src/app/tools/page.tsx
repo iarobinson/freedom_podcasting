@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { ArrowLeft, RefreshCw, ShieldCheck, Zap } from "lucide-react";
+import { ArrowLeft, RefreshCw, ShieldCheck, GitCompare, Zap } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Free Podcast Production Tools — FreedomPodcasting",
   description:
-    "Free tools for podcasters: find the RSS feed behind any Apple Podcasts URL, validate your feed for directory submission.",
+    "Free tools for podcasters: find the RSS feed behind any Apple Podcasts URL, validate your feed for directory submission, and compare two feeds side-by-side.",
 };
 
 const TOOLS = [
@@ -22,6 +22,13 @@ const TOOLS = [
     title: "Feed Validator",
     description:
       "Comprehensive RSS feed validation against Apple Podcasts, Spotify, and other directory requirements. Check all the things that matter.",
+  },
+  {
+    href: "/tools/feed-comparator",
+    icon: GitCompare,
+    title: "Feed Comparator",
+    description:
+      "Compare two RSS feeds side-by-side. Verify your podcast migrated correctly with a GitHub-style diff showing every difference between your old and new feed.",
   },
 ];
 
