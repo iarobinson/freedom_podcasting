@@ -1,0 +1,28 @@
+<p>Hi <%= @user.first_name %>,</p>
+
+<p><strong>Your podcast is live!</strong> "<%= @podcast.title %>" is now published and distributing to every major directory.</p>
+
+<p>Here's what to do next:</p>
+
+<p>
+  <strong>1. Copy your RSS feed URL</strong><br>
+  This is the URL you'll submit to Apple Podcasts, Spotify, and other directories:
+</p>
+
+<p style="background:#f5f5f5;padding:12px 16px;border-radius:4px;font-family:monospace;font-size:13px;word-break:break-all;">
+  <%= @rss_url %>
+</p>
+
+<p>
+  <strong>2. Submit to Apple Podcasts</strong><br>
+  Go to <a href="https://podcastsconnect.apple.com">podcastsconnect.apple.com</a>, sign in with your Apple ID, and paste your RSS URL. Approval usually takes 24–72 hours.
+</p>
+
+<p>
+  <strong>3. Submit to Spotify</strong><br>
+  Go to <a href="https://podcasters.spotify.com">podcasters.spotify.com</a> and follow the steps to add your show via RSS.
+</p>
+
+<p><a href="<%= @podcast_url %>" class="btn">View your podcast</a></p>
+
+<p style="color:#888888;font-size:13px;">Questions? Reply to this email — we read every one.</p>

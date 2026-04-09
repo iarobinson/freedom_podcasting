@@ -1,0 +1,25 @@
+Hi <%= @user.first_name %>,
+
+Your podcast is live! "<%= @podcast.title %>" is now published and distributing
+to every major directory.
+
+Here's what to do next:
+
+1. COPY YOUR RSS FEED URL
+   Submit this URL to Apple Podcasts, Spotify, and other directories:
+
+   <%= @rss_url %>
+
+2. SUBMIT TO APPLE PODCASTS
+   Go to podcastsconnect.apple.com, sign in with your Apple ID, and paste
+   your RSS URL. Approval usually takes 24–72 hours.
+
+3. SUBMIT TO SPOTIFY
+   Go to podcasters.spotify.com and add your show via RSS.
+
+View your podcast:
+<%= @podcast_url %>
+
+Questions? Reply to this email — we read every one.
+
+— Freedom Podcasting

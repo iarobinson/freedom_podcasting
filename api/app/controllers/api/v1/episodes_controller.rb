@@ -28,7 +28,19 @@ module Api::V1
       require_editor!
       return if enforce_monthly_publish_limit!
       return render(json: { error: "Audio required to publish." }, status: :unprocessable_entity) if @episode.audio_url.blank?
+
+      is_first = !current_organization.podcasts
+                   .joins(:episodes)
+                   .where(episodes: { status: "published" })
+                   .exists?
+
       @episode.update!(status: "published", published_at: @episode.published_at || Time.current)
+
+      if is_first
+        owner = current_organization.memberships.find_by(role: "owner")&.user
+        UserMailer.podcast_live(owner, @episode).deliver_later if owner
+      end
+
       render json: { data: episode_json(@episode) }
     end
 
