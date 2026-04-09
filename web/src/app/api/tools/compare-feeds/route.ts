@@ -14,6 +14,7 @@ export interface FeedMeta {
 }
 
 export interface CompareResult {
+  exactlySame: boolean;
   semanticallySame: boolean;
   semanticNotes: string[];
   feedA: FeedMeta;
@@ -184,6 +185,7 @@ export async function GET(req: NextRequest) {
   // Can't diff if either feed failed
   if (resA.error || resB.error) {
     return NextResponse.json({
+      exactlySame: false,
       semanticallySame: false,
       semanticNotes: [],
       feedA: metaA,
@@ -195,10 +197,28 @@ export async function GET(req: NextRequest) {
 
   const linesA = normalizeLines(resA.text);
   const linesB = normalizeLines(resB.text);
+
+  const exactlySame =
+    linesA.length === linesB.length && linesA.every((l, i) => l === linesB[i]);
+
+  // Skip expensive diff computation when feeds are identical
+  if (exactlySame) {
+    return NextResponse.json({
+      exactlySame: true,
+      semanticallySame: true,
+      semanticNotes: [],
+      feedA: metaA,
+      feedB: metaB,
+      diff: [],
+      truncated: false,
+    } satisfies CompareResult);
+  }
+
   const { diff, truncated } = computeDiff(linesA, linesB);
   const { same, notes } = compareSemantics(metaA, metaB);
 
   return NextResponse.json({
+    exactlySame: false,
     semanticallySame: same,
     semanticNotes: notes,
     feedA: metaA,

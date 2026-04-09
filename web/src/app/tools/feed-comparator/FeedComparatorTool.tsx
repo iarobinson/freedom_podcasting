@@ -300,14 +300,16 @@ export default function FeedComparatorTool() {
               )}
               <div className="space-y-1.5">
                 <p className="font-bold text-sm" style={{ color: result.semanticallySame ? "#4ade80" : "#fbbf24" }}>
-                  {result.semanticallySame
+                  {result.exactlySame
+                    ? "These are the same feeds."
+                    : result.semanticallySame
                     ? "These feeds are technically the same."
                     : "These feeds have semantic differences."}
                 </p>
                 {result.semanticNotes.map((note, i) => (
                   <p key={i} className="text-xs text-ink-400">{note}</p>
                 ))}
-                {result.semanticallySame && (
+                {!result.exactlySame && result.semanticallySame && (
                   <p className="text-xs text-ink-500">
                     Same episode count, GUIDs, and channel title. Audio URLs may differ — that is expected after migration.
                   </p>
