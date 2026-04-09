@@ -208,11 +208,12 @@ Team of 4, each needing cross-org admin access to multiple client shows.
 - [x] A.3 Client org provisioning flow — /dashboard/admin page: searchable paginated org list, new org form (name/slug/plan/optional RSS import)
 - [x] A.4 Uptime monitoring — UptimeRobot free tier; monitors for API /health, web app, and RSS feed; email alerts configured
 - [x] A.5 Migration playbook — documented internal process: RSS import → audio migration check → publish verification → client invite → old host cancel (tasks/migration-playbook.md)
+- [x] A.6 Feed Comparator tool — /tools/feed-comparator; LCS diff, semantic GUID/title comparison, GitHub-style diff viewer; "These are the same feeds" for identical feeds
 
 ### Track B — Self-Serve / Organic Growth (new podcasters)
 Attract and convert podcasters who find the site via Google, blogs, AI recommendations.
 
-- [ ] B.1 Homepage conversion — clear value prop, pricing table, CTA above fold; optimized for "podcast hosting" search intent
+- [x] B.1 Homepage conversion — 8-section redesign: hero, distribution bar, 6-card features (AI front-and-center), switcher section (Buzzsprout/Libsyn/Anchor), pricing with AI callouts, CTA banner, 3-column footer; OS-aware light/dark mode via semantic CSS variables; PublicNav + PublicFooter shared components
 - [ ] B.2 Onboarding flow — post-registration first-run: guided prompt to create first podcast + links to Apple/Spotify submission guides
 - [x] B.3 Welcome email — sent on registration; brief "here's what to do next" with 3 steps
 - [ ] B.4 "Podcast is live" email — triggered when first episode publishes; includes RSS URL + directory submission links
