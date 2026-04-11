@@ -214,7 +214,7 @@ Team of 4, each needing cross-org admin access to multiple client shows.
 Attract and convert podcasters who find the site via Google, blogs, AI recommendations.
 
 - [x] B.1 Homepage conversion — 8-section redesign: hero, distribution bar, 6-card features (AI front-and-center), switcher section (Buzzsprout/Libsyn/Anchor), pricing with AI callouts, CTA banner, 3-column footer; OS-aware light/dark mode via semantic CSS variables; PublicNav + PublicFooter shared components
-- [ ] B.2 Onboarding flow — post-registration first-run: guided prompt to create first podcast + links to Apple/Spotify submission guides
+- [x] B.2 Onboarding flow — post-registration first-run: guided prompt to create first podcast + links to Apple/Spotify submission guides
 - [x] B.3 Welcome email — sent on registration; brief "here's what to do next" with 3 steps
 - [x] B.4 "Podcast is live" email — triggered on org's first ever published episode; sent to owner with RSS URL + Apple Podcasts + Spotify submission links
 - [ ] B.5 Paid ad landing pages — dedicated pages for specific offers/audiences (e.g. "switching from Buzzsprout", "new podcast starter kit"); separate from homepage so ad ROI is measurable

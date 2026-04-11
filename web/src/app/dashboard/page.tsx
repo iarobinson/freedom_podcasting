@@ -4,14 +4,18 @@ import { useQuery } from "@tanstack/react-query";
 import { Plus, Mic2, Rss, ArrowRight } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { useAuthStore } from "@/lib/store";
+import { useRole } from "@/lib/useRole";
 import { podcastsApi } from "@/lib/api";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { OnboardingChecklist } from "@/components/dashboard/OnboardingChecklist";
+import { DirectorySubmissionBanner } from "@/components/dashboard/DirectorySubmissionBanner";
 import type { Podcast } from "@/types";
 
 export default function DashboardPage() {
   const router = useRouter();
   const { user, currentOrg } = useAuthStore();
+  const { isStaff } = useRole();
 
   const { data: podcasts = [], isLoading } = useQuery<Podcast[]>({
     queryKey: ["podcasts", currentOrg?.slug],
@@ -19,8 +23,15 @@ export default function DashboardPage() {
     enabled:  !!currentOrg,
   });
 
-  const published = podcasts.filter((p) => p.published);
-  const totalEps  = podcasts.reduce((s, p) => s + (p.episode_count ?? 0), 0);
+  const published       = podcasts.filter((p) => p.published);
+  const totalEps        = podcasts.reduce((s, p) => s + (p.episode_count ?? 0), 0);
+  const hasPublished    = published.length > 0;
+  const firstPublished  = published[0];
+
+  // Onboarding state: show checklist until org has at least one published podcast
+  const showOnboarding = !isStaff && !isLoading && !hasPublished;
+  // Directory banner: show after first publish, until dismissed
+  const showDirectory  = !isStaff && !isLoading && hasPublished && !!firstPublished;
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
@@ -47,6 +58,17 @@ export default function DashboardPage() {
           </div>
         ))}
       </div>
+
+      {/* Onboarding checklist — shown until first podcast is published */}
+      {showOnboarding && <OnboardingChecklist podcasts={podcasts} />}
+
+      {/* Directory submission banner — shown after first publish */}
+      {showDirectory && (
+        <DirectorySubmissionBanner
+          rssUrl={firstPublished.rss_url}
+          orgSlug={currentOrg?.slug ?? ""}
+        />
+      )}
 
       {/* Podcasts */}
       <div className="mb-6 flex items-center justify-between">
@@ -92,17 +114,13 @@ export default function DashboardPage() {
                 <p className="text-[11px] text-ink-600 uppercase tracking-wider">{p.episode_count ?? 0} episodes</p>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <a href={p.rss_url} target="_blank" rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
-                  className="text-ink-700 hover:text-accent transition-colors">
-                  {p.published && (
-                    <a href={p.rss_url} target="_blank" rel="noopener noreferrer"
-                      onClick={(e) => e.stopPropagation()}
-                      className="text-ink-700 hover:text-accent transition-colors">
-                      <Rss className="h-3.5 w-3.5" />
-                    </a>
-                  )}
-                </a>
+                {p.published && (
+                  <a href={p.rss_url} target="_blank" rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    className="text-ink-700 hover:text-accent transition-colors">
+                    <Rss className="h-3.5 w-3.5" />
+                  </a>
+                )}
                 <ArrowRight className="h-3.5 w-3.5 text-ink-700 group-hover:text-accent transition-colors" />
               </div>
             </div>
