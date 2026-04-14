@@ -237,3 +237,9 @@ Goal: Producers and clients can manage shows from mobile.
 *(filled in after completion of each phase)*
 
 ---
+
+## Known Gaps (not worth building yet)
+
+| Gap | Reason deferred |
+|-----|----------------|
+| R2 orphaned file cleanup on podcast/episode delete | R2 storage is $0.015/GB — negligible cost at current scale. DB rows are cleaned up correctly via `dependent: :destroy`. Revisit if storage costs become meaningful. |
