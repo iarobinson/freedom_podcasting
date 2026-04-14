@@ -166,6 +166,10 @@ Goal: Application is reliable and safe for real users before public launch.
 - [x] H.6 CI deploy visibility — post-deploy health check polls live /health endpoint (24x at 5s) after each detached deploy; CI fails if app doesn't come up within 120s
 - [x] H.7 Email verification on registration — Devise :confirmable with non-blocking flow; custom UserMailer.deliver_later; unverified banner in dashboard layout; resend endpoint; verify-email landing page
 - [x] H.8 Password reset flow — verified in production: reset email delivers via Resend, token link works, password updates, redirects to /auth/login?reset=1
+- [x] H.9 Security audit — upgraded axios 1.14→1.15 (CVSS 10 SSRF), Next.js 14.2.3→14.2.35 (cache poisoning/DoS), vitest 1.6→2.1.9 (dev RCE); verified DB backups on Fly Managed Postgres
+- [x] H.10 Sidekiq Web UI — mounted at /sidekiq with HTTP Basic Auth (SIDEKIQ_WEB_USER/PASSWORD env vars)
+- [x] H.11 Delete podcast UI — danger zone on edit page with name-confirmation modal; cascades to episodes/imports via dependent: :destroy
+- [x] H.12 RSS import duplicate GUID handling — skip existing GUIDs instead of crashing with PG::UniqueViolation
 
 ---
 
