@@ -18,7 +18,7 @@ export function OnboardingChecklist({ podcasts }: Props) {
   }, []);
 
   const hasPodcast   = podcasts.length > 0;
-  const hasEpisode   = podcasts.some((p) => (p.episode_count ?? 0) > 0);
+  const hasEpisode   = podcasts.some((p) => (p.published_episode_count ?? 0) > 0);
   const hasPublished = podcasts.some((p) => p.published);
   const firstSlug    = podcasts[0]?.slug;
   const rssUrl       = podcasts[0]?.rss_url ?? "";

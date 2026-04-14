@@ -6,7 +6,9 @@ module Public
     # Also handles legacy slug-based URLs for backward compat with existing subscribers.
     def show
       identifier = params[:podcast_slug]
-      @podcast = Podcast.published.find_by(rss_token: identifier) ||
+      # Token-based lookup: accessible with just the token (no published gate — token is the access control)
+      # Slug-based lookup: only published podcasts (legacy URLs, public-facing)
+      @podcast = Podcast.find_by(rss_token: identifier) ||
                  Podcast.published.find_by!(slug: identifier)
       render_feed
     end
