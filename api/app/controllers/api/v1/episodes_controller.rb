@@ -36,6 +36,9 @@ module Api::V1
 
       @episode.update!(status: "published", published_at: @episode.published_at || Time.current)
 
+      # Auto-publish the podcast when the first episode goes live so the RSS feed is immediately accessible.
+      @podcast.update!(published: true, published_at: @podcast.published_at || Time.current) unless @podcast.published?
+
       if is_first
         owner = current_organization.memberships.find_by(role: "owner")&.user
         UserMailer.podcast_live(owner, @episode).deliver_later if owner

@@ -16,7 +16,7 @@ class UserMailer < ApplicationMailer
     @user        = user
     @episode     = episode
     @podcast     = episode.podcast
-    @rss_url     = @podcast.rss_feed_url
+    @rss_url     = @podcast.rss_url
     @episode_url = "#{frontend}/dashboard/podcasts/#{@podcast.slug}/episodes/#{@episode.id}/edit"
     @podcast_url = "#{frontend}/dashboard/podcasts/#{@podcast.slug}"
     mail(to: @user.email, subject: "Your podcast is live!")
