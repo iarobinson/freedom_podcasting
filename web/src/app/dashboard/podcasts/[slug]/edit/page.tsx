@@ -1,8 +1,8 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { AlertTriangle, ArrowLeft } from "lucide-react";
+import { AlertTriangle, ArrowLeft, Trash2 } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { podcastsApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
@@ -20,6 +20,9 @@ export default function EditPodcastPage() {
   const qc = useQueryClient();
   const { currentOrg } = useAuthStore();
   const [form, setForm] = useState<Record<string, unknown>>({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
+  const deleteInputRef = useRef<HTMLInputElement>(null);
 
   const { data: podcast } = useQuery<Podcast>({
     queryKey: ["podcast", currentOrg?.slug, slug],
@@ -55,6 +58,16 @@ export default function EditPodcastPage() {
       const msgs = (err as { response?: { data?: { errors?: string[] } } })?.response?.data?.errors;
       toast.error("Failed to update podcast", msgs?.join(", ") ?? "Something went wrong.");
     },
+  });
+
+  const deletePodcast = useMutation({
+    mutationFn: () => podcastsApi.delete(currentOrg!.slug, slug),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["podcasts", currentOrg?.slug] });
+      toast.success("Podcast deleted.");
+      router.push("/dashboard");
+    },
+    onError: () => toast.error("Could not delete podcast", "Please try again."),
   });
 
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -201,6 +214,73 @@ export default function EditPodcastPage() {
           <Button type="submit" loading={update.isPending}>Save Changes</Button>
         </div>
       </form>
+
+      {/* Danger zone */}
+      <div className="mt-12 border border-accent/30 rounded-sm p-6">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-accent mb-1">Danger Zone</h2>
+        <p className="text-sm text-ink-500 mb-4">
+          Permanently delete this podcast and all its episodes. This cannot be undone.
+        </p>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => { setDeleteConfirmText(""); setShowDeleteModal(true); setTimeout(() => deleteInputRef.current?.focus(), 50); }}
+        >
+          <Trash2 className="h-3.5 w-3.5" /> Delete Podcast
+        </Button>
+      </div>
+
+      {/* Delete confirmation modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+          <div className="panel w-full max-w-md p-6 space-y-4">
+            <div className="flex items-start gap-3">
+              <AlertTriangle className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+              <div>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-ink-100 mb-1">Delete Podcast</h3>
+                <p className="text-sm text-ink-400 leading-relaxed">
+                  This will permanently delete <span className="text-ink-200 font-semibold">{podcast.title}</span> and
+                  all its episodes, audio files, and data. Once this is done, you won&apos;t be able to undo it.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="block text-xs uppercase tracking-widest text-ink-500 font-bold">
+                Type the podcast name to confirm
+              </label>
+              <input
+                ref={deleteInputRef}
+                type="text"
+                value={deleteConfirmText}
+                onChange={(e) => setDeleteConfirmText(e.target.value)}
+                placeholder={podcast.title}
+                className="w-full px-3 py-2.5 text-sm bg-ink-950 border border-ink-700 text-ink-100 placeholder:text-ink-700 focus:outline-none focus:border-accent/50"
+              />
+            </div>
+
+            <div className="flex justify-end gap-3 pt-1">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setShowDeleteModal(false)}
+                disabled={deletePodcast.isPending}
+              >
+                Cancel
+              </Button>
+              <Button
+                size="sm"
+                disabled={deleteConfirmText !== podcast.title}
+                loading={deletePodcast.isPending}
+                onClick={() => deletePodcast.mutate()}
+                className="!bg-accent hover:!bg-red-700"
+              >
+                <Trash2 className="h-3.5 w-3.5" /> Delete Forever
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
