@@ -82,6 +82,14 @@ class ImportRssFeedJob < ApplicationJob
       ep_explicit = item.at_xpath("explicit")&.text&.strip == "true"
       duration   = parse_duration(item.at_xpath("duration")&.text)
 
+      # Skip episodes whose GUID already exists — handles re-imports and duplicate GUIDs within a feed
+      if Episode.exists?(guid: guid)
+        PodcastImport.where(id: import.id).update_all("imported_episodes = imported_episodes + 1")
+        imp = PodcastImport.find(import.id)
+        imp.update!(status: "done") if imp.imported_episodes >= imp.total_episodes
+        next
+      end
+
       episode = podcast.episodes.create!(
         title:                 item.at_xpath("title")&.text&.strip.presence || "Untitled",
         description:           description_text,
