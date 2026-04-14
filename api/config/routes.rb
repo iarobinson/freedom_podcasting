@@ -1,5 +1,17 @@
+require "sidekiq/web"
+
 Rails.application.routes.draw do
   get "/health", to: proc { [200, {}, [{ status: "ok", version: "1.0.0" }.to_json]] }
+
+  # Sidekiq Web UI — HTTP Basic Auth, staff only
+  Sidekiq::Web.use(Rack::Auth::Basic) do |user, password|
+    expected_user     = ENV.fetch("SIDEKIQ_WEB_USER",     "admin")
+    expected_password = ENV.fetch("SIDEKIQ_WEB_PASSWORD", "")
+    expected_password.present? &&
+      ActiveSupport::SecurityUtils.secure_compare(user,     expected_user) &&
+      ActiveSupport::SecurityUtils.secure_compare(password, expected_password)
+  end
+  mount Sidekiq::Web, at: "/sidekiq"
 
   devise_for :users,
     path: "",
