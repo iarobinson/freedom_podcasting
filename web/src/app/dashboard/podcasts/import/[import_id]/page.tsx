@@ -89,6 +89,8 @@ export default function ImportStatusPage() {
   }
 
   if (imp.status === "done") {
+    const allSkipped = imp.imported_episodes === 0 && imp.skipped_episodes > 0;
+    const someSkipped = imp.skipped_episodes > 0 && imp.imported_episodes > 0;
     return (
       <div className="p-8 max-w-xl mx-auto">
         <div className="panel rounded-2xl p-8 space-y-6">
@@ -98,21 +100,56 @@ export default function ImportStatusPage() {
               <h1 className="font-display text-xl text-ink-100">Import complete!</h1>
               <p className="text-sm text-ink-500 mt-0.5">
                 {imp.imported_episodes > 0
-                  ? `${imp.imported_episodes} episode${imp.imported_episodes !== 1 ? "s" : ""} migrated to FreedomPodcasting.`
-                  : "Your podcast has been created."}
+                  ? `${imp.imported_episodes} episode${imp.imported_episodes !== 1 ? "s" : ""} imported successfully.`
+                  : "Podcast created — no episodes were imported."}
               </p>
             </div>
           </div>
+
+          {/* Skipped episodes breakdown */}
           {imp.skipped_episodes > 0 && (
-            <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-300">
-              {imp.skipped_episodes} episode{imp.skipped_episodes !== 1 ? "s were" : " was"} skipped because the audio files are no longer available at the source.
+            <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4 space-y-2">
+              <p className="text-sm font-semibold text-yellow-300">
+                {imp.skipped_episodes} episode{imp.skipped_episodes !== 1 ? "s" : ""} skipped
+              </p>
+              <p className="text-xs text-yellow-500/80 leading-relaxed">
+                Episodes are skipped when they have no audio file in the feed, or when the source audio URL returned a 404. This is common with older WordPress-based podcasts where posts were added to the RSS feed without audio attached.
+              </p>
+              {allSkipped && (
+                <p className="text-xs text-yellow-500/80 leading-relaxed">
+                  If you have the original audio files, you can create episodes manually and upload them directly.
+                </p>
+              )}
             </div>
           )}
-          {imp.imported_episodes > 0 && (
+
+          {/* Stats row */}
+          {imp.total_episodes > 0 && (
+            <div className="grid grid-cols-3 gap-px bg-ink-800 border border-ink-800">
+              {[
+                { label: "Total in feed", value: imp.total_episodes },
+                { label: "Imported",      value: imp.imported_episodes },
+                { label: "Skipped",       value: imp.skipped_episodes },
+              ].map(({ label, value }) => (
+                <div key={label} className="bg-ink-950 px-4 py-3 text-center">
+                  <p className="text-lg font-bold text-ink-100">{value}</p>
+                  <p className="text-[9px] uppercase tracking-widest text-ink-600 mt-0.5">{label}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {someSkipped && imp.imported_episodes > 0 && (
             <p className="text-sm text-ink-500">
-              Audio files are hosted on our CDN. The waveform and duration for each episode will finish processing in the background.
+              Imported audio is hosted on our CDN. Waveforms and durations will finish processing in the background.
             </p>
           )}
+          {!someSkipped && imp.imported_episodes > 0 && (
+            <p className="text-sm text-ink-500">
+              Audio is hosted on our CDN. Waveforms and durations will finish processing in the background.
+            </p>
+          )}
+
           {imp.podcast_slug && (
             <Button onClick={() => router.push(`/dashboard/podcasts/${imp.podcast_slug}`)}>
               View Podcast <ArrowRight className="h-4 w-4 ml-1" />
