@@ -52,18 +52,21 @@ class ApplicationController < ActionController::API
   end
 
   def enforce_podcast_limit!
+    return if current_user.staff?
     if current_organization.at_podcast_limit?
       render json: { error: "Podcast limit reached for your plan. Upgrade to add more." }, status: :unprocessable_entity
     end
   end
 
   def enforce_member_limit!
+    return if current_user.staff?
     if current_organization.at_member_limit?
       render json: { error: "Member limit reached for your plan. Upgrade to add more members." }, status: :unprocessable_entity
     end
   end
 
   def enforce_monthly_publish_limit!
+    return if current_user.staff?
     if current_organization.at_monthly_publish_limit?
       render json: { error: "Monthly publish limit reached. Upgrade to publish more episodes." }, status: :unprocessable_entity
     end
