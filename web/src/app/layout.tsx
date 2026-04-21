@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "@/components/layout/Providers";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: { template: "%s | FreedomPodcasting", default: "FreedomPodcasting — Production Studio" },
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body>{children}</body>
+      <GoogleAnalytics gaId="G-8MXS2FJ930" />
     </html>
   );
 }

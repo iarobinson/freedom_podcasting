@@ -29,6 +29,10 @@ function RegisterForm() {
     setError(""); setLoading(true);
     try {
       await authApi.register({ ...form, invitation_token: invitationToken || undefined });
+      // Fire GA4 conversion event — Google Ads tracks this as a signup
+      if (typeof window !== "undefined" && typeof (window as { gtag?: Function }).gtag === "function") {
+        (window as { gtag: Function }).gtag("event", "sign_up", { method: "email" });
+      }
       setDone(true);
     } catch (err: unknown) {
       const axiosErr = err as { response?: { data?: { errors?: string[]; message?: string } } };
