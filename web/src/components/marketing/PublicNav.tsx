@@ -1,7 +1,11 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
+import { Menu, X } from "lucide-react";
 
 export function PublicNav() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <nav
       className="sticky top-0 z-50 border-b"
@@ -29,7 +33,8 @@ export function PublicNav() {
           </picture>
         </Link>
 
-        <div className="flex items-center gap-1">
+        {/* Desktop nav */}
+        <div className="hidden md:flex items-center gap-1">
           <Link
             href="/blog"
             className="text-sm px-3 py-1.5 rounded-sm transition-colors"
@@ -74,7 +79,69 @@ export function PublicNav() {
             Start Free
           </Link>
         </div>
+
+        {/* Mobile: Sign In + hamburger */}
+        <div className="flex md:hidden items-center gap-2">
+          <Link
+            href="/auth/login"
+            className="text-sm px-3 py-1.5 rounded-sm"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Sign In
+          </Link>
+          <button
+            onClick={() => setMenuOpen((o) => !o)}
+            className="p-1.5 rounded-sm"
+            style={{ color: "var(--text-muted)" }}
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile dropdown menu */}
+      {menuOpen && (
+        <div
+          className="md:hidden border-t px-6 py-4 space-y-1"
+          style={{ borderColor: "var(--border-subtle)", background: "var(--bg-canvas)" }}
+        >
+          <Link
+            href="/blog"
+            onClick={() => setMenuOpen(false)}
+            className="block text-sm py-2.5 font-medium"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Blog
+          </Link>
+          <Link
+            href="/tools"
+            onClick={() => setMenuOpen(false)}
+            className="block text-sm py-2.5 font-medium"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Tools
+          </Link>
+          <a
+            href="#pricing"
+            onClick={() => setMenuOpen(false)}
+            className="block text-sm py-2.5 font-medium"
+            style={{ color: "var(--text-muted)" }}
+          >
+            Pricing
+          </a>
+          <div className="pt-3">
+            <Link
+              href="/auth/register"
+              onClick={() => setMenuOpen(false)}
+              className="block w-full text-center text-sm font-medium px-4 py-2.5 rounded-sm text-white transition-opacity hover:opacity-90"
+              style={{ background: "var(--accent)" }}
+            >
+              Start Free
+            </Link>
+          </div>
+        </div>
+      )}
     </nav>
   );
 }

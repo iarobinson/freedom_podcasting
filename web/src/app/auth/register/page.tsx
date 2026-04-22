@@ -127,7 +127,7 @@ function RegisterForm() {
 
 export default function RegisterPage() {
   return (
-    <div className="min-h-screen bg-ink-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-ink-950 flex items-center justify-center px-4 py-12 overflow-y-auto">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <svg className="absolute right-0 top-0 opacity-[0.03] w-[600px] h-[600px]" viewBox="0 0 400 400" fill="none">
           <circle cx="200" cy="200" r="180" stroke="white" strokeWidth="0.5"/>

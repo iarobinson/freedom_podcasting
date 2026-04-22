@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MailWarning, X } from "lucide-react";
+import { MailWarning, Menu, X } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { authApi } from "@/lib/api";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -53,11 +53,11 @@ function UnverifiedBanner() {
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const { fetchMe } = useAuthStore();
+  const { fetchMe, currentOrg } = useAuthStore();
   const [ready, setReady] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
-    // Read token from localStorage directly to avoid Zustand hydration race
     const token = localStorage.getItem("fp_token");
     if (!token) { router.push("/auth/login"); return; }
     fetchMe()
@@ -70,8 +70,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <QueryClientProvider client={queryClient}>
       <div className="flex min-h-screen bg-ink-950" style={{ colorScheme: "dark" }}>
-        <Sidebar />
-        <div className="flex-1 flex flex-col overflow-auto">
+        <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+        <div className="flex-1 flex flex-col overflow-auto min-w-0">
+          {/* Mobile top bar — hidden on desktop */}
+          <div className="md:hidden flex items-center h-12 px-4 border-b border-ink-800 bg-ink-950 shrink-0">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-1 text-ink-400 hover:text-ink-100 transition-colors"
+              aria-label="Open menu"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+            <div className="flex-1 text-center">
+              <span className="text-[10px] font-bold uppercase tracking-[0.25em] text-ink-500">
+                {currentOrg?.name ?? "Freedom Podcasting"}
+              </span>
+            </div>
+            {/* Spacer to balance the hamburger */}
+            <div className="w-7" />
+          </div>
+
           <UnverifiedBanner />
           <main className="flex-1">
             {children}
