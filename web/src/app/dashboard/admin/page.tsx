@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Shield, Plus, Building2, RefreshCw } from "lucide-react";
+import { Shield, Plus, Building2, RefreshCw, Link2, Copy, Check } from "lucide-react";
 import { staffApi } from "@/lib/api";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
@@ -31,6 +31,42 @@ export default function AdminPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm]     = useState({ name: "", slug: "", plan: "free", rss_url: "" });
   const [submitting, setSubmitting] = useState(false);
+
+  // Checkout link generation
+  const [linkModal, setLinkModal]     = useState<StaffOrgSummary | null>(null);
+  const [linkPrice, setLinkPrice]     = useState("");
+  const [linkUrl, setLinkUrl]         = useState<string | null>(null);
+  const [linkLoading, setLinkLoading] = useState(false);
+  const [copied, setCopied]           = useState(false);
+
+  const handleGenerateLink = async () => {
+    if (!linkModal || !linkPrice) return;
+    const cents = Math.round(parseFloat(linkPrice) * 100);
+    if (isNaN(cents) || cents < 100) { toast.error("Enter a valid amount ($1 minimum)"); return; }
+    setLinkLoading(true);
+    try {
+      const res = await staffApi.generateCheckoutLink(linkModal.slug, cents);
+      setLinkUrl(res.data.url);
+    } catch {
+      toast.error("Could not generate link", "Please try again.");
+    } finally {
+      setLinkLoading(false);
+    }
+  };
+
+  const handleCopyLink = () => {
+    if (!linkUrl) return;
+    navigator.clipboard.writeText(linkUrl);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const closeModal = () => {
+    setLinkModal(null);
+    setLinkPrice("");
+    setLinkUrl(null);
+    setCopied(false);
+  };
 
   // Auto-derive slug from name
   const handleNameChange = (name: string) => {
@@ -202,6 +238,14 @@ export default function AdminPage() {
                   </span>
                   <button
                     type="button"
+                    onClick={() => { setLinkModal(org); setLinkUrl(null); setLinkPrice(""); }}
+                    className="text-[10px] font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors"
+                    title="Generate checkout link"
+                  >
+                    <Link2 className="h-3.5 w-3.5" />
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => switchTo(org)}
                     className="text-[10px] font-bold uppercase tracking-widest text-accent hover:text-accent/80 transition-colors"
                   >
@@ -238,6 +282,73 @@ export default function AdminPage() {
           </div>
         )}
       </div>
+      {/* Checkout link modal */}
+      {linkModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
+          <div className="panel w-full max-w-md p-6 space-y-4">
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-widest text-ink-100 mb-0.5">
+                Generate Checkout Link
+              </h3>
+              <p className="text-[11px] text-ink-500">{linkModal.name}</p>
+            </div>
+
+            {!linkUrl ? (
+              <>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-ink-500">
+                    Monthly price (USD)
+                  </label>
+                  <div className="flex items-center border border-ink-700 bg-ink-950 rounded-sm">
+                    <span className="px-3 text-ink-500 text-sm">$</span>
+                    <input
+                      type="number"
+                      min="1"
+                      step="1"
+                      placeholder="5"
+                      value={linkPrice}
+                      onChange={(e) => setLinkPrice(e.target.value)}
+                      className="flex-1 py-2.5 pr-3 text-sm bg-transparent text-ink-100 focus:outline-none"
+                    />
+                    <span className="px-3 text-ink-500 text-sm">/mo</span>
+                  </div>
+                </div>
+                <div className="flex gap-3 justify-end">
+                  <Button variant="secondary" size="sm" onClick={closeModal}>Cancel</Button>
+                  <Button size="sm" loading={linkLoading} onClick={handleGenerateLink} disabled={!linkPrice}>
+                    Generate Link
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="space-y-1.5">
+                  <label className="text-[10px] font-bold uppercase tracking-widest text-ink-500">
+                    Checkout link — valid 30 days
+                  </label>
+                  <div className="flex items-center border border-ink-700 bg-ink-950 rounded-sm">
+                    <span className="flex-1 px-3 py-2.5 text-[11px] font-mono text-ink-400 truncate">{linkUrl}</span>
+                    <button
+                      onClick={handleCopyLink}
+                      className="flex items-center gap-1.5 px-3 py-2.5 border-l border-ink-700 text-[10px] font-bold uppercase tracking-widest shrink-0 transition-colors"
+                      style={{ color: copied ? "#5dbf72" : "var(--accent)" }}
+                    >
+                      {copied ? <><Check className="h-3 w-3" /> Copied</> : <><Copy className="h-3 w-3" /> Copy</>}
+                    </button>
+                  </div>
+                  <p className="text-[10px] text-ink-600">
+                    Send this link directly to the client. They&apos;ll see their show info and can subscribe via Stripe.
+                  </p>
+                </div>
+                <div className="flex gap-3 justify-end">
+                  <Button variant="secondary" size="sm" onClick={closeModal}>Done</Button>
+                  <Button size="sm" onClick={() => setLinkUrl(null)}>New Price</Button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
