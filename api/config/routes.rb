@@ -97,7 +97,8 @@ Rails.application.routes.draw do
       end
 
       namespace :staff do
-        resources :organizations, only: [:index, :create]
+        resources :organizations,    only: [:index, :create]
+        resources :checkout_links,   only: [:create]
       end
 
       resources :invitations, only: [] do
@@ -119,6 +120,9 @@ Rails.application.routes.draw do
   get  "/feeds/:podcast_slug/episodes/:guid",               to: "public/episodes#show", as: :public_episode
 
   namespace :public do
+    get  "/checkout/:token", to: "checkout#show"
+    post "/checkout/:token", to: "checkout#checkout"
+
     # Org-scoped (canonical) — unambiguous in multi-tenant
     get "/podcasts/:org_slug/:podcast_slug",                         to: "podcasts#show"
     get "/podcasts/:org_slug/:podcast_slug/episodes",                to: "podcasts#episodes"
