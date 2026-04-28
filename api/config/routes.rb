@@ -102,8 +102,8 @@ Rails.application.routes.draw do
       end
 
       namespace :public do
-        get  "/checkout/:token", to: "checkout#show"
-        post "/checkout/:token", to: "checkout#checkout"
+        get  "/checkout/:token", to: "checkout#show",     constraints: { token: /[^\/]+/ }
+        post "/checkout/:token", to: "checkout#checkout", constraints: { token: /[^\/]+/ }
       end
 
       resources :invitations, only: [] do
