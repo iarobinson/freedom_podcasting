@@ -10,7 +10,7 @@ module Api::V1::Public
           price_cents:        price_cents,
           podcast_title:      podcast&.title,
           podcast_artwork:    podcast&.artwork_url,
-          already_subscribed: org.plan != "free",
+          already_subscribed: org.stripe_subscription_id.present?,
         }
       }
     rescue JWT::DecodeError, JWT::ExpiredSignature
