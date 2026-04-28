@@ -101,6 +101,11 @@ Rails.application.routes.draw do
         resources :checkout_links,   only: [:create]
       end
 
+      namespace :public do
+        get  "/checkout/:token", to: "checkout#show"
+        post "/checkout/:token", to: "checkout#checkout"
+      end
+
       resources :invitations, only: [] do
         collection { post :accept }
       end
