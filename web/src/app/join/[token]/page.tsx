@@ -11,6 +11,7 @@ interface CheckoutInfo {
   podcast_title:      string | null;
   podcast_artwork:    string | null;
   already_subscribed: boolean;
+  test_mode:          boolean;
 }
 
 const BENEFITS = [
@@ -135,6 +136,13 @@ export default function JoinPage() {
             Your show is already imported and ready to go.
           </p>
         </div>
+
+        {/* Test mode banner */}
+        {info.test_mode && (
+          <div className="rounded-sm px-4 py-3 text-center text-xs font-bold uppercase tracking-widest" style={{ background: "rgba(168,85,247,0.15)", color: "#c084fc", border: "1px solid rgba(168,85,247,0.3)" }}>
+            Test mode — use card 4242 4242 4242 4242, any future date, any CVC
+          </div>
+        )}
 
         {/* Show card */}
         <div

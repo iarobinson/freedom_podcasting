@@ -38,6 +38,7 @@ export default function AdminPage() {
   const [linkUrl, setLinkUrl]         = useState<string | null>(null);
   const [linkLoading, setLinkLoading] = useState(false);
   const [copied, setCopied]           = useState(false);
+  const [testMode, setTestMode]       = useState(false);
 
   const handleGenerateLink = async () => {
     if (!linkModal || !linkPrice) return;
@@ -45,7 +46,7 @@ export default function AdminPage() {
     if (isNaN(cents) || cents < 100) { toast.error("Enter a valid amount ($1 minimum)"); return; }
     setLinkLoading(true);
     try {
-      const res = await staffApi.generateCheckoutLink(linkModal.slug, cents);
+      const res = await staffApi.generateCheckoutLink(linkModal.slug, cents, testMode);
       setLinkUrl(res.data.url);
     } catch {
       toast.error("Could not generate link", "Please try again.");
@@ -66,6 +67,7 @@ export default function AdminPage() {
     setLinkPrice("");
     setLinkUrl(null);
     setCopied(false);
+    setTestMode(false);
   };
 
   // Auto-derive slug from name
@@ -313,10 +315,21 @@ export default function AdminPage() {
                     <span className="px-3 text-ink-500 text-sm">/mo</span>
                   </div>
                 </div>
+                <label className="flex items-center gap-2 cursor-pointer w-fit">
+                  <input
+                    type="checkbox"
+                    checked={testMode}
+                    onChange={(e) => setTestMode(e.target.checked)}
+                    className="accent-purple-500"
+                  />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400">
+                    Test mode (Stripe test key, card 4242…)
+                  </span>
+                </label>
                 <div className="flex gap-3 justify-end">
                   <Button variant="secondary" size="sm" onClick={closeModal}>Cancel</Button>
                   <Button size="sm" loading={linkLoading} onClick={handleGenerateLink} disabled={!linkPrice}>
-                    Generate Link
+                    {testMode ? "Generate Test Link" : "Generate Link"}
                   </Button>
                 </div>
               </>

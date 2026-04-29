@@ -13,6 +13,8 @@ module Api::V1::Staff
         price_cents: price_cents,
         exp:         30.days.from_now.to_i,
       }
+      payload[:test] = true if ActiveModel::Type::Boolean.new.cast(params[:test])
+
       token = JWT.encode(payload, Rails.application.secret_key_base, "HS256")
       url   = "#{ENV.fetch('FRONTEND_URL')}/join/#{token}"
 

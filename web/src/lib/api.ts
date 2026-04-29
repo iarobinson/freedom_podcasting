@@ -142,8 +142,8 @@ export const staffApi = {
     apiClient.get("/api/v1/staff/organizations", { params }),
   createOrg: (data: { organization: { name: string; slug?: string }; plan?: string; rss_url?: string }) =>
     apiClient.post("/api/v1/staff/organizations", data),
-  generateCheckoutLink: (org_slug: string, price_cents: number) =>
-    apiClient.post("/api/v1/staff/checkout_links", { org_slug, price_cents }),
+  generateCheckoutLink: (org_slug: string, price_cents: number, test = false) =>
+    apiClient.post("/api/v1/staff/checkout_links", { org_slug, price_cents, test }),
 };
 
 // No auth header — used for public client-facing pages
