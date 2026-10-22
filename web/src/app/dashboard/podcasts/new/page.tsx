@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowLeft, Download } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { podcastsApi, podcastImportsApi } from "@/lib/api";
@@ -16,7 +16,8 @@ type Mode = "scratch" | "import";
 export default function NewPodcastPage() {
   const router = useRouter();
   const { currentOrg } = useAuthStore();
-  const [mode, setMode] = useState<Mode>("scratch");
+  const searchParams = useSearchParams();
+  const [mode, setMode] = useState<Mode>(searchParams.get("mode") === "import" ? "import" : "scratch");
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [form, setForm] = useState({

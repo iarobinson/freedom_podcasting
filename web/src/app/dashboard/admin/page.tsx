@@ -9,7 +9,8 @@ import { useRole } from "@/lib/useRole";
 import { toast } from "@/lib/toast";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
-import type { StaffOrgSummary, OrganizationSummary } from "@/types";
+import type { StaffOrgSummary, OrganizationSummary, Plan } from "@/types";
+import { PLAN_CATALOGUE } from "@/lib/plans";
 
 function slugify(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 50);
@@ -39,6 +40,8 @@ export default function AdminPage() {
   const [linkLoading, setLinkLoading] = useState(false);
   const [copied, setCopied]           = useState(false);
   const [testMode, setTestMode]       = useState(false);
+  const [linkPlan, setLinkPlan]       = useState<Plan>("starter");
+  const [linkInterval, setLinkInterval] = useState<"month" | "year">("month");
 
   const handleGenerateLink = async () => {
     if (!linkModal || !linkPrice) return;
@@ -46,7 +49,7 @@ export default function AdminPage() {
     if (isNaN(cents) || cents < 100) { toast.error("Enter a valid amount ($1 minimum)"); return; }
     setLinkLoading(true);
     try {
-      const res = await staffApi.generateCheckoutLink(linkModal.slug, cents, testMode);
+      const res = await staffApi.generateCheckoutLink(linkModal.slug, cents, testMode, linkPlan, linkInterval);
       setLinkUrl(res.data.url);
     } catch {
       toast.error("Could not generate link", "Please try again.");
@@ -169,6 +172,7 @@ export default function AdminPage() {
                 className="w-full bg-ink-900 border border-ink-700 rounded px-3 py-2 text-sm text-ink-200 focus:border-accent outline-none"
               >
                 <option value="free">Free</option>
+                <option value="archive">Archive</option>
                 <option value="starter">Starter</option>
                 <option value="pro">Pro</option>
                 <option value="agency">Agency</option>
@@ -240,18 +244,23 @@ export default function AdminPage() {
                   </span>
                   <button
                     type="button"
-                    onClick={() => { setLinkModal(org); setLinkUrl(null); setLinkPrice(""); }}
-                    className="text-[10px] font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors"
-                    title="Generate checkout link"
+                    onClick={() => {
+                      const plan: Plan = org.plan === "free" ? "starter" : org.plan;
+                      setLinkModal(org); setLinkUrl(null);
+                      setLinkPlan(plan); setLinkInterval("month");
+                      setLinkPrice(String(PLAN_CATALOGUE[plan].monthly));
+                    }}
+                    className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 transition-colors"
+                    title="Generate a Stripe checkout link for this organization"
                   >
-                    <Link2 className="h-3.5 w-3.5" />
+                    <Link2 className="h-3.5 w-3.5" /> Checkout link
                   </button>
                   <button
                     type="button"
                     onClick={() => switchTo(org)}
                     className="text-[10px] font-bold uppercase tracking-widest text-accent hover:text-accent/80 transition-colors"
                   >
-                    Switch →
+                    Open workspace →
                   </button>
                 </div>
               </div>
@@ -290,16 +299,45 @@ export default function AdminPage() {
           <div className="panel w-full max-w-md p-6 space-y-4">
             <div>
               <h3 className="text-sm font-bold uppercase tracking-widest text-ink-100 mb-0.5">
-                Generate Checkout Link
+                Generate checkout link
               </h3>
-              <p className="text-[11px] text-ink-500">{linkModal.name}</p>
+              <p className="text-[11px] text-ink-500">
+                Generate a Stripe checkout link for {linkModal.name}&apos;s selected plan. The client opens it, pays, and the plan activates automatically.
+              </p>
             </div>
 
             {!linkUrl ? (
               <>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-ink-500">Plan</label>
+                    <select value={linkPlan} onChange={(e) => {
+                        const p = e.target.value as Plan;
+                        setLinkPlan(p);
+                        setLinkPrice(String(linkInterval === "year" ? PLAN_CATALOGUE[p].annual : PLAN_CATALOGUE[p].monthly));
+                      }}
+                      className="w-full px-3 py-2.5 text-sm bg-ink-950 border border-ink-700 text-ink-100 focus:outline-none focus:border-accent/50">
+                      {(["archive", "starter", "pro", "agency"] as Plan[]).map((p) => (
+                        <option key={p} value={p}>{PLAN_CATALOGUE[p].label}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-ink-500">Billing</label>
+                    <select value={linkInterval} onChange={(e) => {
+                        const i = e.target.value as "month" | "year";
+                        setLinkInterval(i);
+                        setLinkPrice(String(i === "year" ? PLAN_CATALOGUE[linkPlan].annual : PLAN_CATALOGUE[linkPlan].monthly));
+                      }}
+                      className="w-full px-3 py-2.5 text-sm bg-ink-950 border border-ink-700 text-ink-100 focus:outline-none focus:border-accent/50">
+                      <option value="month">Monthly</option>
+                      <option value="year">Annual</option>
+                    </select>
+                  </div>
+                </div>
                 <div className="space-y-1.5">
                   <label className="text-[10px] font-bold uppercase tracking-widest text-ink-500">
-                    Monthly price (USD)
+                    Price (USD) — prefilled from the plan, adjust for custom deals
                   </label>
                   <div className="flex items-center border border-ink-700 bg-ink-950 rounded-sm">
                     <span className="px-3 text-ink-500 text-sm">$</span>
@@ -312,24 +350,25 @@ export default function AdminPage() {
                       onChange={(e) => setLinkPrice(e.target.value)}
                       className="flex-1 py-2.5 pr-3 text-sm bg-transparent text-ink-100 focus:outline-none"
                     />
-                    <span className="px-3 text-ink-500 text-sm">/mo</span>
+                    <span className="px-3 text-ink-500 text-sm">{linkInterval === "year" ? "/yr" : "/mo"}</span>
                   </div>
                 </div>
-                <label className="flex items-center gap-2 cursor-pointer w-fit">
+                <label className="flex items-start gap-2 cursor-pointer w-fit">
                   <input
                     type="checkbox"
                     checked={testMode}
                     onChange={(e) => setTestMode(e.target.checked)}
                     className="accent-purple-500"
                   />
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-purple-400">
-                    Test mode (Stripe test key, card 4242…)
+                  <span>
+                    <span className="block text-[10px] font-bold uppercase tracking-widest text-purple-400">Use Stripe test mode</span>
+                    <span className="block text-[10px] text-ink-600">No real charge. Pay with card 4242 4242 4242 4242.</span>
                   </span>
                 </label>
                 <div className="flex gap-3 justify-end">
                   <Button variant="secondary" size="sm" onClick={closeModal}>Cancel</Button>
                   <Button size="sm" loading={linkLoading} onClick={handleGenerateLink} disabled={!linkPrice}>
-                    {testMode ? "Generate Test Link" : "Generate Link"}
+                    {testMode ? "Generate test link" : "Generate link"}
                   </Button>
                 </div>
               </>

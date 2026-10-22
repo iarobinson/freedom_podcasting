@@ -21,15 +21,21 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   const handleLogout = () => { logout(); router.push("/auth/login"); };
 
-  const nav = [
-    { href: "/dashboard",                  label: "Dashboard", icon: LayoutDashboard, show: true,                             exact: true  },
-    { href: "/dashboard/podcasts",         label: "Podcasts",  icon: Mic2,            show: true,                             exact: false },
-    { href: "/dashboard/upload",           label: "Upload",    icon: Upload,          show: canEdit,                          exact: false },
-    { href: "/dashboard/settings",         label: "Settings",  icon: Settings,        show: true,                             exact: true  },
-    { href: "/dashboard/settings/members", label: "Members",   icon: Users,           show: canManage,                        exact: false },
-    { href: "/dashboard/settings/billing", label: "Billing",   icon: CreditCard,      show: currentOrg?.role === "owner",     exact: false },
-    { href: "/dashboard/admin",            label: "Admin",     icon: Shield,          show: isStaff,                          exact: false },
-  ];
+  const groups = [
+    { title: "Content", items: [
+      { href: "/dashboard",                  label: "Dashboard", icon: LayoutDashboard, show: true,                         exact: true  },
+      { href: "/dashboard/podcasts",         label: "Podcasts",  icon: Mic2,            show: true,                         exact: false },
+      { href: "/dashboard/upload",           label: "Upload",    icon: Upload,          show: canEdit,                      exact: false },
+    ]},
+    { title: "Workspace", items: [
+      { href: "/dashboard/settings",         label: "Settings",  icon: Settings,        show: true,                         exact: true  },
+      { href: "/dashboard/settings/members", label: "Members",   icon: Users,           show: canManage,                    exact: false },
+      { href: "/dashboard/settings/billing", label: "Billing",   icon: CreditCard,      show: currentOrg?.role === "owner", exact: false },
+    ]},
+    { title: "Staff", items: [
+      { href: "/dashboard/admin",            label: "Admin",     icon: Shield,          show: isStaff,                      exact: false },
+    ]},
+  ].map(g => ({ ...g, items: g.items.filter(i => i.show) })).filter(g => g.items.length > 0);
 
   return (
     <>
@@ -63,34 +69,36 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
         {currentOrg && (
           <div className="px-5 py-3 border-b border-ink-800">
-            <p className="text-[9px] uppercase tracking-widest text-ink-600 font-bold">
-              {isStaff ? (
-                <span className="text-purple-400">Staff — Client Org</span>
-              ) : (
-                "Organization"
-              )}
+            <p className="text-[9px] uppercase tracking-widest text-ink-600 font-bold">Workspace</p>
+            <p className="text-xs text-ink-200 font-bold truncate">{currentOrg.name}</p>
+            <p className="text-[10px] text-ink-500 capitalize">
+              {isStaff ? <span className="text-purple-400">Staff access</span> : currentOrg.role}
             </p>
-            <p className="text-xs text-ink-300 font-bold truncate">{currentOrg.name}</p>
           </div>
         )}
 
         {isStaff && <StaffOrgSwitcher />}
 
-        <nav className="flex-1 px-3 py-4 space-y-0.5">
-          {nav.filter(n => n.show).map(({ href, label, icon: Icon, exact }) => {
-            const active = pathname === href || (!exact && pathname.startsWith(href + "/"));
-            return (
-              <Link key={href} href={href} onClick={onClose} className={clsx(
-                "flex items-center gap-2.5 px-2 py-2 text-[11px] font-bold uppercase tracking-widest transition-colors border-l-2 pl-[6px]",
-                active
-                  ? "text-accent bg-ink-800 border-accent"
-                  : "text-ink-500 hover:text-ink-200 hover:bg-ink-800 border-transparent"
-              )}>
-                <Icon className="h-3.5 w-3.5 shrink-0" />
-                {label}
-              </Link>
-            );
-          })}
+        <nav className="flex-1 px-3 py-4 space-y-5">
+          {groups.map(({ title, items }) => (
+            <div key={title} className="space-y-0.5">
+              <p className="px-2 pb-1 text-[9px] uppercase tracking-[0.2em] text-ink-700 font-bold">{title}</p>
+              {items.map(({ href, label, icon: Icon, exact }) => {
+                const active = pathname === href || (!exact && pathname.startsWith(href + "/"));
+                return (
+                  <Link key={href} href={href} onClick={onClose} className={clsx(
+                    "flex items-center gap-2.5 px-2 py-2 text-[11px] font-bold uppercase tracking-widest transition-colors border-l-2 pl-[6px]",
+                    active
+                      ? "text-accent bg-ink-800 border-accent"
+                      : "text-ink-500 hover:text-ink-200 hover:bg-ink-800 border-transparent"
+                  )}>
+                    <Icon className="h-3.5 w-3.5 shrink-0" />
+                    {label}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
 
         <div className="px-3 py-4 border-t border-ink-800 space-y-1">

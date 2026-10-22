@@ -38,12 +38,12 @@ class ApplicationController < ActionController::API
 
   def require_editor!
     require_organization_membership!
-    render_forbidden unless @current_membership&.can_edit?
+    render_forbidden unless performed? || @current_membership&.can_edit?
   end
 
   def require_manager!
     require_organization_membership!
-    render_forbidden unless @current_membership&.can_manage?
+    render_forbidden unless performed? || @current_membership&.can_manage?
   end
 
   # Hard staff-only gate — used by Api::V1::Staff::BaseController.
@@ -67,13 +67,15 @@ class ApplicationController < ActionController::API
 
   def enforce_monthly_publish_limit!
     return if current_user.staff?
-    if current_organization.at_monthly_publish_limit?
+    if current_organization.archive?
+      render json: { error: "Archive plan keeps your catalogue live but doesn't publish new episodes. Upgrade to publish." }, status: :unprocessable_entity
+    elsif current_organization.at_monthly_publish_limit?
       render json: { error: "Monthly publish limit reached. Upgrade to publish more episodes." }, status: :unprocessable_entity
     end
   end
 
   def enforce_ai_features!(episode: nil)
-    return unless current_organization.plan == "free"
+    return if current_organization.ai_included?
     return if episode&.ai_purchased_at.present?
     render json: { error: "AI features require a paid plan or a per-episode purchase." }, status: :payment_required
   end

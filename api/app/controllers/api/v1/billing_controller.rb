@@ -4,15 +4,38 @@ module Api::V1
     before_action :require_organization_membership!
     before_action :require_org_owner!
 
-    PRICE_MAP = {
-      "starter" => ENV["STRIPE_STARTER_PRICE_ID"],
-      "pro"     => ENV["STRIPE_PRO_PRICE_ID"],
-      "agency"  => ENV["STRIPE_AGENCY_PRICE_ID"],
-    }.freeze
+    def summary
+      org    = current_organization
+      limits = org.plan_limits
+      renews_at = nil
+      if org.stripe_subscription_id.present?
+        begin
+          sub = Stripe::Subscription.retrieve(org.stripe_subscription_id)
+          period_end = sub.respond_to?(:current_period_end) ? sub.current_period_end : sub.items.data.first&.current_period_end
+          renews_at = Time.at(period_end).utc.iso8601 if period_end
+        rescue Stripe::StripeError => e
+          Rails.logger.warn "Billing summary: could not load subscription #{org.stripe_subscription_id}: #{e.message}"
+        end
+      end
+
+      render json: {
+        data: {
+          plan:             org.plan,
+          billing_interval: org.billing_interval,
+          renews_at:        renews_at,
+          usage: {
+            podcasts:      { used: org.podcasts.count,   limit: limits[:podcasts] },
+            members:       { used: org.memberships.count, limit: limits[:members] },
+            storage_bytes: { used: org.storage_used_bytes, limit: limits[:storage_gb] * 1024**3 },
+          },
+        },
+      }
+    end
 
     def checkout
       plan     = params[:plan]
-      price_id = PRICE_MAP[plan]
+      interval = StripePrices::INTERVALS.include?(params[:interval]) ? params[:interval] : "month"
+      price_id = StripePrices.price_id(plan, interval)
       return render json: { error: "Invalid plan." }, status: :unprocessable_entity unless price_id
 
       # Resolve subscription ID: stored value first, then look up by customer
@@ -36,10 +59,10 @@ module Api::V1
         Stripe::Subscription.update(
           sub_id,
           items: [{ id: subscription.items.data.first.id, price: price_id }],
-          metadata: { organization_id: current_organization.id, plan: plan },
+          metadata: { organization_id: current_organization.id, plan: plan, interval: interval },
           proration_behavior: "create_prorations"
         )
-        current_organization.update!(plan: plan)
+        current_organization.update!(plan: plan, billing_interval: interval)
         render json: { url: nil }
       else
         # New subscriber — create a Stripe Checkout session
@@ -52,7 +75,7 @@ module Api::V1
             allow_promotion_codes: true,
             success_url:           "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing?success=true",
             cancel_url:            "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing",
-            metadata:              { organization_id: current_organization.id, plan: plan }
+            metadata:              { organization_id: current_organization.id, plan: plan, interval: interval }
           )
         rescue Stripe::InvalidRequestError
           # Stale customer ID — retry without it so Stripe creates a fresh customer
@@ -64,7 +87,7 @@ module Api::V1
             allow_promotion_codes: true,
             success_url:           "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing?success=true",
             cancel_url:            "#{ENV.fetch('WEB_URL')}/dashboard/settings/billing",
-            metadata:              { organization_id: current_organization.id, plan: plan }
+            metadata:              { organization_id: current_organization.id, plan: plan, interval: interval }
           )
         end
         render json: { url: session.url }
@@ -105,7 +128,7 @@ module Api::V1
       return render json: { error: "No active subscription." }, status: :unprocessable_entity unless sub_id
 
       Stripe::Subscription.cancel(sub_id)
-      current_organization.update!(plan: "free", stripe_subscription_id: nil)
+      current_organization.update!(plan: "free", billing_interval: "month", stripe_subscription_id: nil)
       render json: { cancelled: true }
     end
 

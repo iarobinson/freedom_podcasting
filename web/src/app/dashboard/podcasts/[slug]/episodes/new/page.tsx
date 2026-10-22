@@ -2,6 +2,7 @@
 import { useCallback, useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, ArrowRight, Sparkles, CheckCircle2, Loader2 } from "lucide-react";
+import { aiIncluded } from "@/lib/plans";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
 import { AudioUploader } from "@/components/upload/AudioUploader";
@@ -50,7 +51,7 @@ export default function NewEpisodePage() {
   const [checkingOut, setCheckingOut] = useState(false);
   const [pollErrors, setPollErrors] = useState(0);
 
-  const isFreePlan = currentOrg?.plan === "free";
+  const isFreePlan = !aiIncluded(currentOrg?.plan);
 
   const handleFileSelected = useCallback(async () => {
     if (!currentOrg) return undefined;
@@ -80,7 +81,7 @@ export default function NewEpisodePage() {
       (episode != null &&
         episode.transcription_status == null &&
         episode.ai_metadata_status == null &&
-        (currentOrg?.plan !== "free" || episode.audio_duration_seconds != null));
+        (aiIncluded(currentOrg?.plan) || episode.audio_duration_seconds != null));
 
     if (aiDone) return;
     if (pollErrors >= 5) return;

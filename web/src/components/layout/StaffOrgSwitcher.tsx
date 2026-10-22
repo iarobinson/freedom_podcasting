@@ -54,7 +54,7 @@ export function StaffOrgSwitcher() {
         className="w-full flex items-center gap-1.5 px-2 py-1.5 text-[9px] font-bold uppercase tracking-widest text-purple-400 hover:text-purple-300 hover:bg-ink-800 transition-colors border-l-2 border-purple-500/40 pl-[6px]"
       >
         <Building2 className="h-3 w-3 shrink-0" />
-        <span className="flex-1 text-left truncate">Switch client org</span>
+        <span className="flex-1 text-left truncate">Switch organization</span>
         <ChevronDown className={clsx("h-3 w-3 shrink-0 transition-transform", open && "rotate-180")} />
       </button>
 
@@ -67,7 +67,7 @@ export function StaffOrgSwitcher() {
                 autoFocus
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search orgs…"
+                placeholder="Search organizations…"
                 className="bg-transparent text-xs text-ink-200 placeholder-ink-600 outline-none w-full"
               />
             </div>

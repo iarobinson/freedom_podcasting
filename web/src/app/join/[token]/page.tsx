@@ -12,7 +12,16 @@ interface CheckoutInfo {
   podcast_artwork:    string | null;
   already_subscribed: boolean;
   test_mode:          boolean;
+  plan?:              string;
+  interval?:          "month" | "year";
 }
+
+const ARCHIVE_BENEFITS = [
+  "Your existing catalogue stays live in every podcast app",
+  "Reliable RSS feed — Spotify & Apple Podcasts compliant",
+  "CDN-backed audio delivery — fast everywhere",
+  "Upgrade anytime to start publishing again",
+];
 
 const BENEFITS = [
   "Unlimited episode publishing — no monthly caps",
@@ -53,6 +62,8 @@ export default function JoinPage() {
   };
 
   const price = info ? `$${(info.price_cents / 100).toFixed(0)}` : "";
+  const per   = info?.interval === "year" ? "year" : "month";
+  const benefits = info?.plan === "archive" ? ARCHIVE_BENEFITS : BENEFITS;
 
   // Loading state
   if (loading) {
@@ -182,7 +193,7 @@ export default function JoinPage() {
           <p className="text-xs font-bold uppercase tracking-widest mb-4" style={{ color: "var(--text-faint)" }}>
             What&apos;s included
           </p>
-          {BENEFITS.map((b) => (
+          {benefits.map((b) => (
             <div key={b} className="flex items-start gap-3">
               <CheckCircle2 className="h-4 w-4 shrink-0 mt-0.5" style={{ color: "var(--accent)" }} />
               <p className="text-sm" style={{ color: "var(--text-muted)" }}>{b}</p>
@@ -194,10 +205,10 @@ export default function JoinPage() {
         <div className="public-panel rounded-sm p-6 text-center space-y-4">
           <div>
             <p className="font-display text-4xl font-bold" style={{ color: "var(--text-primary)" }}>
-              {price}<span className="text-lg font-normal" style={{ color: "var(--text-faint)" }}>/month</span>
+              {price}<span className="text-lg font-normal" style={{ color: "var(--text-faint)" }}>/{per}</span>
             </p>
             <p className="text-xs mt-1" style={{ color: "var(--text-faint)" }}>
-              Recurring monthly billing · Cancel anytime
+              Recurring {per === "year" ? "annual" : "monthly"} billing · Cancel anytime
             </p>
           </div>
 
@@ -210,7 +221,7 @@ export default function JoinPage() {
             {checking ? (
               <><Loader2 className="h-4 w-4 animate-spin" /> Redirecting…</>
             ) : (
-              <><Zap className="h-4 w-4" /> Start hosting — {price}/month</>
+              <><Zap className="h-4 w-4" /> Start hosting — {price}/{per}</>
             )}
           </button>
 

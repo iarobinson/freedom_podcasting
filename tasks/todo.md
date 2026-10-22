@@ -247,3 +247,23 @@ Goal: Producers and clients can manage shows from mobile.
 | Gap | Reason deferred |
 |-----|----------------|
 | R2 orphaned file cleanup on podcast/episode delete | R2 storage is $0.015/GB — negligible cost at current scale. DB rows are cleaned up correctly via `dependent: :destroy`. Revisit if storage costs become meaningful. |
+
+---
+
+## Phase 3.8 — Homepage + Backend Polish Pass (from fp_app_full_homepage_update_guide.pdf + fp_backend_audit_full.pdf) [~]
+- [x] Homepage copy: hero, distribution, features (AI card highlighted), Import → Review → Publish migration, refined CTA
+- [x] Archive plan ($5/mo, $50/yr): no new audio uploads or publishing, catalogue stays live; AI gated like Free
+- [x] Annual billing for all paid plans (organizations.billing_interval, StripePrices lookup, monthly/annual toggle on homepage + billing)
+- [ ] Create 5 Stripe prices + set fly secrets: STRIPE_ARCHIVE_PRICE_ID, STRIPE_ARCHIVE_ANNUAL_PRICE_ID, STRIPE_STARTER_ANNUAL_PRICE_ID, STRIPE_PRO_ANNUAL_PRICE_ID, STRIPE_AGENCY_ANNUAL_PRICE_ID
+- [x] Billing page: plan/interval/renewal summary + usage meters (GET billing/summary), plan descriptors
+- [x] Sidebar groups (Content / Workspace / Staff), workspace + role label, "Switch organization"
+- [x] Shared EmptyState component; guided empty states on dashboard, podcasts, episodes, upload, members
+- [x] Semantic Badge colors (live = red, success = green, owner = gold, staff = purple, rest gray)
+- [x] Podcast list/detail: RSS feed tools with helper text, platform connection status, explicit action labels, unpublish confirmations
+- [x] Edit podcast: 4 sections with helper text on every field; "Podcast platform links"; isolated danger zone
+- [x] Dashboard: 5 stats, Next steps, Recent activity (GET organizations/:slug/overview)
+- [x] Guided upload flow (podcast → destination → upload → review → continue)
+- [x] Members: pending invites w/ resend + revoke (new invitations table), role-change confirmation, polished role copy
+- [x] Settings: editable account name + organization name (PATCH auth/me, PATCH organizations/:slug)
+- [x] Admin: "Open workspace", checkout-link modal with plan + monthly/annual + clearer test-mode copy; fixed "(Test)" label shown on live checkouts
+- [ ] Transfer ownership (not built — needs product decision on billing ownership)

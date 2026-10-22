@@ -1,12 +1,6 @@
 class StripeWebhooksController < ActionController::Base
   protect_from_forgery with: :null_session
 
-  PRICE_TO_PLAN = {
-    ENV["STRIPE_STARTER_PRICE_ID"] => "starter",
-    ENV["STRIPE_PRO_PRICE_ID"]     => "pro",
-    ENV["STRIPE_AGENCY_PRICE_ID"]  => "agency",
-  }.freeze
-
   def receive
     payload    = request.body.read
     sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
@@ -53,6 +47,7 @@ class StripeWebhooksController < ActionController::Base
     return unless org
     org.update!(
       plan:                   session.metadata["plan"],
+      billing_interval:       session.metadata["interval"].presence || "month",
       stripe_customer_id:     session.customer,
       stripe_subscription_id: session.subscription
     )
@@ -68,19 +63,19 @@ class StripeWebhooksController < ActionController::Base
 
     # Subscription scheduled for cancellation — revert to free immediately
     if subscription.cancel_at_period_end
-      org.update!(plan: "free", stripe_subscription_id: nil)
+      org.update!(plan: "free", billing_interval: "month", stripe_subscription_id: nil)
       return
     end
 
     price_id = subscription.items.data.first&.price&.id
-    plan     = PRICE_TO_PLAN[price_id]
-    org.update!(plan: plan) if plan
+    plan, interval = StripePrices.plan_for(price_id)
+    org.update!(plan: plan, billing_interval: interval) if plan
   end
 
   def handle_subscription_deleted(subscription)
     org = Organization.find_by(stripe_subscription_id: subscription.id) ||
           Organization.find_by(stripe_customer_id: subscription.customer)
     return unless org
-    org.update!(plan: "free", stripe_subscription_id: nil)
+    org.update!(plan: "free", billing_interval: "month", stripe_subscription_id: nil)
   end
 end

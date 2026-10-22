@@ -3,18 +3,23 @@ import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, Plus, Rss, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare, Download, Wand2, Sparkles } from "lucide-react";
+import { ArrowLeft, Plus, Copy, Check, Globe, GlobeLock, Pencil, Trash2, Clock, Mic2, MessageSquare, Download, Wand2, Sparkles, ExternalLink, Upload } from "lucide-react";
 import { useAuthStore } from "@/lib/store";
 import { useRole } from "@/lib/useRole";
 import { podcastsApi, episodesApi } from "@/lib/api";
 import { extractErrorMessage } from "@/lib/errorUtils";
 import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
+import { EmptyState } from "@/components/ui/EmptyState";
+
+// Episode row action styles: publish-related = accent, everything else = neutral.
+const ACTION_PRIMARY   = "px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider bg-accent/10 text-accent-light border border-accent/30 hover:bg-accent/20 transition-colors";
+const ACTION_SECONDARY = "px-2.5 py-1 text-[11px] font-bold uppercase tracking-wider text-ink-400 border border-ink-700 hover:text-ink-200 hover:border-ink-500 transition-colors";
 import { toast } from "@/lib/toast";
 import type { Podcast, Episode } from "@/types";
 
 function episodeBadgeVariant(status: Episode["status"]) {
-  if (status === "published") return "success" as const;
+  if (status === "published") return "live" as const;
   if (status === "review")    return "warning" as const;
   if (status === "approved")  return "info" as const;
   return "default" as const;
@@ -64,7 +69,7 @@ export default function PodcastDetailPage() {
     onSuccess: () => { invalidateEpisodes(); toast.success("Episode is now live!"); },
     onError: (err: unknown) => {
       const msg = (err as { response?: { data?: { error?: string } } })?.response?.data?.error;
-      if (msg?.toLowerCase().includes("limit reached")) {
+      if (msg && /limit reached|archive plan/i.test(msg)) {
         toast.error("Plan limit reached", msg);
         router.push("/dashboard/settings/billing");
       } else {
@@ -164,11 +169,11 @@ export default function PodcastDetailPage() {
   return (
     <div className="p-8 max-w-5xl mx-auto">
       <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-ink-500 hover:text-ink-300 transition-colors mb-6">
-        <ArrowLeft className="h-4 w-4" /> All Podcasts
+        <ArrowLeft className="h-4 w-4" /> All podcasts
       </button>
 
       {/* Podcast header */}
-      <div className="glass rounded-2xl p-6 mb-6 flex items-start gap-5">
+      <div className="glass rounded-2xl p-6 mb-6 flex flex-col sm:flex-row items-start gap-5">
         {podcast.artwork_url ? (
           <img src={podcast.artwork_url} alt={podcast.title} className="h-20 w-20 rounded-xl object-cover shrink-0" />
         ) : (
@@ -183,35 +188,54 @@ export default function PodcastDetailPage() {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap mb-1">
             <h1 className="font-display text-2xl text-ink-100">{podcast.title}</h1>
-            <Badge variant={podcast.published ? "success" : "default"}>{podcast.published ? "Live" : "Draft"}</Badge>
+            <Badge variant={podcast.published ? "live" : "default"}>{podcast.published ? "Live" : "Draft"}</Badge>
           </div>
-          <p className="text-sm text-ink-500 mb-3 line-clamp-2">{podcast.description}</p>
-          <div className="flex items-center gap-1.5">
-            <code className="text-xs text-ink-600 font-mono truncate max-w-xs">{podcast.rss_url}</code>
-            <button onClick={copyRss} className="text-ink-600 hover:text-brand-400 transition-colors p-1">
-              {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-            </button>
-            {podcast.published && (
-              <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer"
-                className="text-ink-700 hover:text-accent transition-colors p-1">
-                <Rss className="h-3.5 w-3.5" />
-              </a>
-            )}
+          {podcast.author && <p className="text-xs text-ink-500 mb-1">by {podcast.author}</p>}
+          <p className="text-sm text-ink-500 mb-4 line-clamp-2">{podcast.description}</p>
+
+          <div className="border-t border-ink-800 pt-3 space-y-3">
+            <div>
+              <div className="flex items-center gap-3 flex-wrap">
+                <span className="text-[9px] font-bold uppercase tracking-widest text-ink-600">RSS feed</span>
+                <button onClick={copyRss} className="flex items-center gap-1 text-[11px] text-ink-400 hover:text-ink-100 transition-colors">
+                  {copied ? <Check className="h-3 w-3 text-emerald-400" /> : <Copy className="h-3 w-3" />}
+                  {copied ? "Copied" : "Copy feed"}
+                </button>
+                {podcast.published && (
+                  <a href={podcast.rss_url} target="_blank" rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-[11px] text-ink-400 hover:text-ink-100 transition-colors">
+                    <ExternalLink className="h-3 w-3" /> Open feed
+                  </a>
+                )}
+              </div>
+              <p className="text-[10px] text-ink-600 mt-0.5">This is the feed you submit to podcast directories.</p>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[9px] font-bold uppercase tracking-widest text-ink-600 mr-1">Platforms</span>
+              {([["Apple Podcasts", podcast.apple_podcasts_url], ["Spotify", podcast.spotify_url], ["Amazon Music", podcast.amazon_music_url]] as const).map(([name, url]) => (
+                <span key={name} className="flex items-center gap-1.5 text-[11px] text-ink-400">
+                  {name} <Badge variant={url ? "success" : "default"}>{url ? "Connected" : "Not added"}</Badge>
+                </span>
+              ))}
+            </div>
           </div>
         </div>
         {canEdit && (
           <div className="flex items-center gap-2 shrink-0">
             <Button variant="secondary" size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/edit`)}>
-              <Pencil className="h-3.5 w-3.5" /> Edit
+              <Pencil className="h-3.5 w-3.5" /> Edit details
             </Button>
             <Button
               variant={podcast.published ? "secondary" : "primary"}
               size="sm"
               loading={togglePodcastPublish.isPending}
-              onClick={() => togglePodcastPublish.mutate()}>
+              onClick={() => {
+                if (podcast.published && !confirm("Unpublish this show? Your RSS feed will stop serving episodes until you publish again.")) return;
+                togglePodcastPublish.mutate();
+              }}>
               {podcast.published
-                ? <><GlobeLock className="h-3.5 w-3.5" /> Unpublish</>
-                : <><Globe className="h-3.5 w-3.5" /> Publish</>}
+                ? <><GlobeLock className="h-3.5 w-3.5" /> Unpublish show</>
+                : <><Globe className="h-3.5 w-3.5" /> Publish podcast</>}
             </Button>
           </div>
         )}
@@ -225,21 +249,27 @@ export default function PodcastDetailPage() {
           </h2>
           {canEdit && (
             <Button size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/new`)}>
-              <Plus className="h-3.5 w-3.5" /> New Episode
+              <Plus className="h-3.5 w-3.5" /> Add episode
             </Button>
           )}
         </div>
 
         {episodes.length === 0 ? (
-          <div className="glass rounded-2xl p-10 text-center">
-            <Mic2 className="h-8 w-8 text-ink-700 mx-auto mb-3" />
-            <p className="text-ink-400 text-sm mb-4">No episodes yet. Add your first one!</p>
-            {canEdit && (
+          <EmptyState
+            icon={Mic2}
+            title="No episodes yet."
+            body="Add your first episode to start building your catalogue and prepare your show for publishing."
+            primary={canEdit && (
               <Button size="sm" onClick={() => router.push(`/dashboard/podcasts/${slug}/episodes/new`)}>
-                <Plus className="h-3.5 w-3.5" /> Add Episode
+                <Plus className="h-3.5 w-3.5" /> Add first episode
               </Button>
             )}
-          </div>
+            secondary={canEdit && (
+              <Button size="sm" variant="secondary" onClick={() => router.push(`/dashboard/upload?podcast=${slug}`)}>
+                <Upload className="h-3.5 w-3.5" /> Upload audio
+              </Button>
+            )}
+          />
         ) : (
           <div className="space-y-2">
             {episodes.map((ep) => (
@@ -288,13 +318,13 @@ export default function PodcastDetailPage() {
                           <button
                             onClick={() => submitForReview.mutate(ep)}
                             disabled={submitForReview.isPending}
-                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors">
-                            Submit for Review
+                            className={ACTION_SECONDARY}>
+                            Submit for review
                           </button>
                           <button
                             onClick={() => publishEpisode.mutate(ep)}
                             disabled={publishEpisode.isPending}
-                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-brand-500/15 text-brand-400 hover:bg-brand-500/25 transition-colors">
+                            className={ACTION_PRIMARY}>
                             Publish
                           </button>
                         </>
@@ -305,13 +335,13 @@ export default function PodcastDetailPage() {
                           <button
                             onClick={() => approveEpisode.mutate(ep)}
                             disabled={approveEpisode.isPending}
-                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-sky-500/10 text-sky-400 hover:bg-sky-500/20 transition-colors">
+                            className={ACTION_PRIMARY}>
                             Approve
                           </button>
                           <button
                             onClick={() => { setRejectingEpisodeId(ep.id); setRejectNotes(""); }}
-                            className="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 transition-colors">
-                            Request Changes
+                            className={ACTION_SECONDARY}>
+                            Request changes
                           </button>
                         </>
                       )}
@@ -320,16 +350,16 @@ export default function PodcastDetailPage() {
                         <button
                           onClick={() => publishEpisode.mutate(ep)}
                           disabled={publishEpisode.isPending}
-                          className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 transition-colors">
+                          className={ACTION_PRIMARY}>
                           Publish
                         </button>
                       )}
 
                       {ep.status === "published" && (
                         <button
-                          onClick={() => unpublishEpisode.mutate(ep)}
+                          onClick={() => { if (confirm(`Unpublish "${ep.title}"? It will be removed from your RSS feed.`)) unpublishEpisode.mutate(ep); }}
                           disabled={unpublishEpisode.isPending}
-                          className="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 hover:bg-red-500/10 hover:text-red-400 transition-colors">
+                          className={ACTION_SECONDARY}>
                           Unpublish
                         </button>
                       )}
@@ -372,7 +402,7 @@ export default function PodcastDetailPage() {
 
                       {/* Delete */}
                       <button
-                        onClick={() => { if (confirm("Delete this episode?")) deleteEpisode.mutate(ep.id); }}
+                        onClick={() => { if (confirm(`Permanently delete "${ep.title}"? This cannot be undone.`)) deleteEpisode.mutate(ep.id); }}
                         className="p-1.5 text-ink-600 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors opacity-0 group-hover:opacity-100">
                         <Trash2 className="h-3.5 w-3.5" />
                       </button>

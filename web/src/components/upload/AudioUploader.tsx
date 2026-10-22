@@ -10,6 +10,7 @@ interface Props {
   podcastSlug: string;
   episodeId?: number;
   onFileSelected?: () => Promise<number | undefined>;
+  onFileChosen?: (file: File) => void;
   onUploadComplete: (data: { mediaFileId: number; publicUrl: string }) => void;
   onError?: (error: string) => void;
 }
@@ -19,7 +20,7 @@ type State = "idle" | "uploading" | "processing" | "complete" | "error";
 const ACCEPTED = ["audio/mpeg","audio/mp4","audio/ogg","audio/wav","audio/x-wav","audio/flac"];
 const MAX_BYTES = 500 * 1024 * 1024;
 
-export function AudioUploader({ orgSlug, podcastSlug, episodeId, onFileSelected, onUploadComplete, onError }: Props) {
+export function AudioUploader({ orgSlug, podcastSlug, episodeId, onFileSelected, onFileChosen, onUploadComplete, onError }: Props) {
   const [state,    setState]    = useState<State>("idle");
   const [progress, setProgress] = useState(0);
   const [fileName, setFileName] = useState("");
@@ -36,6 +37,7 @@ export function AudioUploader({ orgSlug, podcastSlug, episodeId, onFileSelected,
       setErrMsg(msg); setState("error"); onError?.(msg); return;
     }
     setFileName(file.name); setState("uploading"); setProgress(0);
+    onFileChosen?.(file);
     try {
       const resolvedEpisodeId = onFileSelected ? await onFileSelected() : episodeId;
       const presignRes = await uploadsApi.presign(orgSlug, podcastSlug, { filename: file.name, content_type: file.type, upload_type: "audio" });
@@ -49,7 +51,7 @@ export function AudioUploader({ orgSlug, podcastSlug, episodeId, onFileSelected,
       const msg = "Upload failed — please try again";
       setErrMsg(msg); setState("error"); onError?.(msg);
     }
-  }, [orgSlug, podcastSlug, episodeId, onFileSelected, onUploadComplete, onError]);
+  }, [orgSlug, podcastSlug, episodeId, onFileSelected, onFileChosen, onUploadComplete, onError]);
 
   const reset = () => { setState("idle"); setProgress(0); setFileName(""); setErrMsg(""); };
 

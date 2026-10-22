@@ -33,7 +33,51 @@ export interface OrganizationSummary {
   role: Role;
 }
 
-export type Plan = "free" | "starter" | "pro" | "agency";
+export interface PendingInvitation {
+  email: string;
+  role: Exclude<Role, "owner">;
+  invited_at: string;
+  expired: boolean;
+}
+
+export interface ActivityItem {
+  kind: "podcast_created" | "podcast_published" | "episode_created" | "episode_published" | "invite_sent";
+  at: string;
+  text: string;
+  podcast_slug?: string;
+  episode_id?: number;
+}
+
+export interface OrgOverview {
+  stats: {
+    podcasts: number;
+    published_episodes: number;
+    draft_episodes: number;
+    storage_used_bytes: number;
+    storage_limit_bytes: number;
+  };
+  setup: {
+    has_podcast: boolean;
+    missing_artwork_slug: string | null;
+    has_episode: boolean;
+    has_published: boolean;
+    unsubmitted_slug: string | null;
+    has_teammate: boolean;
+    at_publish_limit: boolean;
+  };
+  activity: ActivityItem[];
+}
+
+export interface UsageMeter { used: number; limit: number }
+
+export interface BillingSummary {
+  plan: Plan;
+  billing_interval: "month" | "year";
+  renews_at: string | null;
+  usage: { podcasts: UsageMeter; members: UsageMeter; storage_bytes: UsageMeter };
+}
+
+export type Plan = "free" | "archive" | "starter" | "pro" | "agency";
 export type Role = "owner" | "admin" | "editor" | "viewer";
 
 export interface Podcast {

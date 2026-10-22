@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :auth do
         get  "me",                    to: "me#show"
+        patch "me",                   to: "me#update"
         post "password",              to: "passwords#create"
         put  "password",              to: "passwords#update"
         get  "confirm",               to: "confirmations#confirm"
@@ -38,9 +39,14 @@ Rails.application.routes.draw do
       resources :organizations, param: :slug do
         member do
           get    :members
+          get    :overview
           post   :invite
+          get    :invitations
+          post   "invitations/resend",    to: "organizations#resend_invitation"
+          delete "invitations",           to: "organizations#revoke_invitation"
           delete "members/:user_id",      to: "organizations#remove_member"
           patch  "members/:user_id/role", to: "organizations#update_member_role"
+          get    "billing/summary",       to: "billing#summary"
           post   "billing/checkout",      to: "billing#checkout"
           post   "billing/portal",        to: "billing#portal"
           post   "billing/cancel",        to: "billing#cancel"

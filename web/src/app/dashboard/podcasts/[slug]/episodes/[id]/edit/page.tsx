@@ -7,6 +7,7 @@ import {
   Copy, Check, Lightbulb, Scissors, Search, Trash2, AlertTriangle,
 } from "lucide-react";
 import Link from "next/link";
+import { aiIncluded } from "@/lib/plans";
 import { useAuthStore } from "@/lib/store";
 import { episodesApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
@@ -257,7 +258,7 @@ export default function EditEpisodePage() {
 
   const hasAudio = !!(form.audio_url as string);
   const showUploader = !hasAudio || replaceAudio;
-  const isFreePlan = currentOrg?.plan === "free";
+  const isFreePlan = !aiIncluded(currentOrg?.plan);
   const PRICE_PER_MIN = parseFloat(process.env.NEXT_PUBLIC_AI_PRICE_PER_MINUTE ?? "0.50");
   const calcAiPrice = (secs?: number) => {
     if (!secs) return "…";

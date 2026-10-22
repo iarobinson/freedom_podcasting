@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios";
+import type { BillingSummary, OrgOverview, PendingInvitation } from "@/types";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 
@@ -45,6 +46,8 @@ export const authApi = {
     apiClient.post("/api/v1/auth/register", { user: data }),
   logout: () => apiClient.delete("/api/v1/auth/logout"),
   me:     () => apiClient.get("/api/v1/auth/me"),
+  updateMe: (data: { first_name: string; last_name: string }) =>
+    apiClient.patch("/api/v1/auth/me", { user: data }),
   forgotPassword: (email: string) =>
     apiClient.post("/api/v1/auth/password", { email }),
   resetPassword: (reset_password_token: string, password: string, password_confirmation: string) =>
@@ -94,11 +97,26 @@ export const membersApi = {
                 apiClient.patch(`/api/v1/organizations/${orgSlug}/members/${userId}/role`, { role }),
   accept:     (token: string) =>
                 apiClient.post(`/api/v1/invitations/accept`, { token }),
+  pending:    (orgSlug: string) =>
+                apiClient.get<{ data: PendingInvitation[] }>(`/api/v1/organizations/${orgSlug}/invitations`),
+  resend:     (orgSlug: string, email: string) =>
+                apiClient.post(`/api/v1/organizations/${orgSlug}/invitations/resend`, { email }),
+  revoke:     (orgSlug: string, email: string) =>
+                apiClient.delete(`/api/v1/organizations/${orgSlug}/invitations`, { data: { email } }),
+};
+
+export const organizationsApi = {
+  overview: (orgSlug: string) =>
+    apiClient.get<{ data: OrgOverview }>(`/api/v1/organizations/${orgSlug}/overview`),
+  update:   (orgSlug: string, data: { name: string }) =>
+    apiClient.patch(`/api/v1/organizations/${orgSlug}`, { organization: data }),
 };
 
 export const billingApi = {
-  checkout: (orgSlug: string, plan: string) =>
-    apiClient.post(`/api/v1/organizations/${orgSlug}/billing/checkout`, { plan }),
+  summary: (orgSlug: string) =>
+    apiClient.get<{ data: BillingSummary }>(`/api/v1/organizations/${orgSlug}/billing/summary`),
+  checkout: (orgSlug: string, plan: string, interval: "month" | "year" = "month") =>
+    apiClient.post(`/api/v1/organizations/${orgSlug}/billing/checkout`, { plan, interval }),
   portal: (orgSlug: string) =>
     apiClient.post(`/api/v1/organizations/${orgSlug}/billing/portal`),
   cancel: (orgSlug: string) =>
@@ -142,8 +160,8 @@ export const staffApi = {
     apiClient.get("/api/v1/staff/organizations", { params }),
   createOrg: (data: { organization: { name: string; slug?: string }; plan?: string; rss_url?: string }) =>
     apiClient.post("/api/v1/staff/organizations", data),
-  generateCheckoutLink: (org_slug: string, price_cents: number, test = false) =>
-    apiClient.post("/api/v1/staff/checkout_links", { org_slug, price_cents, test }),
+  generateCheckoutLink: (org_slug: string, price_cents: number, test = false, plan = "starter", interval: "month" | "year" = "month") =>
+    apiClient.post("/api/v1/staff/checkout_links", { org_slug, price_cents, test, plan, interval }),
 };
 
 // No auth header — used for public client-facing pages

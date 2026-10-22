@@ -2,6 +2,15 @@ module Api
   module V1
     module Auth
       class MeController < ApplicationController
+        # PATCH /api/v1/auth/me — name only; email changes go through support.
+        def update
+          if current_user.update(params.require(:user).permit(:first_name, :last_name))
+            show
+          else
+            render json: { error: current_user.errors.full_messages.to_sentence }, status: :unprocessable_entity
+          end
+        end
+
         def show
           render json: { data: {
             id:           current_user.id,

@@ -1,13 +1,15 @@
 module Api::V1::Public
   class CheckoutController < ActionController::API
     def show
-      org, price_cents, test_mode = decode_token!
+      org, price_cents, test_mode, plan, interval = decode_token!
       podcast = org.podcasts.order(:created_at).first
 
       render json: {
         data: {
           org_name:           org.name,
           price_cents:        price_cents,
+          plan:               plan,
+          interval:           interval,
           podcast_title:      podcast&.title,
           podcast_artwork:    podcast&.artwork_url,
           already_subscribed: org.stripe_subscription_id.present?,
@@ -21,7 +23,7 @@ module Api::V1::Public
     end
 
     def checkout
-      org, price_cents, test_mode = decode_token!
+      org, price_cents, test_mode, plan, interval = decode_token!
 
       if org.stripe_subscription_id.present?
         return render json: { error: "This organization already has an active subscription." }, status: :unprocessable_entity
@@ -48,14 +50,14 @@ module Api::V1::Public
             price_data: {
               currency:     "usd",
               unit_amount:  price_cents,
-              recurring:    { interval: "month" },
-              product_data: { name: "Freedom Podcasting Hosting (Test)" },
+              recurring:    { interval: interval },
+              product_data: { name: "Freedom Podcasting #{plan.capitalize} Hosting#{' (Test)' if test_mode}" },
             },
             quantity: 1,
           }],
           success_url: success_url,
           cancel_url:  "#{ENV.fetch('FRONTEND_URL')}/join/#{params[:token]}",
-          metadata:    { organization_id: org.id, plan: "starter", test: test_mode.to_s }
+          metadata:    { organization_id: org.id, plan: plan, interval: interval, test: test_mode.to_s }
         },
         stripe_opts
       )
@@ -77,7 +79,9 @@ module Api::V1::Public
         algorithms: ["HS256"]
       ).first
       org = Organization.find_by!(slug: payload["org_slug"])
-      [org, payload["price_cents"], payload["test"] == true]
+      # Links issued before plan/interval were added default to starter, monthly.
+      [org, payload["price_cents"], payload["test"] == true,
+       payload["plan"].presence || "starter", payload["interval"].presence || "month"]
     end
   end
 end

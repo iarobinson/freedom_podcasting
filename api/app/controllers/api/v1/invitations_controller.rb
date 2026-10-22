@@ -21,12 +21,20 @@ module Api::V1
         begin
           payload = JWT.decode(token, Rails.application.secret_key_base, true, algorithms: ["HS256"]).first
           org     = Organization.find(payload["org_id"])
+          # Tokens issued since invitations were stored must still have their row
+          # (deleted = revoked). Older tokens carry no invitation_id.
+          invitation = nil
+          if payload["invitation_id"]
+            invitation = org.invitations.find_by(id: payload["invitation_id"])
+            return render json: { error: "This invitation has been revoked." }, status: :gone unless invitation
+          end
           existing = org.memberships.find_by(user: current_user)
           if existing&.accepted_at?
             return render json: { message: "You're already a member of #{org.name}.", data: { org_slug: org.slug } }
           end
           m = org.memberships.find_or_initialize_by(user: current_user)
           m.update!(role: payload["role"], accepted_at: Time.current, invitation_token: nil)
+          invitation&.destroy!
           render json: { message: "Welcome to #{org.name}!", data: { org_slug: org.slug } }
         rescue JWT::DecodeError, JWT::ExpiredSignature
           render json: { error: "Invalid or expired invitation token." }, status: :unprocessable_entity

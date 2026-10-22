@@ -11,6 +11,9 @@ module Api::V1
       upload_type = params.fetch(:upload_type, "audio")
       allowed = upload_type == "artwork" ? ALLOWED_IMAGES : ALLOWED_AUDIO
       return render(json: { error: "File type not allowed." }, status: :unprocessable_entity) unless allowed.include?(content_type)
+      if upload_type == "audio" && current_organization.archive? && !current_user.staff?
+        return render(json: { error: "Archive plan doesn't accept new audio uploads. Upgrade to keep publishing." }, status: :unprocessable_entity)
+      end
 
       key = "organizations/#{current_organization.id}/#{upload_type}/#{SecureRandom.uuid}#{File.extname(filename).downcase}"
       url = StorageService.new.presigned_upload_url(key: key, content_type: content_type)
@@ -40,7 +43,7 @@ module Api::V1
         episode = Episode.find_by(id: mf.episode_id)
         if episode && !episode.transcript.present?
           normalized = normalize_audio_filename(mf.filename)
-          if current_organization.plan == "free" && !episode.ai_purchased_at.present?
+          if !current_organization.ai_included? && !episode.ai_purchased_at.present?
             # Free plan without purchase: save audio URL but skip AI pipeline
             episode.update!(audio_url: mf.public_url, audio_content_type: mf.content_type,
                             audio_filename: normalized)

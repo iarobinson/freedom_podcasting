@@ -8,6 +8,7 @@ import { podcastsApi } from "@/lib/api";
 import { Input } from "@/components/ui/Input";
 import { Textarea } from "@/components/ui/Textarea";
 import { Button } from "@/components/ui/Button";
+import { Badge } from "@/components/ui/Badge";
 import { ArtworkUploader } from "@/components/upload/ArtworkUploader";
 import { toast } from "@/lib/toast";
 import type { Podcast } from "@/types";
@@ -80,12 +81,15 @@ export default function EditPodcastPage() {
       <button onClick={() => router.back()} className="flex items-center gap-2 text-sm text-ink-500 hover:text-ink-300 transition-colors mb-6">
         <ArrowLeft className="h-4 w-4" /> Back
       </button>
-      <h1 className="font-display text-2xl text-ink-100 mb-1">Edit Podcast</h1>
+      <h1 className="font-display text-2xl text-ink-100 mb-1">Edit podcast</h1>
       <p className="text-sm text-ink-500 mb-8">{podcast.title}</p>
 
       <form onSubmit={(e) => { e.preventDefault(); update.mutate(); }} className="space-y-6">
         <div className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Artwork</h2>
+          <div>
+            <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider mb-1">Artwork</h2>
+            <p className="text-xs text-ink-600">Square artwork, minimum 1400 × 1400. JPG, PNG, or WebP.</p>
+          </div>
           <ArtworkUploader
             orgSlug={currentOrg!.slug}
             podcastSlug={slug}
@@ -96,52 +100,62 @@ export default function EditPodcastPage() {
         </div>
 
         <div className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Basic Info</h2>
-          <Input label="Title *" value={form.title as string ?? ""} onChange={set("title")} required />
-          <Textarea label="Description *" value={form.description as string ?? ""} onChange={set("description")} rows={4} required />
-          <div className="grid grid-cols-2 gap-4">
-            <Input label="Author *" value={form.author as string ?? ""} onChange={set("author")} required />
-            <Input label="Email *" type="email" value={form.email as string ?? ""} onChange={set("email")} required />
+          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Show details</h2>
+          <Input label="Title *" value={form.title as string ?? ""} onChange={set("title")} required
+            hint="This is the public title listeners will see across podcast apps." />
+          <Textarea label="Description *" value={form.description as string ?? ""} onChange={set("description")} rows={4} required
+            hint="Your show description appears in podcast directories and helps listeners understand what your podcast is about." />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input label="Author *" value={form.author as string ?? ""} onChange={set("author")} required
+              hint="Usually your name, company, or brand name." />
+            <Input label="Email *" type="email" value={form.email as string ?? ""} onChange={set("email")} required
+              hint="Used for podcast feed settings and directory compliance. This does not have to be shown publicly." />
           </div>
         </div>
 
         <div className="glass rounded-2xl p-6 space-y-4">
-          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Settings</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-ink-300">Category</label>
+          <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider">Publishing settings</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-ink-500">Category</label>
               <select value={form.category as string ?? ""} onChange={set("category")}
-                className="w-full rounded-lg px-3.5 py-2.5 text-sm bg-white/5 border border-white/10 text-ink-100 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                className="w-full px-3 py-2.5 text-sm font-body bg-ink-900 border border-ink-700 text-ink-100 focus:outline-none focus:border-accent/50">
                 <option value="">Select category</option>
                 {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
+              <p className="text-[10px] text-ink-600">Choose the category that best fits your show in podcast directories.</p>
             </div>
-            <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-ink-300">Type</label>
+            <div className="space-y-1">
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-ink-500">Type</label>
               <select value={form.podcast_type as string ?? "episodic"} onChange={set("podcast_type")}
-                className="w-full rounded-lg px-3.5 py-2.5 text-sm bg-white/5 border border-white/10 text-ink-100 focus:outline-none focus:ring-2 focus:ring-brand-500/40">
+                className="w-full px-3 py-2.5 text-sm font-body bg-ink-900 border border-ink-700 text-ink-100 focus:outline-none focus:border-accent/50">
                 <option value="episodic">Episodic</option>
                 <option value="serial">Serial</option>
               </select>
+              <p className="text-[10px] text-ink-600">Most shows should use Episodic. Use Serial only if episodes are meant to be heard in order.</p>
             </div>
           </div>
-          <Input label="Website URL" type="text" placeholder="https://mypodcast.com" value={form.website_url as string ?? ""} onChange={set("website_url")} onBlur={(e) => {
+          <Input label="Website URL" type="text" placeholder="https://mypodcast.com" hint="Optional. Link to your show website or primary homepage." value={form.website_url as string ?? ""} onChange={set("website_url")} onBlur={(e) => {
               const val = e.target.value.trim();
               if (val && !val.match(/^https?:\/\//)) {
                 setForm((f) => ({ ...f, website_url: `https://${val}` }));
               }
             }}
           />
-          <label className="flex items-center gap-2.5 cursor-pointer">
+          <label className="flex items-start gap-2.5 cursor-pointer">
             <input type="checkbox" checked={form.explicit as boolean ?? false}
               onChange={(e) => setForm((f) => ({ ...f, explicit: e.target.checked }))}
-              className="w-4 h-4 rounded accent-brand-500" />
-            <span className="text-sm text-ink-400">Explicit content</span>
+              className="w-4 h-4 mt-0.5 accent-accent" />
+            <span>
+              <span className="block text-sm text-ink-300">Explicit content</span>
+              <span className="block text-[10px] text-ink-600">Turn this on if your show contains explicit language or mature content.</span>
+            </span>
           </label>
 
           <div className="pt-2 border-t border-white/5 space-y-2">
             <div className="space-y-1.5">
-              <label className="block text-sm font-medium text-ink-300">Podcast URL slug</label>
+              <label className="block text-[10px] font-bold uppercase tracking-widest text-ink-500">Podcast URL</label>
+              <p className="text-[10px] text-ink-600">This creates your podcast page and RSS path inside Freedom Podcasting.</p>
               <div className="flex items-stretch">
                 <span className="flex items-center px-3 text-xs text-ink-600 bg-ink-900 border border-r-0 border-ink-700 rounded-l-sm whitespace-nowrap select-none">
                   /rss/
@@ -161,7 +175,7 @@ export default function EditPodcastPage() {
                 />
               </div>
               <p className="text-xs text-ink-600">
-                RSS feed: <span className="text-ink-500 font-mono">{podcast.rss_url.replace(`/${podcast.slug}`, `/${(form.slug as string) || podcast.slug}`)}</span>
+                Your RSS feed: <span className="text-ink-500 font-mono">{podcast.rss_url.replace(`/${podcast.slug}`, `/${(form.slug as string) || podcast.slug}`)}</span>
               </p>
             </div>
 
@@ -183,8 +197,15 @@ export default function EditPodcastPage() {
 
         <div className="glass rounded-2xl p-6 space-y-4">
           <div>
-            <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider mb-1">Podcast Directories</h2>
-            <p className="text-xs text-ink-600">After your podcast is approved on each platform, paste the URL here to show subscribe buttons on your public podcast page.</p>
+            <h2 className="text-xs font-semibold text-ink-500 uppercase tracking-wider mb-1">Podcast platform links</h2>
+            <p className="text-xs text-ink-600">After your show is approved on each platform, paste the public episode or show link here to display listening buttons on your public podcast page.</p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {([["Apple Podcasts", "apple_podcasts_url"], ["Spotify", "spotify_url"], ["Amazon Music", "amazon_music_url"]] as const).map(([name, key]) => (
+              <span key={key} className="flex items-center gap-1.5 text-[11px] text-ink-400 border border-ink-800 px-2 py-1">
+                {name} <Badge variant={form[key] ? "success" : "default"}>{form[key] ? "Connected" : "Not added"}</Badge>
+              </span>
+            ))}
           </div>
           <Input
             label="Apple Podcasts URL"
@@ -211,13 +232,14 @@ export default function EditPodcastPage() {
 
         <div className="flex justify-end gap-3">
           <Button variant="secondary" type="button" onClick={() => router.back()}>Cancel</Button>
-          <Button type="submit" loading={update.isPending}>Save Changes</Button>
+          <Button type="submit" loading={update.isPending}>Save changes</Button>
         </div>
       </form>
 
       {/* Danger zone */}
-      <div className="mt-12 border border-accent/30 rounded-sm p-6">
-        <h2 className="text-xs font-bold uppercase tracking-widest text-accent mb-1">Danger Zone</h2>
+      <div className="mt-16 pt-8 border-t border-ink-800">
+      <div className="border border-accent/30 bg-accent/5 rounded-sm p-6">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-accent mb-1">Danger zone</h2>
         <p className="text-sm text-ink-500 mb-4">
           Permanently delete this podcast and all its episodes. This cannot be undone.
         </p>
@@ -226,8 +248,9 @@ export default function EditPodcastPage() {
           size="sm"
           onClick={() => { setDeleteConfirmText(""); setShowDeleteModal(true); setTimeout(() => deleteInputRef.current?.focus(), 50); }}
         >
-          <Trash2 className="h-3.5 w-3.5" /> Delete Podcast
+          <Trash2 className="h-3.5 w-3.5" /> Delete podcast
         </Button>
+      </div>
       </div>
 
       {/* Delete confirmation modal */}
@@ -239,8 +262,8 @@ export default function EditPodcastPage() {
               <div>
                 <h3 className="text-sm font-bold uppercase tracking-widest text-ink-100 mb-1">Delete Podcast</h3>
                 <p className="text-sm text-ink-400 leading-relaxed">
-                  This will permanently delete <span className="text-ink-200 font-semibold">{podcast.title}</span> and
-                  all its episodes, audio files, and data. Once this is done, you won&apos;t be able to undo it.
+                  This permanently deletes <span className="text-ink-200 font-semibold">{podcast.title}</span>, including
+                  its episodes, feed settings, and associated content. This action cannot be undone.
                 </p>
               </div>
             </div>

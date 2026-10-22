@@ -47,6 +47,24 @@ RSpec.describe "Episode publish limit", type: :request do
     end
   end
 
+  context "archive plan (no new publishing)" do
+    let(:plan) { "archive" }
+
+    it "blocks publishing even with nothing published this month" do
+      publish(audio_episode)
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body["error"]).to match(/archive plan/i)
+    end
+
+    it "blocks presigning new audio uploads" do
+      post "/api/v1/organizations/#{org.slug}/podcasts/#{podcast.slug}/uploads/presign",
+           params: { filename: "ep.mp3", content_type: "audio/mpeg", upload_type: "audio" }.to_json,
+           headers: headers
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body["error"]).to match(/archive plan/i)
+    end
+  end
+
   context "starter plan (unlimited episodes / month)" do
     let(:plan) { "starter" }
 
