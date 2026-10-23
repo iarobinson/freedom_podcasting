@@ -12,7 +12,8 @@ jobs:
   # ─────────────────────────────────────────────────────────────
   api-checks:
     name: API — Tests & Lint
-    runs-on: ubuntu-latest
+    # Pinned: setup-ruby has no prebuilt Ruby 3.3.0 for newer ubuntu-latest images.
+    runs-on: ubuntu-24.04
 
     services:
       postgres:
