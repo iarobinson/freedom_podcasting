@@ -1,4 +1,4 @@
-FROM ruby:3.3.0-slim
+FROM ruby:3.3.12-slim
 
 # Retry apt in case of transient mirror failures
 RUN apt-get update -qq && \

@@ -267,4 +267,4 @@ Goal: Producers and clients can manage shows from mobile.
 - [x] Settings: editable account name + organization name (PATCH auth/me, PATCH organizations/:slug)
 - [x] Admin: "Open workspace", checkout-link modal with plan + monthly/annual + clearer test-mode copy; fixed "(Test)" label shown on live checkouts
 - [ ] Transfer ownership (not built — needs product decision on billing ownership)
-- [ ] Upgrade Ruby 3.3.0 → 3.3.12 (Gemfile, Gemfile.lock, Dockerfile, CI) and drop the ubuntu-24.04 CI pin; also clears the Nokogiri libxml warning
+- [x] Upgrade Ruby 3.3.0 → 3.3.12 (Gemfile, Gemfile.lock, Dockerfile, CI) and drop the ubuntu-24.04 CI pin; also clears the Nokogiri libxml warning
